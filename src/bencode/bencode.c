@@ -1,6 +1,7 @@
 #include <bencode/bencode.h>
 
 #include <math.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -145,13 +146,18 @@ void *BEDecode(void *aData, size_t aLength, BEType *aType)
 		// Integer, e.g. i3e
 		case 'i':
 			{
+				// Check presence of minus sign
+				bool isNegative = (((char *)aData)[1] == '-');
+
 				// Get integer
 				int integer = 0;
-				for(size_t i = 0; i < aLength-2; ++i)
+				for(size_t i = (isNegative ? 2 : 1); i < aLength-1; ++i)
 				{
 					integer *= 10;
-					integer += (((char *)aData)[1+i] - '0');
+					integer += (((char *)aData)[i] - '0');
 				}
+				if(isNegative)
+					integer = -integer;
 
 				// Set result
 				// FIXME check malloc return value
