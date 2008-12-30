@@ -1,6 +1,6 @@
 #include <string.h>
 
-#include <bencode/bencode.h>
+#include <ddbencode/ddbencode.h>
 #include <uctest/uctest.h>
 
 static void BETestString_decodeWithLengthEqualTo0(void)

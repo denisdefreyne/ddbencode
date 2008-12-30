@@ -1,4 +1,4 @@
-#include <bencode/bencode.h>
+#include <ddbencode/ddbencode.h>
 #include <uctest/uctest.h>
 
 static void BETestDictionary_0(void)

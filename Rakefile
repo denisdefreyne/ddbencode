@@ -1,10 +1,10 @@
 ### configuration
 
-TARGET_BIN_TEST   = 'bencode_test'
-TARGET_LIB        = 'bencode.dylib'
+TARGET_BIN_TEST   = 'ddbencode_test'
+TARGET_LIB        = 'ddbencode.dylib'
 
-SRCS_LIB          = FileList[ 'src/bencode/*.c' ]
-SRCS_BIN_TEST     = FileList[ 'src/bencode/*.c', 'src/test/*.c', 'vendor/uctest/src/uctest/*.c' ]
+SRCS_LIB          = FileList[ 'src/ddbencode/*.c' ]
+SRCS_BIN_TEST     = FileList[ 'src/ddbencode/*.c', 'src/test/*.c', 'vendor/uctest/src/uctest/*.c' ]
 
 CFLAGS            = '--std=c99 -W -Wall -Wno-unused-parameter -Iinclude -Ivendor/uctest/include'
 LDFLAGS_BIN_TEST  = ''
