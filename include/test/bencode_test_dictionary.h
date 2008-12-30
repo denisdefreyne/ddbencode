@@ -1,0 +1,1 @@
+void BETestDictionary(void);
