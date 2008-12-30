@@ -3,7 +3,7 @@
 #include <bencode/bencode.h>
 #include <uctest/uctest.h>
 
-static void BETestString_lengthEqualTo0(void)
+static void BETestString_decodeWithLengthEqualTo0(void)
 {
 	void   *data  = NULL;
 	size_t length = 0;
@@ -16,7 +16,7 @@ static void BETestString_lengthEqualTo0(void)
 	free(data);
 }
 
-static void BETestString_lengthEqualTo1(void)
+static void BETestString_decodeWithLengthEqualTo1(void)
 {
 	void   *data  = NULL;
 	size_t length = 0;
@@ -29,7 +29,7 @@ static void BETestString_lengthEqualTo1(void)
 	free(data);
 }
 
-static void BETestString_smallLength(void)
+static void BETestString_decodeWithSmallLength(void)
 {
 	void   *data  = NULL;
 	size_t length = 0;
@@ -42,7 +42,7 @@ static void BETestString_smallLength(void)
 	free(data);
 }
 
-static void BETestString_lengthEqualTo9(void)
+static void BETestString_decodeWithLengthEqualTo9(void)
 {
 	void   *data  = NULL;
 	size_t length = 0;
@@ -55,7 +55,7 @@ static void BETestString_lengthEqualTo9(void)
 	free(data);
 }
 
-static void BETestString_lengthEqualTo10(void)
+static void BETestString_decodeWithLengthEqualTo10(void)
 {
 	void   *data  = NULL;
 	size_t length = 0;
@@ -68,7 +68,7 @@ static void BETestString_lengthEqualTo10(void)
 	free(data);
 }
 
-static void BETestString_lengthEqualTo11(void)
+static void BETestString_decodeWithLengthEqualTo11(void)
 {
 	void   *data  = NULL;
 	size_t length = 0;
@@ -87,12 +87,12 @@ void BETestString(void)
 	uc_suite_t *test_suite = uc_suite_create("string");
 
 	/* add tests to suite */
-	uc_suite_add_test(test_suite, uc_test_create("length == 0",        &BETestString_lengthEqualTo0));
-	uc_suite_add_test(test_suite, uc_test_create("length == 1",        &BETestString_lengthEqualTo1));
-	uc_suite_add_test(test_suite, uc_test_create("length > 1 and < 9", &BETestString_smallLength));
-	uc_suite_add_test(test_suite, uc_test_create("length == 9",        &BETestString_lengthEqualTo9));
-	uc_suite_add_test(test_suite, uc_test_create("length == 10",       &BETestString_lengthEqualTo10));
-	uc_suite_add_test(test_suite, uc_test_create("length == 11",       &BETestString_lengthEqualTo11));
+	uc_suite_add_test(test_suite, uc_test_create("length == 0",        &BETestString_decodeWithLengthEqualTo0));
+	uc_suite_add_test(test_suite, uc_test_create("length == 1",        &BETestString_decodeWithLengthEqualTo1));
+	uc_suite_add_test(test_suite, uc_test_create("length > 1 and < 9", &BETestString_decodeWithSmallLength));
+	uc_suite_add_test(test_suite, uc_test_create("length == 9",        &BETestString_decodeWithLengthEqualTo9));
+	uc_suite_add_test(test_suite, uc_test_create("length == 10",       &BETestString_decodeWithLengthEqualTo10));
+	uc_suite_add_test(test_suite, uc_test_create("length == 11",       &BETestString_decodeWithLengthEqualTo11));
 
 	/* run suite */
 	uc_suite_run(test_suite);
