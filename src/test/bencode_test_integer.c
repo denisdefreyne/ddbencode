@@ -3,7 +3,7 @@
 #include <bencode/bencode.h>
 #include <uctest/uctest.h>
 
-static void BETestInteger_0(void)
+static void BETestInteger_encode0(void)
 {
 	void   *data  = NULL;
 	size_t length = 0;
@@ -16,7 +16,7 @@ static void BETestInteger_0(void)
 	free(data);
 }
 
-static void BETestInteger_1(void)
+static void BETestInteger_encode1(void)
 {
 	void   *data  = NULL;
 	size_t length = 0;
@@ -29,7 +29,7 @@ static void BETestInteger_1(void)
 	free(data);
 }
 
-static void BETestInteger_9(void)
+static void BETestInteger_encode9(void)
 {
 	void   *data  = NULL;
 	size_t length = 0;
@@ -42,7 +42,7 @@ static void BETestInteger_9(void)
 	free(data);
 }
 
-static void BETestInteger_10(void)
+static void BETestInteger_encode10(void)
 {
 	void   *data  = NULL;
 	size_t length = 0;
@@ -55,7 +55,7 @@ static void BETestInteger_10(void)
 	free(data);
 }
 
-static void BETestInteger_11(void)
+static void BETestInteger_encode11(void)
 {
 	void   *data  = NULL;
 	size_t length = 0;
@@ -68,7 +68,7 @@ static void BETestInteger_11(void)
 	free(data);
 }
 
-static void BETestInteger_m1(void)
+static void BETestInteger_encodeM1(void)
 {
 	void   *data  = NULL;
 	size_t length = 0;
@@ -81,7 +81,7 @@ static void BETestInteger_m1(void)
 	free(data);
 }
 
-static void BETestInteger_m9(void)
+static void BETestInteger_encodeM9(void)
 {
 	void   *data  = NULL;
 	size_t length = 0;
@@ -94,7 +94,7 @@ static void BETestInteger_m9(void)
 	free(data);
 }
 
-static void BETestInteger_m10(void)
+static void BETestInteger_encodeM10(void)
 {
 	void   *data  = NULL;
 	size_t length = 0;
@@ -107,7 +107,7 @@ static void BETestInteger_m10(void)
 	free(data);
 }
 
-static void BETestInteger_m11(void)
+static void BETestInteger_encodeM11(void)
 {
 	void   *data  = NULL;
 	size_t length = 0;
@@ -120,21 +120,147 @@ static void BETestInteger_m11(void)
 	free(data);
 }
 
+static void BETestInteger_decode0(void)
+{
+	BEType type;
+	void *result;
+
+	result = BEDecode("i0e", 3, &type);
+
+	UC_ASSERT(BE_INTEGER == type);
+	UC_ASSERT(*((int *)result) == 0);
+
+	free(result);
+}
+
+static void BETestInteger_decode1(void)
+{
+	BEType type;
+	void *result;
+
+	result = BEDecode("i1e", 3, &type);
+
+	UC_ASSERT(BE_INTEGER == type);
+	UC_ASSERT(*((int *)result) == 1);
+
+	free(result);
+}
+
+static void BETestInteger_decode9(void)
+{
+	BEType type;
+	void *result;
+
+	result = BEDecode("i9e", 3, &type);
+
+	UC_ASSERT(BE_INTEGER == type);
+	UC_ASSERT(*((int *)result) == 9);
+
+	free(result);
+}
+
+static void BETestInteger_decode10(void)
+{
+	BEType type;
+	void *result;
+
+	result = BEDecode("i10e", 4, &type);
+
+	UC_ASSERT(BE_INTEGER == type);
+	UC_ASSERT(*((int *)result) == 10);
+
+	free(result);
+}
+
+static void BETestInteger_decode11(void)
+{
+	BEType type;
+	void *result;
+
+	result = BEDecode("i11e", 4, &type);
+
+	UC_ASSERT(BE_INTEGER == type);
+	UC_ASSERT(*((int *)result) == 11);
+
+	free(result);
+}
+
+static void BETestInteger_decodeM1(void)
+{
+	BEType type;
+	void *result;
+
+	result = BEDecode("i-1e", 4, &type);
+
+	UC_ASSERT(BE_INTEGER == type);
+	UC_ASSERT(*((int *)result) == -1);
+
+	free(result);
+}
+
+static void BETestInteger_decodeM9(void)
+{
+	BEType type;
+	void *result;
+
+	result = BEDecode("i-9e", 4, &type);
+
+	UC_ASSERT(BE_INTEGER == type);
+	UC_ASSERT(*((int *)result) == -9);
+
+	free(result);
+}
+
+static void BETestInteger_decodeM10(void)
+{
+	BEType type;
+	void *result;
+
+	result = BEDecode("i-10e", 5, &type);
+
+	UC_ASSERT(BE_INTEGER == type);
+	UC_ASSERT(*((int *)result) == -10);
+
+	free(result);
+}
+
+static void BETestInteger_decodeM11(void)
+{
+	BEType type;
+	void *result;
+
+	result = BEDecode("i-11e", 5, &type);
+
+	UC_ASSERT(BE_INTEGER == type);
+	UC_ASSERT(*((int *)result) == -11);
+
+	free(result);
+}
+
 void BETestInteger(void)
 {
 	/* create suite */
 	uc_suite_t *test_suite = uc_suite_create("integer");
 
 	/* add tests to suite */
-	uc_suite_add_test(test_suite, uc_test_create("0",   &BETestInteger_0));
-	uc_suite_add_test(test_suite, uc_test_create("1",   &BETestInteger_1));
-	uc_suite_add_test(test_suite, uc_test_create("9",   &BETestInteger_9));
-	uc_suite_add_test(test_suite, uc_test_create("10",  &BETestInteger_10));
-	uc_suite_add_test(test_suite, uc_test_create("11",  &BETestInteger_11));
-	uc_suite_add_test(test_suite, uc_test_create("-1",  &BETestInteger_m1));
-	uc_suite_add_test(test_suite, uc_test_create("-9",  &BETestInteger_m9));
-	uc_suite_add_test(test_suite, uc_test_create("-10", &BETestInteger_m10));
-	uc_suite_add_test(test_suite, uc_test_create("-11", &BETestInteger_m11));
+	uc_suite_add_test(test_suite, uc_test_create("encode 0",   &BETestInteger_encode0));
+	uc_suite_add_test(test_suite, uc_test_create("encode 1",   &BETestInteger_encode1));
+	uc_suite_add_test(test_suite, uc_test_create("encode 9",   &BETestInteger_encode9));
+	uc_suite_add_test(test_suite, uc_test_create("encode 10",  &BETestInteger_encode10));
+	uc_suite_add_test(test_suite, uc_test_create("encode 11",  &BETestInteger_encode11));
+	uc_suite_add_test(test_suite, uc_test_create("encode -1",  &BETestInteger_encodeM1));
+	uc_suite_add_test(test_suite, uc_test_create("encode -9",  &BETestInteger_encodeM9));
+	uc_suite_add_test(test_suite, uc_test_create("encode -10", &BETestInteger_encodeM10));
+	uc_suite_add_test(test_suite, uc_test_create("encode -11", &BETestInteger_encodeM11));
+	uc_suite_add_test(test_suite, uc_test_create("decode 0",   &BETestInteger_decode0));
+	uc_suite_add_test(test_suite, uc_test_create("decode 1",   &BETestInteger_decode1));
+	uc_suite_add_test(test_suite, uc_test_create("decode 9",   &BETestInteger_decode9));
+	uc_suite_add_test(test_suite, uc_test_create("decode 10",  &BETestInteger_decode10));
+	uc_suite_add_test(test_suite, uc_test_create("decode 11",  &BETestInteger_decode11));
+	uc_suite_add_test(test_suite, uc_test_create("decode -1",  &BETestInteger_decodeM1));
+	uc_suite_add_test(test_suite, uc_test_create("decode -9",  &BETestInteger_decodeM9));
+	uc_suite_add_test(test_suite, uc_test_create("decode -10", &BETestInteger_decodeM10));
+	uc_suite_add_test(test_suite, uc_test_create("decode -11", &BETestInteger_decodeM11));
 
 	/* run suite */
 	uc_suite_run(test_suite);
