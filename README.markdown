@@ -46,10 +46,10 @@ Usage
 List creation example:
 
 	BEList *list = BEListCreate(
-		4,                   // number of list entries
-		BE_STRING,  "foo",   // entry 0
-		BE_INTEGER, 123,     // entry 1
-		BE_LIST,    someList // entry 2
+		4,                        // number of list entries
+		BE_STRING,  "foo",   3,   // entry 0
+		BE_INTEGER, 123,          // entry 1
+		BE_LIST,    someList      // entry 2
 	);
 
 Dictionary creation example:
