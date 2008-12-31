@@ -74,6 +74,65 @@ static void BETestList_createInvalid(void)
 	UC_ASSERT(!list);
 }
 
+// void BEListEncode(BEList *aiList, void **aoData, size_t *aoDataLength)
+
+static void BETestList_encode0(void)
+{
+	BEList *list = BEListCreate(
+		0
+	); // le
+
+	void *data;
+	size_t dataLength;
+
+	BEListEncode(list, &data, &dataLength);
+
+	UC_ASSERT(data);
+	UC_ASSERT(1+1 == dataLength);
+	UC_ASSERT(0 == strncmp(data, "le", 1+1));
+
+	free(data);
+}
+
+static void BETestList_encode1(void)
+{
+	BEList *list = BEListCreate(
+		1,
+		BE_STRING, "foo", 3
+	); // l3:fooe
+
+	void *data;
+	size_t dataLength;
+
+	BEListEncode(list, &data, &dataLength);
+
+	UC_ASSERT(data);
+	UC_ASSERT(1+(1+1+3)+1 == dataLength);
+	UC_ASSERT(0 == strncmp(data, "l3:fooe", 1+(1+1+3)+1));
+
+	free(data);
+}
+
+static void BETestList_encode2(void)
+{
+	BEList *list = BEListCreate(
+		2,
+		BE_STRING,  "foo", 3,
+		BE_INTEGER, 123
+	); // l3:fooi123ee
+
+	void *data;
+	size_t dataLength;
+
+	BEListEncode(list, &data, &dataLength);
+
+	UC_ASSERT(data);
+	UC_ASSERT(1+(1+1+3)+(1+3+1)+1 == dataLength);
+	UC_ASSERT(0 == strncmp(data, "l3:fooi123ee", 1+(1+1+3)+(1+3+1)+1));
+
+	free(data);
+}
+
 static void BETestList_getEncodedLength0(void)
 {
 	BEList *list = BEListCreate(
@@ -115,6 +174,9 @@ void BETestList(void)
 	uc_suite_add_test(test_suite, uc_test_create("create 1 integer",     &BETestList_create1Integer));
 	uc_suite_add_test(test_suite, uc_test_create("create 4",             &BETestList_create4));
 	uc_suite_add_test(test_suite, uc_test_create("create invalid",       &BETestList_createInvalid));
+	uc_suite_add_test(test_suite, uc_test_create("encode 0",             &BETestList_encode0));
+	uc_suite_add_test(test_suite, uc_test_create("encode 1",             &BETestList_encode1));
+	uc_suite_add_test(test_suite, uc_test_create("encode 2",             &BETestList_encode2));
 	uc_suite_add_test(test_suite, uc_test_create("get encoded length 0", &BETestList_getEncodedLength0));
 	uc_suite_add_test(test_suite, uc_test_create("get encoded length 1", &BETestList_getEncodedLength1));
 	uc_suite_add_test(test_suite, uc_test_create("get encoded length 2", &BETestList_getEncodedLength2));

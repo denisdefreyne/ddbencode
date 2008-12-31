@@ -3,6 +3,7 @@
 
 #include <stdarg.h>
 #include <stdio.h>
+#include <string.h>
 
 BEList *BEListCreate(size_t aSize, ...)
 {
@@ -65,7 +66,58 @@ void BEListEncode(BEList *aiList, void **aoData, size_t *aoDataLength)
 	// followed by an 'e'. For example l4:spam4:eggse corresponds to ['spam',
 	// 'eggs'].
 
-	// TODO implement
+	// Calculate the length of the encoded list
+	size_t encodedLength = BEListGetEncodedLength(aiList);
+
+	// Create data
+	// FIXME check malloc return value
+	void *data = malloc(encodedLength*(sizeof data));
+
+	// Fill data
+	((char *)data)[0] = 'l';
+	void *currentEnd = data+1;
+	for(size_t i = 0; i < aiList->size; ++i)
+	{
+		// Get entry
+		struct _BEListEntry entry = aiList->entries[i];
+
+		// Encode entry
+		void   *entryData;
+		size_t entryDataLength;
+		switch(entry.type)
+		{
+			case BE_STRING:
+				BEStringEncode(entry.data.string, entry.stringLength, &entryData, &entryDataLength);
+				break;
+
+			case BE_INTEGER:
+				BEIntegerEncode(entry.data.integer, &entryData, &entryDataLength);
+				break;
+
+			case BE_LIST:
+				BEListEncode(entry.data.list, &entryData, &entryDataLength);
+				break;
+
+			case BE_DICTIONARY:
+				BEDictionaryEncode(entry.data.dictionary, &entryData, &entryDataLength);
+				break;
+
+			default:
+				return;
+		}
+
+		// Append entry data
+		memcpy(currentEnd, entryData, entryDataLength);
+		currentEnd += entryDataLength;
+
+		// Cleanup
+		free(entryData);
+	}
+	((char *)data)[encodedLength-1] = 'e';
+
+	// Return data
+	*aoData = data;
+	*aoDataLength = encodedLength;
 }
 
 size_t BEListGetEncodedLength(BEList *aList)
