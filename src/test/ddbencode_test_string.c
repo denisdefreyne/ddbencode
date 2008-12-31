@@ -277,6 +277,23 @@ static void BETestString_decodeInvalid2(void)
 
 	size_t stringLength = 0;
 
+	success = BEDecode("5:asdf", 6, &type, &string, &integer, &list, &dictionary, &stringLength);
+
+	UC_ASSERT(false == success);
+}
+
+static void BETestString_decodeInvalid3(void)
+{
+	BEType type;
+	bool success;
+
+	char *string = NULL;
+	int integer = 0;
+	BEList *list = NULL;
+	BEDictionary *dictionary = NULL;
+
+	size_t stringLength = 0;
+
 	success = BEDecode("9:asdf", 6, &type, &string, &integer, &list, &dictionary, &stringLength);
 
 	UC_ASSERT(false == success);
@@ -327,7 +344,8 @@ void BETestString(void)
 	uc_suite_add_test(test_suite, uc_test_create("decode 11",             &BETestString_decode11));
 	uc_suite_add_test(test_suite, uc_test_create("decode invalid 0",      &BETestString_decodeInvalid0));
 	uc_suite_add_test(test_suite, uc_test_create("decode invalid 1",      &BETestString_decodeInvalid1));
-	uc_suite_add_test(test_suite, uc_test_create("decode invalid 1",      &BETestString_decodeInvalid2));
+	uc_suite_add_test(test_suite, uc_test_create("decode invalid 2",      &BETestString_decodeInvalid2));
+	uc_suite_add_test(test_suite, uc_test_create("decode invalid 3",      &BETestString_decodeInvalid3));
 	uc_suite_add_test(test_suite, uc_test_create("get encoded length 0",  &BETestString_getEncodedLength0));
 	uc_suite_add_test(test_suite, uc_test_create("get encoded length 1",  &BETestString_getEncodedLength1));
 	uc_suite_add_test(test_suite, uc_test_create("get encoded length 9",  &BETestString_getEncodedLength9));
