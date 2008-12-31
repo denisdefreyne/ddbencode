@@ -1,4 +1,5 @@
 #include <ddbencode/ddbencode.h>
+#include <ddbencode/private.h>
 
 #include <stdarg.h>
 #include <stdio.h>
@@ -7,59 +8,54 @@ BEList *BEListCreate(size_t aSize, ...)
 {
 	va_list ap;
 
-	// Create (empty) list
-	;
+	// Create list
+	// FIXME check malloc return value
+	BEList *list = malloc(sizeof (BEList));
+	list->entries = malloc(aSize * (sizeof (struct _BEListEntry)));
+	list->size = aSize;
 
 	va_start(ap, aSize);
 	for(size_t i = 0; i < aSize; ++i)
 	{
-		// Temporary iterator variables
-		char         *string;
-		int          integer;
-		BEList       *list;
-		BEDictionary *dictionary;
-
-		// Get type
-		int type = va_arg(ap, int);
-
-		switch(type)
+		switch(va_arg(ap, int))
 		{
 			case BE_STRING:
-				string = va_arg(ap, char *);
-				printf("it's a string! %s\n", string);
+				// TODO decide whether the string should be retained (dup'ed) or not
+				list->entries[i].type = BE_STRING;
+				list->entries[i].data.string = va_arg(ap, char *);
 				break;
 
 			case BE_INTEGER:
-				integer = va_arg(ap, int);
-				printf("it's an integer! %i\n", integer);
+				list->entries[i].type = BE_INTEGER;
+				list->entries[i].data.integer = va_arg(ap, int);
 				break;
 
 			case BE_LIST:
-				list = va_arg(ap, BEList *);
-				printf("it's a list!\n");
+				list->entries[i].type = BE_LIST;
+				list->entries[i].data.list = va_arg(ap, BEList *);
 				break;
 
 			case BE_DICTIONARY:
-				dictionary = va_arg(ap, BEDictionary *);
-				printf("it's a dictionary!\n");
+				list->entries[i].type = BE_DICTIONARY;
+				list->entries[i].data.dictionary = va_arg(ap, BEDictionary *);
 				break;
 
 			default:
-				printf("not sure what it is :/\n");
+				free(list->entries);
+				free(list);
+				return NULL;
 		}
 	}
 	va_end(ap);
 
-
-
-	// TODO implement
-	return NULL;
+	// Done
+	return list;
 }
 
 void BEListDelete(BEList *aList)
 {
-	// TODO implement
-	;
+	free(aList->entries);
+	free(aList);
 }
 
 void BEListEncode(BEList *aList, void **aData, size_t *aDataLength)
