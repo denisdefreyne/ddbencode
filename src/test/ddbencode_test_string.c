@@ -92,8 +92,9 @@ static void BETestString_decode0(void)
 	BEDictionary *dictionary = NULL;
 
 	size_t stringLength = 0;
+	size_t usedLength = 0;
 
-	success = BEDecode("0:", 2, &type, &string, &integer, &list, &dictionary, &stringLength);
+	success = BEDecode("0:", 2, &type, &string, &integer, &list, &dictionary, &stringLength, &usedLength);
 
 	UC_ASSERT(success);
 
@@ -104,6 +105,7 @@ static void BETestString_decode0(void)
 	UC_ASSERT(0 == integer);
 	UC_ASSERT(NULL == list);
 	UC_ASSERT(NULL == dictionary);
+	UC_ASSERT(2 == usedLength);
 }
 
 static void BETestString_decode1(void)
@@ -117,8 +119,9 @@ static void BETestString_decode1(void)
 	BEDictionary *dictionary = NULL;
 
 	size_t stringLength = 0;
+	size_t usedLength = 0;
 
-	success = BEDecode("1:a", 3, &type, &string, &integer, &list, &dictionary, &stringLength);
+	success = BEDecode("1:a", 3, &type, &string, &integer, &list, &dictionary, &stringLength, &usedLength);
 
 	UC_ASSERT(success);
 
@@ -129,6 +132,7 @@ static void BETestString_decode1(void)
 	UC_ASSERT(0 == integer);
 	UC_ASSERT(NULL == list);
 	UC_ASSERT(NULL == dictionary);
+	UC_ASSERT(3 == usedLength);
 }
 
 static void BETestString_decode4(void)
@@ -142,8 +146,9 @@ static void BETestString_decode4(void)
 	BEDictionary *dictionary = NULL;
 
 	size_t stringLength = 0;
+	size_t usedLength = 0;
 
-	success = BEDecode("4:abcd", 6, &type, &string, &integer, &list, &dictionary, &stringLength);
+	success = BEDecode("4:abcd", 6, &type, &string, &integer, &list, &dictionary, &stringLength, &usedLength);
 
 	UC_ASSERT(success);
 
@@ -154,6 +159,7 @@ static void BETestString_decode4(void)
 	UC_ASSERT(0 == integer);
 	UC_ASSERT(NULL == list);
 	UC_ASSERT(NULL == dictionary);
+	UC_ASSERT(6 == usedLength);
 }
 
 static void BETestString_decode9(void)
@@ -167,8 +173,9 @@ static void BETestString_decode9(void)
 	BEDictionary *dictionary = NULL;
 
 	size_t stringLength = 0;
+	size_t usedLength = 0;
 
-	success = BEDecode("9:abcdefghi", 11, &type, &string, &integer, &list, &dictionary, &stringLength);
+	success = BEDecode("9:abcdefghi", 11, &type, &string, &integer, &list, &dictionary, &stringLength, &usedLength);
 
 	UC_ASSERT(success);
 
@@ -179,6 +186,7 @@ static void BETestString_decode9(void)
 	UC_ASSERT(0 == integer);
 	UC_ASSERT(NULL == list);
 	UC_ASSERT(NULL == dictionary);
+	UC_ASSERT(11 == usedLength);
 }
 
 static void BETestString_decode10(void)
@@ -192,8 +200,9 @@ static void BETestString_decode10(void)
 	BEDictionary *dictionary = NULL;
 
 	size_t stringLength = 0;
+	size_t usedLength = 0;
 
-	success = BEDecode("10:abcdefghij", 13, &type, &string, &integer, &list, &dictionary, &stringLength);
+	success = BEDecode("10:abcdefghij", 13, &type, &string, &integer, &list, &dictionary, &stringLength, &usedLength);
 
 	UC_ASSERT(success);
 
@@ -204,6 +213,7 @@ static void BETestString_decode10(void)
 	UC_ASSERT(0 == integer);
 	UC_ASSERT(NULL == list);
 	UC_ASSERT(NULL == dictionary);
+	UC_ASSERT(13 == usedLength);
 }
 
 static void BETestString_decode11(void)
@@ -217,8 +227,9 @@ static void BETestString_decode11(void)
 	BEDictionary *dictionary = NULL;
 
 	size_t stringLength = 0;
+	size_t usedLength = 0;
 
-	success = BEDecode("11:abcdefghijk", 14, &type, &string, &integer, &list, &dictionary, &stringLength);
+	success = BEDecode("11:abcdefghijk", 14, &type, &string, &integer, &list, &dictionary, &stringLength, &usedLength);
 
 	UC_ASSERT(success);
 
@@ -229,6 +240,34 @@ static void BETestString_decode11(void)
 	UC_ASSERT(0 == integer);
 	UC_ASSERT(NULL == list);
 	UC_ASSERT(NULL == dictionary);
+	UC_ASSERT(14 == usedLength);
+}
+
+static void BETestString_decodeLong(void)
+{
+	BEType type;
+	bool success;
+
+	char *string = NULL;
+	int integer = 0;
+	BEList *list = NULL;
+	BEDictionary *dictionary = NULL;
+
+	size_t stringLength = 0;
+	size_t usedLength = 0;
+
+	success = BEDecode("3:abcdefghijklmno", 17, &type, &string, &integer, &list, &dictionary, &stringLength, &usedLength);
+
+	UC_ASSERT(success);
+
+	UC_ASSERT(BE_STRING == type);
+	UC_ASSERT(0 == strcmp(string, "abc"));
+	UC_ASSERT(3 == stringLength);
+
+	UC_ASSERT(0 == integer);
+	UC_ASSERT(NULL == list);
+	UC_ASSERT(NULL == dictionary);
+	UC_ASSERT(5 == usedLength);
 }
 
 static void BETestString_decodeInvalid0(void)
@@ -242,8 +281,9 @@ static void BETestString_decodeInvalid0(void)
 	BEDictionary *dictionary = NULL;
 
 	size_t stringLength = 0;
+	size_t usedLength = 0;
 
-	success = BEDecode("0", 1, &type, &string, &integer, &list, &dictionary, &stringLength);
+	success = BEDecode("0", 1, &type, &string, &integer, &list, &dictionary, &stringLength, &usedLength);
 
 	UC_ASSERT(false == success);
 }
@@ -259,8 +299,9 @@ static void BETestString_decodeInvalid1(void)
 	BEDictionary *dictionary = NULL;
 
 	size_t stringLength = 0;
+	size_t usedLength = 0;
 
-	success = BEDecode(":", 1, &type, &string, &integer, &list, &dictionary, &stringLength);
+	success = BEDecode(":", 1, &type, &string, &integer, &list, &dictionary, &stringLength, &usedLength);
 
 	UC_ASSERT(false == success);
 }
@@ -276,8 +317,9 @@ static void BETestString_decodeInvalid2(void)
 	BEDictionary *dictionary = NULL;
 
 	size_t stringLength = 0;
+	size_t usedLength = 0;
 
-	success = BEDecode("5:asdf", 6, &type, &string, &integer, &list, &dictionary, &stringLength);
+	success = BEDecode("5:asdf", 6, &type, &string, &integer, &list, &dictionary, &stringLength, &usedLength);
 
 	UC_ASSERT(false == success);
 }
@@ -293,8 +335,9 @@ static void BETestString_decodeInvalid3(void)
 	BEDictionary *dictionary = NULL;
 
 	size_t stringLength = 0;
+	size_t usedLength = 0;
 
-	success = BEDecode("9:asdf", 6, &type, &string, &integer, &list, &dictionary, &stringLength);
+	success = BEDecode("9:asdf", 6, &type, &string, &integer, &list, &dictionary, &stringLength, &usedLength);
 
 	UC_ASSERT(false == success);
 }
@@ -342,6 +385,7 @@ void BETestString(void)
 	uc_suite_add_test(test_suite, uc_test_create("decode 9",              &BETestString_decode9));
 	uc_suite_add_test(test_suite, uc_test_create("decode 10",             &BETestString_decode10));
 	uc_suite_add_test(test_suite, uc_test_create("decode 11",             &BETestString_decode11));
+	uc_suite_add_test(test_suite, uc_test_create("decode long",           &BETestString_decodeLong));
 	uc_suite_add_test(test_suite, uc_test_create("decode invalid 0",      &BETestString_decodeInvalid0));
 	uc_suite_add_test(test_suite, uc_test_create("decode invalid 1",      &BETestString_decodeInvalid1));
 	uc_suite_add_test(test_suite, uc_test_create("decode invalid 2",      &BETestString_decodeInvalid2));

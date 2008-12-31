@@ -131,8 +131,9 @@ static void BETestInteger_decode0(void)
 	BEDictionary *dictionary = NULL;
 
 	size_t stringLength = 0;
+	size_t usedLength = 0;
 
-	success = BEDecode("i0e", 3, &type, &string, &integer, &list, &dictionary, &stringLength);
+	success = BEDecode("i0e", 3, &type, &string, &integer, &list, &dictionary, &stringLength, &usedLength);
 
 	UC_ASSERT(success);
 
@@ -143,6 +144,7 @@ static void BETestInteger_decode0(void)
 	UC_ASSERT(NULL == list);
 	UC_ASSERT(NULL == dictionary);
 	UC_ASSERT(0 == stringLength);
+	UC_ASSERT(3 == usedLength);
 }
 
 static void BETestInteger_decode1(void)
@@ -156,8 +158,9 @@ static void BETestInteger_decode1(void)
 	BEDictionary *dictionary = NULL;
 
 	size_t stringLength = 0;
+	size_t usedLength = 0;
 
-	success = BEDecode("i1e", 3, &type, &string, &integer, &list, &dictionary, &stringLength);
+	success = BEDecode("i1e", 3, &type, &string, &integer, &list, &dictionary, &stringLength, &usedLength);
 
 	UC_ASSERT(success);
 
@@ -168,6 +171,7 @@ static void BETestInteger_decode1(void)
 	UC_ASSERT(NULL == list);
 	UC_ASSERT(NULL == dictionary);
 	UC_ASSERT(0 == stringLength);
+	UC_ASSERT(3 == usedLength);
 }
 
 static void BETestInteger_decode9(void)
@@ -181,8 +185,9 @@ static void BETestInteger_decode9(void)
 	BEDictionary *dictionary = NULL;
 
 	size_t stringLength = 0;
+	size_t usedLength = 0;
 
-	success = BEDecode("i9e", 3, &type, &string, &integer, &list, &dictionary, &stringLength);
+	success = BEDecode("i9e", 3, &type, &string, &integer, &list, &dictionary, &stringLength, &usedLength);
 
 	UC_ASSERT(success);
 
@@ -193,6 +198,7 @@ static void BETestInteger_decode9(void)
 	UC_ASSERT(NULL == list);
 	UC_ASSERT(NULL == dictionary);
 	UC_ASSERT(0 == stringLength);
+	UC_ASSERT(3 == usedLength);
 }
 
 static void BETestInteger_decode10(void)
@@ -206,8 +212,9 @@ static void BETestInteger_decode10(void)
 	BEDictionary *dictionary = NULL;
 
 	size_t stringLength = 0;
+	size_t usedLength = 0;
 
-	success = BEDecode("i10e", 4, &type, &string, &integer, &list, &dictionary, &stringLength);
+	success = BEDecode("i10e", 4, &type, &string, &integer, &list, &dictionary, &stringLength, &usedLength);
 
 	UC_ASSERT(success);
 
@@ -218,6 +225,7 @@ static void BETestInteger_decode10(void)
 	UC_ASSERT(NULL == list);
 	UC_ASSERT(NULL == dictionary);
 	UC_ASSERT(0 == stringLength);
+	UC_ASSERT(4 == usedLength);
 }
 
 static void BETestInteger_decode11(void)
@@ -231,8 +239,9 @@ static void BETestInteger_decode11(void)
 	BEDictionary *dictionary = NULL;
 
 	size_t stringLength = 0;
+	size_t usedLength = 0;
 
-	success = BEDecode("i11e", 4, &type, &string, &integer, &list, &dictionary, &stringLength);
+	success = BEDecode("i11e", 4, &type, &string, &integer, &list, &dictionary, &stringLength, &usedLength);
 
 	UC_ASSERT(success);
 
@@ -243,6 +252,7 @@ static void BETestInteger_decode11(void)
 	UC_ASSERT(NULL == list);
 	UC_ASSERT(NULL == dictionary);
 	UC_ASSERT(0 == stringLength);
+	UC_ASSERT(4 == usedLength);
 }
 
 static void BETestInteger_decodeM1(void)
@@ -256,8 +266,9 @@ static void BETestInteger_decodeM1(void)
 	BEDictionary *dictionary = NULL;
 
 	size_t stringLength = 0;
+	size_t usedLength = 0;
 
-	success = BEDecode("i-1e", 4, &type, &string, &integer, &list, &dictionary, &stringLength);
+	success = BEDecode("i-1e", 4, &type, &string, &integer, &list, &dictionary, &stringLength, &usedLength);
 
 	UC_ASSERT(success);
 
@@ -268,6 +279,7 @@ static void BETestInteger_decodeM1(void)
 	UC_ASSERT(NULL == list);
 	UC_ASSERT(NULL == dictionary);
 	UC_ASSERT(0 == stringLength);
+	UC_ASSERT(4 == usedLength);
 }
 
 static void BETestInteger_decodeM9(void)
@@ -281,8 +293,9 @@ static void BETestInteger_decodeM9(void)
 	BEDictionary *dictionary = NULL;
 
 	size_t stringLength = 0;
+	size_t usedLength = 0;
 
-	success = BEDecode("i-9e", 4, &type, &string, &integer, &list, &dictionary, &stringLength);
+	success = BEDecode("i-9e", 4, &type, &string, &integer, &list, &dictionary, &stringLength, &usedLength);
 
 	UC_ASSERT(success);
 
@@ -293,6 +306,7 @@ static void BETestInteger_decodeM9(void)
 	UC_ASSERT(NULL == list);
 	UC_ASSERT(NULL == dictionary);
 	UC_ASSERT(0 == stringLength);
+	UC_ASSERT(4 == usedLength);
 }
 
 static void BETestInteger_decodeM10(void)
@@ -306,8 +320,9 @@ static void BETestInteger_decodeM10(void)
 	BEDictionary *dictionary = NULL;
 
 	size_t stringLength = 0;
+	size_t usedLength = 0;
 
-	success = BEDecode("i-10e", 5, &type, &string, &integer, &list, &dictionary, &stringLength);
+	success = BEDecode("i-10e", 5, &type, &string, &integer, &list, &dictionary, &stringLength, &usedLength);
 
 	UC_ASSERT(success);
 
@@ -318,6 +333,7 @@ static void BETestInteger_decodeM10(void)
 	UC_ASSERT(NULL == list);
 	UC_ASSERT(NULL == dictionary);
 	UC_ASSERT(0 == stringLength);
+	UC_ASSERT(5 == usedLength);
 }
 
 static void BETestInteger_decodeM11(void)
@@ -331,8 +347,9 @@ static void BETestInteger_decodeM11(void)
 	BEDictionary *dictionary = NULL;
 
 	size_t stringLength = 0;
+	size_t usedLength = 0;
 
-	success = BEDecode("i-11e", 5, &type, &string, &integer, &list, &dictionary, &stringLength);
+	success = BEDecode("i-11e", 5, &type, &string, &integer, &list, &dictionary, &stringLength, &usedLength);
 
 	UC_ASSERT(success);
 
@@ -343,6 +360,7 @@ static void BETestInteger_decodeM11(void)
 	UC_ASSERT(NULL == list);
 	UC_ASSERT(NULL == dictionary);
 	UC_ASSERT(0 == stringLength);
+	UC_ASSERT(5 == usedLength);
 }
 
 static void BETestInteger_decodeLong(void)
@@ -356,8 +374,9 @@ static void BETestInteger_decodeLong(void)
 	BEDictionary *dictionary = NULL;
 
 	size_t stringLength = 0;
+	size_t usedLength = 0;
 
-	success = BEDecode("i123eblahblah", 13, &type, &string, &integer, &list, &dictionary, &stringLength);
+	success = BEDecode("i123eblahblah", 13, &type, &string, &integer, &list, &dictionary, &stringLength, &usedLength);
 
 	UC_ASSERT(success);
 
@@ -368,6 +387,7 @@ static void BETestInteger_decodeLong(void)
 	UC_ASSERT(NULL == list);
 	UC_ASSERT(NULL == dictionary);
 	UC_ASSERT(0 == stringLength);
+	UC_ASSERT(5 == usedLength);
 }
 
 static void BETestInteger_decodeInvalid0(void)
@@ -381,8 +401,9 @@ static void BETestInteger_decodeInvalid0(void)
 	BEDictionary *dictionary = NULL;
 
 	size_t stringLength = 0;
+	size_t usedLength = 0;
 
-	success = BEDecode("ie", 2, &type, &string, &integer, &list, &dictionary, &stringLength);
+	success = BEDecode("ie", 2, &type, &string, &integer, &list, &dictionary, &stringLength, &usedLength);
 
 	UC_ASSERT(false == success);
 }
@@ -398,8 +419,9 @@ static void BETestInteger_decodeInvalid1(void)
 	BEDictionary *dictionary = NULL;
 
 	size_t stringLength = 0;
+	size_t usedLength = 0;
 
-	success = BEDecode("ieee", 4, &type, &string, &integer, &list, &dictionary, &stringLength);
+	success = BEDecode("ieee", 4, &type, &string, &integer, &list, &dictionary, &stringLength, &usedLength);
 
 	UC_ASSERT(false == success);
 }
@@ -415,8 +437,9 @@ static void BETestInteger_decodeInvalid2(void)
 	BEDictionary *dictionary = NULL;
 
 	size_t stringLength = 0;
+	size_t usedLength = 0;
 
-	success = BEDecode("i12345e", 3, &type, &string, &integer, &list, &dictionary, &stringLength);
+	success = BEDecode("i12345e", 3, &type, &string, &integer, &list, &dictionary, &stringLength, &usedLength);
 
 	UC_ASSERT(false == success);
 }

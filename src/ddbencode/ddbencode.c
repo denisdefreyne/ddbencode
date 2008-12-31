@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-bool BEDecode(void *aiData, size_t aiLength, BEType *aoType, char **aoString, int *aoInteger, BEList **aoList, BEDictionary **aoDictionary, size_t *aoStringLength)
+bool BEDecode(void *aiData, size_t aiLength, BEType *aoType, char **aoString, int *aoInteger, BEList **aoList, BEDictionary **aoDictionary, size_t *aoStringLength, size_t *aoUsedLength)
 {
 	// Validate length
 	if(aiLength < 2)
@@ -50,6 +50,8 @@ bool BEDecode(void *aiData, size_t aiLength, BEType *aoType, char **aoString, in
 				// Set result
 				*aoType = BE_INTEGER;
 				*aoInteger = integer;
+				if(aoUsedLength)
+					*aoUsedLength = i+1;
 				return true;
 			}
 			break;
@@ -61,7 +63,13 @@ bool BEDecode(void *aiData, size_t aiLength, BEType *aoType, char **aoString, in
 
 		// List, e.g. l4:spam4:eggse
 		case 'l':
-			;
+			{
+				if(((char *)aiData)[1] == 'e')
+					// we're done
+					;
+				else
+					;
+			}
 			break;
 
 		// String, e.g. 4:spam
@@ -104,7 +112,10 @@ bool BEDecode(void *aiData, size_t aiLength, BEType *aoType, char **aoString, in
 				// Set result
 				*aoType = BE_STRING;
 				*aoString = string;
-				*aoStringLength = length;
+				if(aoStringLength)
+					*aoStringLength = length;
+				if(aoUsedLength)
+					*aoUsedLength = i + 1 + length;
 				return true;
 			}
 			break;
