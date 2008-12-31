@@ -67,3 +67,43 @@ void BEListEncode(BEList *aList, void **aData, size_t *aDataLength)
 	// TODO implement
 }
 
+size_t BEListGetEncodedLength(BEList *aList)
+{
+	size_t encodedLength = 0;
+
+	// Add start size
+	encodedLength += 1;
+
+	// Add sizes of each entry
+	for(size_t i = 0; i < aList->size; ++i)
+	{
+		struct _BEListEntry entry = aList->entries[i];
+		switch(entry.type)
+		{
+			case BE_STRING:
+				encodedLength += BEStringGetEncodedLength(entry.data.string);
+				break;
+
+			case BE_INTEGER:
+				encodedLength += BEIntegerGetEncodedLength(entry.data.integer);
+				break;
+
+			case BE_LIST:
+				encodedLength += BEListGetEncodedLength(entry.data.list);
+				break;
+
+			case BE_DICTIONARY:
+				encodedLength += BEDictionaryGetEncodedLength(entry.data.dictionary);
+				break;
+
+			default:
+				return -1;
+		}
+	}
+
+	// Add end size
+	encodedLength += 1;
+
+	// TODO implement
+	return encodedLength;
+}

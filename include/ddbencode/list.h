@@ -4,3 +4,4 @@ BEList *BEListCreate(size_t aSize, ...);
 void BEListDelete(BEList *aList);
 
 void BEListEncode(BEList *aList, void **aData, size_t *aDataLength);
+size_t BEListGetEncodedLength(BEList *aList);

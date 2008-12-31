@@ -237,30 +237,84 @@ static void BETestInteger_decodeM11(void)
 	free(result);
 }
 
+static void BETestInteger_getEncodedLength0(void)
+{
+	UC_ASSERT(3 == BEIntegerGetEncodedLength(0));
+}
+
+static void BETestInteger_getEncodedLength1(void)
+{
+	UC_ASSERT(3 == BEIntegerGetEncodedLength(1));
+}
+
+static void BETestInteger_getEncodedLength9(void)
+{
+	UC_ASSERT(3 == BEIntegerGetEncodedLength(9));
+}
+
+static void BETestInteger_getEncodedLength10(void)
+{
+	UC_ASSERT(4 == BEIntegerGetEncodedLength(10));
+}
+
+static void BETestInteger_getEncodedLength11(void)
+{
+	UC_ASSERT(4 == BEIntegerGetEncodedLength(11));
+}
+
+static void BETestInteger_getEncodedLengthM1(void)
+{
+	UC_ASSERT(4 == BEIntegerGetEncodedLength(-1));
+}
+
+static void BETestInteger_getEncodedLengthM9(void)
+{
+	UC_ASSERT(4 == BEIntegerGetEncodedLength(-9));
+}
+
+static void BETestInteger_getEncodedLengthM10(void)
+{
+	UC_ASSERT(5 == BEIntegerGetEncodedLength(-10));
+}
+
+static void BETestInteger_getEncodedLengthM11(void)
+{
+	UC_ASSERT(5 == BEIntegerGetEncodedLength(-11));
+}
+
 void BETestInteger(void)
 {
 	/* create suite */
 	uc_suite_t *test_suite = uc_suite_create("integer");
 
 	/* add tests to suite */
-	uc_suite_add_test(test_suite, uc_test_create("encode 0",   &BETestInteger_encode0));
-	uc_suite_add_test(test_suite, uc_test_create("encode 1",   &BETestInteger_encode1));
-	uc_suite_add_test(test_suite, uc_test_create("encode 9",   &BETestInteger_encode9));
-	uc_suite_add_test(test_suite, uc_test_create("encode 10",  &BETestInteger_encode10));
-	uc_suite_add_test(test_suite, uc_test_create("encode 11",  &BETestInteger_encode11));
-	uc_suite_add_test(test_suite, uc_test_create("encode -1",  &BETestInteger_encodeM1));
-	uc_suite_add_test(test_suite, uc_test_create("encode -9",  &BETestInteger_encodeM9));
-	uc_suite_add_test(test_suite, uc_test_create("encode -10", &BETestInteger_encodeM10));
-	uc_suite_add_test(test_suite, uc_test_create("encode -11", &BETestInteger_encodeM11));
-	uc_suite_add_test(test_suite, uc_test_create("decode 0",   &BETestInteger_decode0));
-	uc_suite_add_test(test_suite, uc_test_create("decode 1",   &BETestInteger_decode1));
-	uc_suite_add_test(test_suite, uc_test_create("decode 9",   &BETestInteger_decode9));
-	uc_suite_add_test(test_suite, uc_test_create("decode 10",  &BETestInteger_decode10));
-	uc_suite_add_test(test_suite, uc_test_create("decode 11",  &BETestInteger_decode11));
-	uc_suite_add_test(test_suite, uc_test_create("decode -1",  &BETestInteger_decodeM1));
-	uc_suite_add_test(test_suite, uc_test_create("decode -9",  &BETestInteger_decodeM9));
-	uc_suite_add_test(test_suite, uc_test_create("decode -10", &BETestInteger_decodeM10));
-	uc_suite_add_test(test_suite, uc_test_create("decode -11", &BETestInteger_decodeM11));
+	uc_suite_add_test(test_suite, uc_test_create("encode 0",               &BETestInteger_encode0));
+	uc_suite_add_test(test_suite, uc_test_create("encode 1",               &BETestInteger_encode1));
+	uc_suite_add_test(test_suite, uc_test_create("encode 9",               &BETestInteger_encode9));
+	uc_suite_add_test(test_suite, uc_test_create("encode 10",              &BETestInteger_encode10));
+	uc_suite_add_test(test_suite, uc_test_create("encode 11",              &BETestInteger_encode11));
+	uc_suite_add_test(test_suite, uc_test_create("encode -1",              &BETestInteger_encodeM1));
+	uc_suite_add_test(test_suite, uc_test_create("encode -9",              &BETestInteger_encodeM9));
+	uc_suite_add_test(test_suite, uc_test_create("encode -10",             &BETestInteger_encodeM10));
+	uc_suite_add_test(test_suite, uc_test_create("encode -11",             &BETestInteger_encodeM11));
+	uc_suite_add_test(test_suite, uc_test_create("decode 0",               &BETestInteger_decode0));
+	uc_suite_add_test(test_suite, uc_test_create("decode 1",               &BETestInteger_decode1));
+	uc_suite_add_test(test_suite, uc_test_create("decode 9",               &BETestInteger_decode9));
+	uc_suite_add_test(test_suite, uc_test_create("decode 10",              &BETestInteger_decode10));
+	uc_suite_add_test(test_suite, uc_test_create("decode 11",              &BETestInteger_decode11));
+	uc_suite_add_test(test_suite, uc_test_create("decode -1",              &BETestInteger_decodeM1));
+	uc_suite_add_test(test_suite, uc_test_create("decode -9",              &BETestInteger_decodeM9));
+	uc_suite_add_test(test_suite, uc_test_create("decode -10",             &BETestInteger_decodeM10));
+	uc_suite_add_test(test_suite, uc_test_create("decode -11",             &BETestInteger_decodeM11));
+	uc_suite_add_test(test_suite, uc_test_create("get encoded length 0",   &BETestInteger_getEncodedLength0));
+	uc_suite_add_test(test_suite, uc_test_create("get encoded length 1",   &BETestInteger_getEncodedLength1));
+	uc_suite_add_test(test_suite, uc_test_create("get encoded length 9",   &BETestInteger_getEncodedLength9));
+	uc_suite_add_test(test_suite, uc_test_create("get encoded length 10",  &BETestInteger_getEncodedLength10));
+	uc_suite_add_test(test_suite, uc_test_create("get encoded length 11",  &BETestInteger_getEncodedLength11));
+	uc_suite_add_test(test_suite, uc_test_create("get encoded length -1",  &BETestInteger_getEncodedLengthM1));
+	uc_suite_add_test(test_suite, uc_test_create("get encoded length -9",  &BETestInteger_getEncodedLengthM9));
+	uc_suite_add_test(test_suite, uc_test_create("get encoded length -10", &BETestInteger_getEncodedLengthM10));
+	uc_suite_add_test(test_suite, uc_test_create("get encoded length -11", &BETestInteger_getEncodedLengthM11));
 
 	/* run suite */
 	uc_suite_run(test_suite);

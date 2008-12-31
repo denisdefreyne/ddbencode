@@ -34,3 +34,17 @@ void BEIntegerEncode(int aInteger, void **aData, size_t *aDataLength)
 	*aDataLength = dataLength;
 }
 
+size_t BEIntegerGetEncodedLength(int aInteger)
+{
+	// Get length of integer
+	size_t integerLength;
+	if(aInteger == 0 || aInteger == 1)
+		integerLength = 1;
+	else
+		integerLength = (int)log10(fabs((double)aInteger)) + 1;
+	if(aInteger < 0)
+		++integerLength;
+
+	// Add begin and end marker lengths
+	return 1 + integerLength + 1;
+}

@@ -23,3 +23,9 @@ void BEDictionaryEncode(BEDictionary *aDictionary, void **aData, size_t *aDataLe
 
 	// TODO implement
 }
+
+size_t BEDictionaryGetEncodedLength(BEDictionary *aDictionary)
+{
+	// TODO implement
+	return 0;
+}

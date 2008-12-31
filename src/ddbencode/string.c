@@ -32,3 +32,11 @@ void BEStringEncode(void *aString, size_t aStringLength, void **aData, size_t *a
 	*aDataLength = dataLength;
 }
 
+size_t BEStringGetEncodedLength(void *aString)
+{
+	size_t stringLength = strlen(aString);
+	if(stringLength < 2)
+		return 1 + 1 + stringLength;
+	else
+		return (int)log10((double)stringLength) + 1 + 1 + stringLength;
+}

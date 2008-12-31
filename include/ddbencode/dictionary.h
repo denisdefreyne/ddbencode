@@ -4,3 +4,4 @@ BEDictionary *BEDictionaryCreate(void *args, ...);
 void BEDictionaryDelete(BEDictionary *aDictionary);
 
 void BEDictionaryEncode(BEDictionary *aDictionary, void **aData, size_t *aDataLength);
+size_t BEDictionaryGetEncodedLength(BEDictionary *aDictionary);

@@ -81,6 +81,31 @@ static void BETestString_decodeWithLengthEqualTo11(void)
 	free(data);
 }
 
+static void BETestString_getEncodedLength0(void)
+{
+	UC_ASSERT(2 == BEStringGetEncodedLength(""));
+}
+
+static void BETestString_getEncodedLength1(void)
+{
+	UC_ASSERT(3 == BEStringGetEncodedLength("a"));
+}
+
+static void BETestString_getEncodedLength9(void)
+{
+	UC_ASSERT(11 == BEStringGetEncodedLength("abcdefghi"));
+}
+
+static void BETestString_getEncodedLength10(void)
+{
+	UC_ASSERT(13 == BEStringGetEncodedLength("abcdefghij"));
+}
+
+static void BETestString_getEncodedLength11(void)
+{
+	UC_ASSERT(14 == BEStringGetEncodedLength("abcdefghijk"));
+}
+
 void BETestString(void)
 {
 	/* create suite */
@@ -93,6 +118,11 @@ void BETestString(void)
 	uc_suite_add_test(test_suite, uc_test_create("length == 9",        &BETestString_decodeWithLengthEqualTo9));
 	uc_suite_add_test(test_suite, uc_test_create("length == 10",       &BETestString_decodeWithLengthEqualTo10));
 	uc_suite_add_test(test_suite, uc_test_create("length == 11",       &BETestString_decodeWithLengthEqualTo11));
+	uc_suite_add_test(test_suite, uc_test_create("get encoded length 0",        &BETestString_getEncodedLength0));
+	uc_suite_add_test(test_suite, uc_test_create("get encoded length 1",        &BETestString_getEncodedLength1));
+	uc_suite_add_test(test_suite, uc_test_create("get encoded length 9",        &BETestString_getEncodedLength9));
+	uc_suite_add_test(test_suite, uc_test_create("get encoded length 10",       &BETestString_getEncodedLength10));
+	uc_suite_add_test(test_suite, uc_test_create("get encoded length 11",       &BETestString_getEncodedLength11));
 
 	/* run suite */
 	uc_suite_run(test_suite);
