@@ -81,6 +81,84 @@ static void BETestString_encode11(void)
 	free(data);
 }
 
+static void BETestString_decode0(void)
+{
+	BEType type;
+	void *result;
+
+	result = BEDecode("0:", 2, &type);
+
+	UC_ASSERT(BE_STRING == type);
+	UC_ASSERT(0 == strcmp(result, ""));
+
+	free(result);
+}
+
+static void BETestString_decode1(void)
+{
+	BEType type;
+	void *result;
+
+	result = BEDecode("1:a", 3, &type);
+
+	UC_ASSERT(BE_STRING == type);
+	UC_ASSERT(0 == strcmp(result, "a"));
+
+	free(result);
+}
+
+static void BETestString_decode4(void)
+{
+	BEType type;
+	void *result;
+
+	result = BEDecode("4:abcd", 6, &type);
+
+	UC_ASSERT(BE_STRING == type);
+	UC_ASSERT(0 == strcmp(result, "abcd"));
+
+	free(result);
+}
+
+static void BETestString_decode9(void)
+{
+	BEType type;
+	void *result;
+
+	result = BEDecode("9:abcdefghi", 11, &type);
+
+	UC_ASSERT(BE_STRING == type);
+	UC_ASSERT(0 == strcmp(result, "abcdefghi"));
+
+	free(result);
+}
+
+static void BETestString_decode10(void)
+{
+	BEType type;
+	void *result;
+
+	result = BEDecode("10:abcdefghij", 13, &type);
+
+	UC_ASSERT(BE_STRING == type);
+	UC_ASSERT(0 == strcmp(result, "abcdefghij"));
+
+	free(result);
+}
+
+static void BETestString_decode11(void)
+{
+	BEType type;
+	void *result;
+
+	result = BEDecode("11:abcdefghijk", 14, &type);
+
+	UC_ASSERT(BE_STRING == type);
+	UC_ASSERT(0 == strcmp(result, "abcdefghijk"));
+
+	free(result);
+}
+
 static void BETestString_getEncodedLength0(void)
 {
 	UC_ASSERT(2 == BEStringGetEncodedLength(""));
@@ -118,6 +196,12 @@ void BETestString(void)
 	uc_suite_add_test(test_suite, uc_test_create("encode 9",              &BETestString_encode9));
 	uc_suite_add_test(test_suite, uc_test_create("encode 10",             &BETestString_encode10));
 	uc_suite_add_test(test_suite, uc_test_create("encode 11",             &BETestString_encode11));
+	uc_suite_add_test(test_suite, uc_test_create("decode 0",              &BETestString_decode0));
+	uc_suite_add_test(test_suite, uc_test_create("decode 1",              &BETestString_decode1));
+	uc_suite_add_test(test_suite, uc_test_create("decode 4",              &BETestString_decode4));
+	uc_suite_add_test(test_suite, uc_test_create("decode 9",              &BETestString_decode9));
+	uc_suite_add_test(test_suite, uc_test_create("decode 10",             &BETestString_decode10));
+	uc_suite_add_test(test_suite, uc_test_create("decode 11",             &BETestString_decode11));
 	uc_suite_add_test(test_suite, uc_test_create("get encoded length 0",  &BETestString_getEncodedLength0));
 	uc_suite_add_test(test_suite, uc_test_create("get encoded length 1",  &BETestString_getEncodedLength1));
 	uc_suite_add_test(test_suite, uc_test_create("get encoded length 9",  &BETestString_getEncodedLength9));
