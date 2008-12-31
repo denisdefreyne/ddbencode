@@ -55,6 +55,8 @@ bool BEDecode(void *aiData, size_t aiLength, BEType *aoType, char **aoString, in
 
 				// Get string
 				char *string = malloc((length+1)*sizeof (char));
+				if(!string)
+					return false;
 				memcpy(string, aiData+i+1, length);
 				string[length] = '\0';
 

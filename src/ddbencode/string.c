@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <string.h>
 
-void BEStringEncode(void *aiString, size_t aiStringLength, void **aoData, size_t *aoDataLength)
+bool BEStringEncode(void *aiString, size_t aiStringLength, void **aoData, size_t *aoDataLength)
 {
 	// Strings are length-prefixed base ten followed by a colon and the string.
 	// For example 4:spam corresponds to 'spam'.
@@ -20,6 +20,8 @@ void BEStringEncode(void *aiString, size_t aiStringLength, void **aoData, size_t
 	// Create data
 	size_t dataLength = lengthLength + 1 + stringLength;
 	void *data = malloc(dataLength+1);
+	if(!data)
+		return false;
 
 	// Fill data
 	sprintf(data, "%i:", (int)stringLength);
@@ -29,6 +31,8 @@ void BEStringEncode(void *aiString, size_t aiStringLength, void **aoData, size_t
 	// Return data
 	*aoData = data;
 	*aoDataLength = dataLength;
+
+	return true;
 }
 
 size_t BEStringGetEncodedLength(void *aString)

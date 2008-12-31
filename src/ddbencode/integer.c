@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void BEIntegerEncode(int aiInteger, void **aoData, size_t *aoDataLength)
+bool BEIntegerEncode(int aiInteger, void **aoData, size_t *aoDataLength)
 {
 	// Integers are represented by an 'i' followed by the number in base 10
 	// followed by an 'e'. For example i3e corresponds to 3 and i-3e corresponds
@@ -24,6 +24,8 @@ void BEIntegerEncode(int aiInteger, void **aoData, size_t *aoDataLength)
 	// Create data
 	size_t dataLength = 1 + integerLength + 1;
 	void *data = malloc(dataLength+1);
+	if(!data)
+		return false;
 
 	// Fill data
 	sprintf(data, "i%ie", aiInteger);
@@ -31,6 +33,8 @@ void BEIntegerEncode(int aiInteger, void **aoData, size_t *aoDataLength)
 	// Return data
 	*aoData = data;
 	*aoDataLength = dataLength;
+
+	return true;
 }
 
 size_t BEIntegerGetEncodedLength(int aInteger)

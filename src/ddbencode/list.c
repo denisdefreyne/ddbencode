@@ -11,7 +11,11 @@ BEList *BEListCreate(size_t aSize, ...)
 
 	// Create list
 	BEList *list = malloc(sizeof (BEList));
+	if(!list)
+		return NULL;
 	list->entries = malloc(aSize * (sizeof (struct _BEListEntry)));
+	if(!list->entries)
+		return NULL;
 	list->size = aSize;
 
 	va_start(ap, aSize);
@@ -58,7 +62,7 @@ void BEListDelete(BEList *aList)
 	free(aList);
 }
 
-void BEListEncode(BEList *aiList, void **aoData, size_t *aoDataLength)
+bool BEListEncode(BEList *aiList, void **aoData, size_t *aoDataLength)
 {
 	// Lists are encoded as an 'l' followed by their elements (also bencoded)
 	// followed by an 'e'. For example l4:spam4:eggse corresponds to ['spam',
@@ -69,6 +73,8 @@ void BEListEncode(BEList *aiList, void **aoData, size_t *aoDataLength)
 
 	// Create data
 	void *data = malloc(encodedLength*(sizeof data));
+	if(!data)
+		return false;
 
 	// Fill data
 	((char *)data)[0] = 'l';
@@ -100,7 +106,7 @@ void BEListEncode(BEList *aiList, void **aoData, size_t *aoDataLength)
 				break;
 
 			default:
-				return;
+				return false;
 		}
 
 		// Append entry data
@@ -115,6 +121,8 @@ void BEListEncode(BEList *aiList, void **aoData, size_t *aoDataLength)
 	// Return data
 	*aoData = data;
 	*aoDataLength = encodedLength;
+
+	return true;
 }
 
 size_t BEListGetEncodedLength(BEList *aList)

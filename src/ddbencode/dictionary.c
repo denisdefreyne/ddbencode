@@ -1,5 +1,6 @@
 #include <ddbencode/ddbencode.h>
 
+#include <stdbool.h>
 #include <stdlib.h>
 
 BEDictionary *BEDictionaryCreate(void *args, ...)
@@ -13,7 +14,7 @@ void BEDictionaryDelete(BEDictionary *aDictionary)
 	// TODO implement
 }
 
-void BEDictionaryEncode(BEDictionary *aiDictionary, void **aoData, size_t *aoDataLength)
+bool BEDictionaryEncode(BEDictionary *aiDictionary, void **aoData, size_t *aoDataLength)
 {
 	// Dictionaries are encoded as a 'd' followed by a list of alternating keys
 	// and their corresponding values followed by an 'e'. For example,
@@ -22,6 +23,7 @@ void BEDictionaryEncode(BEDictionary *aiDictionary, void **aoData, size_t *aoDat
 	// and appear in sorted order (sorted as raw strings, not alphanumerics).
 
 	// TODO implement
+	return false;
 }
 
 size_t BEDictionaryGetEncodedLength(BEDictionary *aDictionary)
