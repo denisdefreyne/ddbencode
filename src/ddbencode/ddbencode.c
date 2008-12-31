@@ -48,16 +48,17 @@ void *BEDecode(void *aData, size_t aLength, BEType *aType)
 			{
 				// Get string length
 				int length = 0;
-				for(char *currentChar = (char *)aData; *currentChar != ':'; ++currentChar)
+				size_t i;
+				for(i = 0; ((char *)aData)[i] != ':'; ++i)
 				{
 					length *= 10;
-					length += (*currentChar - '0');
+					length += (((char *)aData)[i] - '0');
 				}
 
 				// Get string
 				// FIXME check malloc return value
 				char *string = malloc((length+1)*sizeof (char));
-				memcpy(string, aData+2, length);
+				memcpy(string, aData+i+1, length);
 				string[length] = '\0';
 
 				// Set result
