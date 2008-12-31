@@ -1,24 +1,36 @@
 struct _BEListEntry
 {
 	BEType type;
-	void *data;
+	union
+	{
+		char        *string;
+		int         integer;
+		BEList      *list;
+		BEDictionary *dictionary;
+	} data;
 };
 
 struct _BEList
 {
 	struct _BEListEntry *entries;
-	size_t length;
+	size_t size;
 };
 
 struct _BEDictionaryEntry
 {
 	char *key;
 	BEType valueType;
-	void *value;
+	union
+	{
+		char        *string;
+		int         integer;
+		BEList      *list;
+		BEDictionary *dictionary;
+	} data;
 };
 
 struct _BEDictionary
 {
 	struct _BEDictionaryEntry *entries;
-	size_t length;
+	size_t size;
 };
