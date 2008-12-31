@@ -345,6 +345,82 @@ static void BETestInteger_decodeM11(void)
 	UC_ASSERT(0 == stringLength);
 }
 
+static void BETestInteger_decodeLong(void)
+{
+	BEType type;
+	bool success;
+
+	char *string = NULL;
+	int integer = 0;
+	BEList *list = NULL;
+	BEDictionary *dictionary = NULL;
+
+	size_t stringLength = 0;
+
+	success = BEDecode("i123eblahblah", 13, &type, &string, &integer, &list, &dictionary, &stringLength);
+
+	UC_ASSERT(success);
+
+	UC_ASSERT(BE_INTEGER == type);
+	UC_ASSERT(123 == integer);
+
+	UC_ASSERT(NULL == string);
+	UC_ASSERT(NULL == list);
+	UC_ASSERT(NULL == dictionary);
+	UC_ASSERT(0 == stringLength);
+}
+
+static void BETestInteger_decodeInvalid0(void)
+{
+	BEType type;
+	bool success;
+
+	char *string = NULL;
+	int integer = 0;
+	BEList *list = NULL;
+	BEDictionary *dictionary = NULL;
+
+	size_t stringLength = 0;
+
+	success = BEDecode("ie", 2, &type, &string, &integer, &list, &dictionary, &stringLength);
+
+	UC_ASSERT(false == success);
+}
+
+static void BETestInteger_decodeInvalid1(void)
+{
+	BEType type;
+	bool success;
+
+	char *string = NULL;
+	int integer = 0;
+	BEList *list = NULL;
+	BEDictionary *dictionary = NULL;
+
+	size_t stringLength = 0;
+
+	success = BEDecode("ieee", 4, &type, &string, &integer, &list, &dictionary, &stringLength);
+
+	UC_ASSERT(false == success);
+}
+
+static void BETestInteger_decodeInvalid2(void)
+{
+	BEType type;
+	bool success;
+
+	char *string = NULL;
+	int integer = 0;
+	BEList *list = NULL;
+	BEDictionary *dictionary = NULL;
+
+	size_t stringLength = 0;
+
+	success = BEDecode("i12345e", 3, &type, &string, &integer, &list, &dictionary, &stringLength);
+
+	UC_ASSERT(false == success);
+}
+
 static void BETestInteger_getEncodedLength0(void)
 {
 	UC_ASSERT(3 == BEIntegerGetEncodedLength(0));
@@ -414,6 +490,10 @@ void BETestInteger(void)
 	uc_suite_add_test(test_suite, uc_test_create("decode -9",              &BETestInteger_decodeM9));
 	uc_suite_add_test(test_suite, uc_test_create("decode -10",             &BETestInteger_decodeM10));
 	uc_suite_add_test(test_suite, uc_test_create("decode -11",             &BETestInteger_decodeM11));
+	uc_suite_add_test(test_suite, uc_test_create("decode long",            &BETestInteger_decodeLong));
+	uc_suite_add_test(test_suite, uc_test_create("decode invalid 0",       &BETestInteger_decodeInvalid0));
+	uc_suite_add_test(test_suite, uc_test_create("decode invalid 1",       &BETestInteger_decodeInvalid1));
+	uc_suite_add_test(test_suite, uc_test_create("decode invalid 2",       &BETestInteger_decodeInvalid2));
 	uc_suite_add_test(test_suite, uc_test_create("get encoded length 0",   &BETestInteger_getEncodedLength0));
 	uc_suite_add_test(test_suite, uc_test_create("get encoded length 1",   &BETestInteger_getEncodedLength1));
 	uc_suite_add_test(test_suite, uc_test_create("get encoded length 9",   &BETestInteger_getEncodedLength9));

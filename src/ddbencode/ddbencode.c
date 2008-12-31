@@ -6,6 +6,10 @@
 
 bool BEDecode(void *aiData, size_t aiLength, BEType *aoType, char **aoString, int *aoInteger, BEList **aoList, BEDictionary **aoDictionary, size_t *aoStringLength)
 {
+	// Validate length
+	if(aiLength < 2)
+		return false;
+
 	switch(((char *)aiData)[0])
 	{
 		// Integer, e.g. i3e
@@ -14,15 +18,37 @@ bool BEDecode(void *aiData, size_t aiLength, BEType *aoType, char **aoString, in
 				// Check presence of minus sign
 				bool isNegative = (((char *)aiData)[1] == '-');
 
+				// Validate length
+				if(aiLength < (isNegative ? 4 : 3))
+					return false;
+
 				// Get integer
 				int integer = 0;
-				for(size_t i = (isNegative ? 2 : 1); i < aiLength-1; ++i)
+				size_t i = (isNegative ? 2 : 1);
+				while(((char *)aiData)[i] != 'e')
 				{
+					// Get and validate char
+					char thisChar = ((char *)aiData)[i];
+					if(thisChar < '0' || thisChar > '9')
+						return false;
+
+					// Add to integer
 					integer *= 10;
-					integer += (((char *)aiData)[i] - '0');
+					integer += (thisChar - '0');
+
+					// Validate length
+					if(i+1 >= aiLength)
+						return false;
+
+					// Go to next char
+					++i;
 				}
 				if(isNegative)
 					integer = -integer;
+
+				// Validate numbers
+				if(i == (isNegative ? 2 : 1))
+					return false;
 
 				// Set result
 				*aoType = BE_INTEGER;
