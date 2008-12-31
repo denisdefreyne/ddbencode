@@ -14,11 +14,11 @@ void BEIntegerEncode(int aiInteger, void **aoData, size_t *aoDataLength)
 
 	// Calculate the length of the integer
 	size_t integerLength;
-	if(aInteger == 0 || aInteger == 1)
+	if(aiInteger == 0 || aiInteger == 1)
 		integerLength = 1;
 	else
-		integerLength = (int)log10(fabs((double)aInteger)) + 1;
-	if(aInteger < 0)
+		integerLength = (int)log10(fabs((double)aiInteger)) + 1;
+	if(aiInteger < 0)
 		++integerLength;
 
 	// Create data
@@ -27,11 +27,11 @@ void BEIntegerEncode(int aiInteger, void **aoData, size_t *aoDataLength)
 	void *data = malloc(dataLength+1);
 
 	// Fill data
-	sprintf(data, "i%ie", aInteger);
+	sprintf(data, "i%ie", aiInteger);
 
 	// Return data
-	*aData = data;
-	*aDataLength = dataLength;
+	*aoData = data;
+	*aoDataLength = dataLength;
 }
 
 size_t BEIntegerGetEncodedLength(int aInteger)

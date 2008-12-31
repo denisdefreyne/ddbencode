@@ -10,7 +10,7 @@ void BEStringEncode(void *aiString, size_t aiStringLength, void **aoData, size_t
 	// For example 4:spam corresponds to 'spam'.
 
 	// Calculate the length of the length (yes, indeed) of the string
-	size_t stringLength = strlen(aString);
+	size_t stringLength = strlen(aiString);
 	size_t lengthLength;
 	if(stringLength < 2)
 		lengthLength = 1;
@@ -24,12 +24,12 @@ void BEStringEncode(void *aiString, size_t aiStringLength, void **aoData, size_t
 
 	// Fill data
 	sprintf(data, "%i:", (int)stringLength);
-	memcpy(data+lengthLength+1, aString, aStringLength);
-	((char *)data)[lengthLength+1+aStringLength] = '\0';
+	memcpy(data+lengthLength+1, aiString, aiStringLength);
+	((char *)data)[lengthLength+1+aiStringLength] = '\0';
 
 	// Return data
-	*aData = data;
-	*aDataLength = dataLength;
+	*aoData = data;
+	*aoDataLength = dataLength;
 }
 
 size_t BEStringGetEncodedLength(void *aString)
