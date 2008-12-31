@@ -10,7 +10,6 @@ BEList *BEListCreate(size_t aSize, ...)
 	va_list ap;
 
 	// Create list
-	// FIXME check malloc return value
 	BEList *list = malloc(sizeof (BEList));
 	list->entries = malloc(aSize * (sizeof (struct _BEListEntry)));
 	list->size = aSize;
@@ -21,7 +20,6 @@ BEList *BEListCreate(size_t aSize, ...)
 		switch(va_arg(ap, int))
 		{
 			case BE_STRING:
-				// TODO decide whether the string should be retained (dup'ed) or not
 				list->entries[i].type = BE_STRING;
 				list->entries[i].data.string = va_arg(ap, char *);
 				list->entries[i].stringLength = va_arg(ap, size_t);
@@ -70,7 +68,6 @@ void BEListEncode(BEList *aiList, void **aoData, size_t *aoDataLength)
 	size_t encodedLength = BEListGetEncodedLength(aiList);
 
 	// Create data
-	// FIXME check malloc return value
 	void *data = malloc(encodedLength*(sizeof data));
 
 	// Fill data
@@ -157,6 +154,6 @@ size_t BEListGetEncodedLength(BEList *aList)
 	// Add end size
 	encodedLength += 1;
 
-	// TODO implement
+	// Done
 	return encodedLength;
 }

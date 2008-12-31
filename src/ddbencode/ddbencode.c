@@ -6,8 +6,6 @@
 
 bool BEDecode(void *aiData, size_t aiLength, BEType *aoType, char **aoString, int *aoInteger, BEList **aoList, BEDictionary **aoDictionary, size_t *aoStringLength)
 {
-	// TODO validate input
-
 	switch(((char *)aiData)[0])
 	{
 		// Integer, e.g. i3e
@@ -56,7 +54,6 @@ bool BEDecode(void *aiData, size_t aiLength, BEType *aoType, char **aoString, in
 				}
 
 				// Get string
-				// FIXME check malloc return value
 				char *string = malloc((length+1)*sizeof (char));
 				memcpy(string, aiData+i+1, length);
 				string[length] = '\0';

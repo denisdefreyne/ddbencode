@@ -22,7 +22,6 @@ void BEIntegerEncode(int aiInteger, void **aoData, size_t *aoDataLength)
 		++integerLength;
 
 	// Create data
-	// FIXME check malloc return value
 	size_t dataLength = 1 + integerLength + 1;
 	void *data = malloc(dataLength+1);
 

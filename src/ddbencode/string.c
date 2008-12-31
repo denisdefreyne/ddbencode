@@ -18,7 +18,6 @@ void BEStringEncode(void *aiString, size_t aiStringLength, void **aoData, size_t
 		lengthLength = (int)log10((double)stringLength) + 1;
 
 	// Create data
-	// FIXME check malloc return value
 	size_t dataLength = lengthLength + 1 + stringLength;
 	void *data = malloc(dataLength+1);
 
