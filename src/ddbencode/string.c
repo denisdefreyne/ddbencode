@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <string.h>
 
-void BEStringEncode(void *aString, size_t aStringLength, void **aData, size_t *aDataLength)
+void BEStringEncode(void *aiString, size_t aiStringLength, void **aoData, size_t *aoDataLength)
 {
 	// Strings are length-prefixed base ten followed by a colon and the string.
 	// For example 4:spam corresponds to 'spam'.

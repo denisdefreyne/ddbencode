@@ -13,7 +13,7 @@ void BEDictionaryDelete(BEDictionary *aDictionary)
 	// TODO implement
 }
 
-void BEDictionaryEncode(BEDictionary *aDictionary, void **aData, size_t *aDataLength)
+void BEDictionaryEncode(BEDictionary *aiDictionary, void **aoData, size_t *aoDataLength)
 {
 	// Dictionaries are encoded as a 'd' followed by a list of alternating keys
 	// and their corresponding values followed by an 'e'. For example,

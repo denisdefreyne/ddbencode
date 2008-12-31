@@ -1,2 +1,2 @@
-void BEStringEncode(void *aString, size_t aStringLength, void **aData, size_t *aDataLength);
+void BEStringEncode(void *aiString, size_t aiStringLength, void **aoData, size_t *aoDataLength);
 size_t BEStringGetEncodedLength(void *aString);

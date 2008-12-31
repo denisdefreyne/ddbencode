@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void BEIntegerEncode(int aInteger, void **aData, size_t *aDataLength)
+void BEIntegerEncode(int aiInteger, void **aoData, size_t *aoDataLength)
 {
 	// Integers are represented by an 'i' followed by the number in base 10
 	// followed by an 'e'. For example i3e corresponds to 3 and i-3e corresponds

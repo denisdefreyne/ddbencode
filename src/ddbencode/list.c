@@ -58,7 +58,7 @@ void BEListDelete(BEList *aList)
 	free(aList);
 }
 
-void BEListEncode(BEList *aList, void **aData, size_t *aDataLength)
+void BEListEncode(BEList *aiList, void **aoData, size_t *aoDataLength)
 {
 	// Lists are encoded as an 'l' followed by their elements (also bencoded)
 	// followed by an 'e'. For example l4:spam4:eggse corresponds to ['spam',
