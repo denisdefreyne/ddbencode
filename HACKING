@@ -1,0 +1,56 @@
+ddbencode coding style guidelines
+=================================
+
+Platform
+--------
+
+All code must be valid C99. Avoid GNU extensions.
+
+Text
+----
+
+All text and source code must be ASCII, or, if not possible, UTF-8. Use Unix line endings. When writing text, put one space (not two) after punctuation. Avoid trailing whitespace.
+
+Naming
+------
+
+...
+
+Comments
+--------
+
+Use comments liberally. //-style comments are allowed and encouraged.
+
+Indenting and bracing
+---------------------
+
+Use tabs to indent; use spaces to align.
+
+Keep indentation levels to a minimum to improve readability. Bail out of a block as soon as possible. Bad example:
+
+	public void foo()
+	{
+		if(bar)
+		{
+			if(baz)
+			{
+				blah();
+			}
+		}
+	}
+
+Good example:
+
+	public void foo()
+	{
+		if(!bar)
+			return;
+		if(!baz)
+			return;
+	
+		blah();
+	}
+
+Braces always start on a new line. Do not put braces around blocks with only one statement.
+
+Do not put spaces after a function name in a function call. Do not put a space after a keyword that is followed by a left parenthesis. Place spaces around operators such as `==` and `<`. Do not place spaces inside parentheses.
