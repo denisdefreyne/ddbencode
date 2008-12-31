@@ -13,7 +13,7 @@ static void BETestList_create1(void)
 {
 	BEList *list = BEListCreate(
 		1,
-		BE_STRING, "foo"
+		BE_STRING, "foo", 3
 	);
 
 	UC_ASSERT(1 == list->size);
@@ -23,14 +23,14 @@ static void BETestList_create8(void)
 {
 	BEList *list = BEListCreate(
 		8,
-		BE_STRING, "foo",
-		BE_INTEGER, 800,
-		BE_STRING, "foo",
-		BE_INTEGER, 800,
-		BE_INTEGER, 800,
-		BE_LIST, NULL,
+		BE_STRING,     "foo", 3,
+		BE_INTEGER,    800,
+		BE_STRING,     "foo", 3,
+		BE_INTEGER,    800,
+		BE_INTEGER,    800,
+		BE_LIST,       NULL,
 		BE_DICTIONARY, 2,
-		BE_LIST, 123
+		BE_LIST,       123
 	);
 
 	UC_ASSERT(8 == list->size);
@@ -40,7 +40,7 @@ static void BETestList_createInvalid(void)
 {
 	BEList *list = BEListCreate(
 		1,
-		123, "foo"
+		123, "foo", 3
 	);
 
 	UC_ASSERT(!list);

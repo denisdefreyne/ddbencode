@@ -8,6 +8,7 @@ struct _BEListEntry
 		BEList      *list;
 		BEDictionary *dictionary;
 	} data;
+	size_t stringLength;
 };
 
 struct _BEList
@@ -27,6 +28,7 @@ struct _BEDictionaryEntry
 		BEList      *list;
 		BEDictionary *dictionary;
 	} data;
+	size_t stringLength;
 };
 
 struct _BEDictionary

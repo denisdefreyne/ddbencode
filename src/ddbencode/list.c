@@ -23,6 +23,7 @@ BEList *BEListCreate(size_t aSize, ...)
 				// TODO decide whether the string should be retained (dup'ed) or not
 				list->entries[i].type = BE_STRING;
 				list->entries[i].data.string = va_arg(ap, char *);
+				list->entries[i].stringLength = va_arg(ap, size_t);
 				break;
 
 			case BE_INTEGER:
