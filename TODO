@@ -6,6 +6,4 @@ ddbencode to do
 * Implement dictionary deletion
 * Implement dictionary encoding
 * Implement dictionary decoding
-* Make sure all tests clean up their allocated data
-* Make sure all malloc calls check the return value
 * Make sure decoder validates input

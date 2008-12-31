@@ -9,6 +9,8 @@ static void BETestList_create0(void)
 	BEList *list = BEListCreate(0);
 
 	UC_ASSERT(0 == list->size);
+
+	BEListDelete(list);
 }
 
 static void BETestList_create1Integer(void)
@@ -22,6 +24,8 @@ static void BETestList_create1Integer(void)
 
 	UC_ASSERT(BE_INTEGER == list->entries[0].type);
 	UC_ASSERT(123 == list->entries[0].data.integer);
+
+	BEListDelete(list);
 }
 
 static void BETestList_create1String(void)
@@ -36,6 +40,8 @@ static void BETestList_create1String(void)
 	UC_ASSERT(BE_STRING == list->entries[0].type);
 	UC_ASSERT(0 == strcmp(list->entries[0].data.string, "foo"));
 	UC_ASSERT(3 == list->entries[0].stringLength);
+
+	BEListDelete(list);
 }
 
 static void BETestList_create4(void)
@@ -62,6 +68,8 @@ static void BETestList_create4(void)
 
 	UC_ASSERT(BE_DICTIONARY == list->entries[3].type);
 	UC_ASSERT((void *)333 == list->entries[3].data.dictionary);
+
+	BEListDelete(list);
 }
 
 static void BETestList_createInvalid(void)
@@ -92,6 +100,7 @@ static void BETestList_encode0(void)
 	UC_ASSERT(0 == strncmp(data, "le", 1+1));
 
 	free(data);
+	BEListDelete(list);
 }
 
 static void BETestList_encode1(void)
@@ -111,6 +120,7 @@ static void BETestList_encode1(void)
 	UC_ASSERT(0 == strncmp(data, "l3:fooe", 1+(1+1+3)+1));
 
 	free(data);
+	BEListDelete(list);
 }
 
 static void BETestList_encode2(void)
@@ -131,6 +141,7 @@ static void BETestList_encode2(void)
 	UC_ASSERT(0 == strncmp(data, "l3:fooi123ee", 1+(1+1+3)+(1+3+1)+1));
 
 	free(data);
+	BEListDelete(list);
 }
 
 static void BETestList_getEncodedLength0(void)
@@ -140,6 +151,8 @@ static void BETestList_getEncodedLength0(void)
 	); // le
 
 	UC_ASSERT(1+1 == BEListGetEncodedLength(list));
+
+	BEListDelete(list);
 }
 
 static void BETestList_getEncodedLength1(void)
@@ -150,6 +163,8 @@ static void BETestList_getEncodedLength1(void)
 	); // l3:fooe
 
 	UC_ASSERT(1+(1+1+3)+1 == BEListGetEncodedLength(list));
+
+	BEListDelete(list);
 }
 
 static void BETestList_getEncodedLength2(void)
@@ -161,6 +176,8 @@ static void BETestList_getEncodedLength2(void)
 	); // l3:fooi123ee
 
 	UC_ASSERT(1+(1+1+3)+(1+3+1)+1 == BEListGetEncodedLength(list));
+
+	BEListDelete(list);
 }
 
 void BETestList(void)
