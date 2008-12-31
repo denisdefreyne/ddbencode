@@ -72,9 +72,27 @@ bool BEDecode(void *aiData, size_t aiLength, BEType *aoType, char **aoString, in
 				size_t i;
 				for(i = 0; ((char *)aiData)[i] != ':'; ++i)
 				{
+					// Get and validate char
+					char thisChar = ((char *)aiData)[i];
+					if(thisChar < '0' || thisChar > '9')
+						return false;
+
+					// Add to length
 					length *= 10;
-					length += (((char *)aiData)[i] - '0');
+					length += (thisChar - '0');
+
+					// Validate length
+					if(i+1 >= aiLength)
+						return false;
 				}
+
+				// Validate numbers
+				if(i == 0)
+					return false;
+
+				// Validate length
+				if(i + 1 + length > aiLength)
+					return false;
 
 				// Get string
 				char *string = malloc((length+1)*sizeof (char));
