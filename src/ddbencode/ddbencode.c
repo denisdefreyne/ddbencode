@@ -24,8 +24,8 @@ bool BEDecode(void *aiData, size_t aiLength, BEType *aoType, char **aoString, in
 
 				// Get integer
 				int integer = 0;
-				size_t i = (isNegative ? 2 : 1);
-				while(((char *)aiData)[i] != 'e')
+				size_t i;
+				for(i = (isNegative ? 2 : 1); ((char *)aiData)[i] != 'e'; ++i)
 				{
 					// Get and validate char
 					char thisChar = ((char *)aiData)[i];
@@ -39,9 +39,6 @@ bool BEDecode(void *aiData, size_t aiLength, BEType *aoType, char **aoString, in
 					// Validate length
 					if(i+1 >= aiLength)
 						return false;
-
-					// Go to next char
-					++i;
 				}
 				if(isNegative)
 					integer = -integer;
