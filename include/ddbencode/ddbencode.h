@@ -1,3 +1,4 @@
+#include <stdbool.h>
 #include <stdint.h>
 #include <stdlib.h>
 
@@ -14,4 +15,4 @@ enum {
 };
 typedef uint8_t BEType;
 
-void *BEDecode(void *aData, size_t aLength, BEType *aType);
+bool BEDecode(void *aiData, size_t aiLength, BEType *aoType, char **aoString, int *aoInteger, BEList **aoList, BEDictionary **aoDictionary, size_t *aoStringLength);

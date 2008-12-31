@@ -4,32 +4,32 @@
 #include <stdlib.h>
 #include <string.h>
 
-void *BEDecode(void *aData, size_t aLength, BEType *aType)
+bool BEDecode(void *aiData, size_t aiLength, BEType *aoType, char **aoString, int *aoInteger, BEList **aoList, BEDictionary **aoDictionary, size_t *aoStringLength)
 {
-	switch(((char *)aData)[0])
+	// TODO validate input
+
+	switch(((char *)aiData)[0])
 	{
 		// Integer, e.g. i3e
 		case 'i':
 			{
 				// Check presence of minus sign
-				bool isNegative = (((char *)aData)[1] == '-');
+				bool isNegative = (((char *)aiData)[1] == '-');
 
 				// Get integer
 				int integer = 0;
-				for(size_t i = (isNegative ? 2 : 1); i < aLength-1; ++i)
+				for(size_t i = (isNegative ? 2 : 1); i < aiLength-1; ++i)
 				{
 					integer *= 10;
-					integer += (((char *)aData)[i] - '0');
+					integer += (((char *)aiData)[i] - '0');
 				}
 				if(isNegative)
 					integer = -integer;
 
 				// Set result
-				// FIXME check malloc return value
-				*aType = BE_INTEGER;
-				int *result = malloc(sizeof (int));
-				*result = integer;
-				return result;
+				*aoType = BE_INTEGER;
+				*aoInteger = integer;
+				return true;
 			}
 			break;
 
@@ -49,21 +49,23 @@ void *BEDecode(void *aData, size_t aLength, BEType *aType)
 				// Get string length
 				int length = 0;
 				size_t i;
-				for(i = 0; ((char *)aData)[i] != ':'; ++i)
+				for(i = 0; ((char *)aiData)[i] != ':'; ++i)
 				{
 					length *= 10;
-					length += (((char *)aData)[i] - '0');
+					length += (((char *)aiData)[i] - '0');
 				}
 
 				// Get string
 				// FIXME check malloc return value
 				char *string = malloc((length+1)*sizeof (char));
-				memcpy(string, aData+i+1, length);
+				memcpy(string, aiData+i+1, length);
 				string[length] = '\0';
 
 				// Set result
-				*aType = BE_STRING;
-				return string;
+				*aoType = BE_STRING;
+				*aoString = string;
+				*aoStringLength = length;
+				return true;
 			}
 			break;
 
@@ -73,6 +75,5 @@ void *BEDecode(void *aData, size_t aLength, BEType *aType)
 			break;
 	}
 
-	// TODO implement
-	return NULL;
+	return false;
 }

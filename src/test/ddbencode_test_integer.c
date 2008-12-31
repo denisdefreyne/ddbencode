@@ -123,118 +123,226 @@ static void BETestInteger_encodeM11(void)
 static void BETestInteger_decode0(void)
 {
 	BEType type;
-	void *result;
+	bool success;
 
-	result = BEDecode("i0e", 3, &type);
+	char *string = NULL;
+	int integer = 0;
+	BEList *list = NULL;
+	BEDictionary *dictionary = NULL;
+
+	size_t stringLength = 0;
+
+	success = BEDecode("i0e", 3, &type, &string, &integer, &list, &dictionary, &stringLength);
+
+	UC_ASSERT(success);
 
 	UC_ASSERT(BE_INTEGER == type);
-	UC_ASSERT(*((int *)result) == 0);
+	UC_ASSERT(0 == integer);
 
-	free(result);
+	UC_ASSERT(NULL == string);
+	UC_ASSERT(NULL == list);
+	UC_ASSERT(NULL == dictionary);
+	UC_ASSERT(0 == stringLength);
 }
 
 static void BETestInteger_decode1(void)
 {
 	BEType type;
-	void *result;
+	bool success;
 
-	result = BEDecode("i1e", 3, &type);
+	char *string = NULL;
+	int integer = 0;
+	BEList *list = NULL;
+	BEDictionary *dictionary = NULL;
+
+	size_t stringLength = 0;
+
+	success = BEDecode("i1e", 3, &type, &string, &integer, &list, &dictionary, &stringLength);
+
+	UC_ASSERT(success);
 
 	UC_ASSERT(BE_INTEGER == type);
-	UC_ASSERT(*((int *)result) == 1);
+	UC_ASSERT(1 == integer);
 
-	free(result);
+	UC_ASSERT(NULL == string);
+	UC_ASSERT(NULL == list);
+	UC_ASSERT(NULL == dictionary);
+	UC_ASSERT(0 == stringLength);
 }
 
 static void BETestInteger_decode9(void)
 {
 	BEType type;
-	void *result;
+	bool success;
 
-	result = BEDecode("i9e", 3, &type);
+	char *string = NULL;
+	int integer = 0;
+	BEList *list = NULL;
+	BEDictionary *dictionary = NULL;
+
+	size_t stringLength = 0;
+
+	success = BEDecode("i9e", 3, &type, &string, &integer, &list, &dictionary, &stringLength);
+
+	UC_ASSERT(success);
 
 	UC_ASSERT(BE_INTEGER == type);
-	UC_ASSERT(*((int *)result) == 9);
+	UC_ASSERT(9 == integer);
 
-	free(result);
+	UC_ASSERT(NULL == string);
+	UC_ASSERT(NULL == list);
+	UC_ASSERT(NULL == dictionary);
+	UC_ASSERT(0 == stringLength);
 }
 
 static void BETestInteger_decode10(void)
 {
 	BEType type;
-	void *result;
+	bool success;
 
-	result = BEDecode("i10e", 4, &type);
+	char *string = NULL;
+	int integer = 0;
+	BEList *list = NULL;
+	BEDictionary *dictionary = NULL;
+
+	size_t stringLength = 0;
+
+	success = BEDecode("i10e", 4, &type, &string, &integer, &list, &dictionary, &stringLength);
+
+	UC_ASSERT(success);
 
 	UC_ASSERT(BE_INTEGER == type);
-	UC_ASSERT(*((int *)result) == 10);
+	UC_ASSERT(10 == integer);
 
-	free(result);
+	UC_ASSERT(NULL == string);
+	UC_ASSERT(NULL == list);
+	UC_ASSERT(NULL == dictionary);
+	UC_ASSERT(0 == stringLength);
 }
 
 static void BETestInteger_decode11(void)
 {
 	BEType type;
-	void *result;
+	bool success;
 
-	result = BEDecode("i11e", 4, &type);
+	char *string = NULL;
+	int integer = 0;
+	BEList *list = NULL;
+	BEDictionary *dictionary = NULL;
+
+	size_t stringLength = 0;
+
+	success = BEDecode("i11e", 4, &type, &string, &integer, &list, &dictionary, &stringLength);
+
+	UC_ASSERT(success);
 
 	UC_ASSERT(BE_INTEGER == type);
-	UC_ASSERT(*((int *)result) == 11);
+	UC_ASSERT(11 == integer);
 
-	free(result);
+	UC_ASSERT(NULL == string);
+	UC_ASSERT(NULL == list);
+	UC_ASSERT(NULL == dictionary);
+	UC_ASSERT(0 == stringLength);
 }
 
 static void BETestInteger_decodeM1(void)
 {
 	BEType type;
-	void *result;
+	bool success;
 
-	result = BEDecode("i-1e", 4, &type);
+	char *string = NULL;
+	int integer = 0;
+	BEList *list = NULL;
+	BEDictionary *dictionary = NULL;
+
+	size_t stringLength = 0;
+
+	success = BEDecode("i-1e", 4, &type, &string, &integer, &list, &dictionary, &stringLength);
+
+	UC_ASSERT(success);
 
 	UC_ASSERT(BE_INTEGER == type);
-	UC_ASSERT(*((int *)result) == -1);
+	UC_ASSERT(-1 == integer);
 
-	free(result);
+	UC_ASSERT(NULL == string);
+	UC_ASSERT(NULL == list);
+	UC_ASSERT(NULL == dictionary);
+	UC_ASSERT(0 == stringLength);
 }
 
 static void BETestInteger_decodeM9(void)
 {
 	BEType type;
-	void *result;
+	bool success;
 
-	result = BEDecode("i-9e", 4, &type);
+	char *string = NULL;
+	int integer = 0;
+	BEList *list = NULL;
+	BEDictionary *dictionary = NULL;
+
+	size_t stringLength = 0;
+
+	success = BEDecode("i-9e", 4, &type, &string, &integer, &list, &dictionary, &stringLength);
+
+	UC_ASSERT(success);
 
 	UC_ASSERT(BE_INTEGER == type);
-	UC_ASSERT(*((int *)result) == -9);
+	UC_ASSERT(-9 == integer);
 
-	free(result);
+	UC_ASSERT(NULL == string);
+	UC_ASSERT(NULL == list);
+	UC_ASSERT(NULL == dictionary);
+	UC_ASSERT(0 == stringLength);
 }
 
 static void BETestInteger_decodeM10(void)
 {
 	BEType type;
-	void *result;
+	bool success;
 
-	result = BEDecode("i-10e", 5, &type);
+	char *string = NULL;
+	int integer = 0;
+	BEList *list = NULL;
+	BEDictionary *dictionary = NULL;
+
+	size_t stringLength = 0;
+
+	success = BEDecode("i-10e", 5, &type, &string, &integer, &list, &dictionary, &stringLength);
+
+	UC_ASSERT(success);
 
 	UC_ASSERT(BE_INTEGER == type);
-	UC_ASSERT(*((int *)result) == -10);
+	UC_ASSERT(-10 == integer);
 
-	free(result);
+	UC_ASSERT(NULL == string);
+	UC_ASSERT(NULL == list);
+	UC_ASSERT(NULL == dictionary);
+	UC_ASSERT(0 == stringLength);
 }
 
 static void BETestInteger_decodeM11(void)
 {
 	BEType type;
-	void *result;
+	bool success;
 
-	result = BEDecode("i-11e", 5, &type);
+	char *string = NULL;
+	int integer = 0;
+	BEList *list = NULL;
+	BEDictionary *dictionary = NULL;
+
+	size_t stringLength = 0;
+
+	success = BEDecode("i-11e", 5, &type, &string, &integer, &list, &dictionary, &stringLength);
+
+	UC_ASSERT(success);
 
 	UC_ASSERT(BE_INTEGER == type);
-	UC_ASSERT(*((int *)result) == -11);
+	UC_ASSERT(-11 == integer);
 
-	free(result);
+	UC_ASSERT(NULL == string);
+	UC_ASSERT(NULL == list);
+	UC_ASSERT(NULL == dictionary);
+	UC_ASSERT(0 == stringLength);
 }
 
 static void BETestInteger_getEncodedLength0(void)
