@@ -74,17 +74,50 @@ static void BETestList_createInvalid(void)
 	UC_ASSERT(!list);
 }
 
+static void BETestList_getEncodedLength0(void)
+{
+	BEList *list = BEListCreate(
+		0
+	); // le
+
+	UC_ASSERT(1+1 == BEListGetEncodedLength(list));
+}
+
+static void BETestList_getEncodedLength1(void)
+{
+	BEList *list = BEListCreate(
+		1,
+		BE_STRING, "foo", 3
+	); // l3:fooe
+
+	UC_ASSERT(1+(1+1+3)+1 == BEListGetEncodedLength(list));
+}
+
+static void BETestList_getEncodedLength2(void)
+{
+	BEList *list = BEListCreate(
+		2,
+		BE_STRING,  "foo", 3,
+		BE_INTEGER, 123
+	); // l3:fooi123ee
+
+	UC_ASSERT(1+(1+1+3)+(1+3+1)+1 == BEListGetEncodedLength(list));
+}
+
 void BETestList(void)
 {
 	/* create suite */
 	uc_suite_t *test_suite = uc_suite_create("list");
 
 	/* add tests to suite */
-	uc_suite_add_test(test_suite, uc_test_create("create 0",         &BETestList_create0));
-	uc_suite_add_test(test_suite, uc_test_create("create 1 string",  &BETestList_create1String));
-	uc_suite_add_test(test_suite, uc_test_create("create 1 integer", &BETestList_create1Integer));
-	uc_suite_add_test(test_suite, uc_test_create("create 4",         &BETestList_create4));
-	uc_suite_add_test(test_suite, uc_test_create("create invalid",   &BETestList_createInvalid));
+	uc_suite_add_test(test_suite, uc_test_create("create 0",             &BETestList_create0));
+	uc_suite_add_test(test_suite, uc_test_create("create 1 string",      &BETestList_create1String));
+	uc_suite_add_test(test_suite, uc_test_create("create 1 integer",     &BETestList_create1Integer));
+	uc_suite_add_test(test_suite, uc_test_create("create 4",             &BETestList_create4));
+	uc_suite_add_test(test_suite, uc_test_create("create invalid",       &BETestList_createInvalid));
+	uc_suite_add_test(test_suite, uc_test_create("get encoded length 0", &BETestList_getEncodedLength0));
+	uc_suite_add_test(test_suite, uc_test_create("get encoded length 1", &BETestList_getEncodedLength1));
+	uc_suite_add_test(test_suite, uc_test_create("get encoded length 2", &BETestList_getEncodedLength2));
 
 	/* run suite */
 	uc_suite_run(test_suite);
