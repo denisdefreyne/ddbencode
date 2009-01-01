@@ -46,6 +46,7 @@ BEList *BEListCreate(size_t aSize, ...)
 				break;
 
 			default:
+				// FIXME delete everything properly
 				free(list->entries);
 				free(list);
 				return NULL;
