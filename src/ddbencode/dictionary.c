@@ -109,6 +109,47 @@ bool BEDictionaryEncode(BEDictionary *aiDictionary, void **aoData, size_t *aoDat
 
 size_t BEDictionaryGetEncodedLength(BEDictionary *aDictionary)
 {
-	// TODO implement
-	return 0;
+	size_t encodedLength = 0;
+
+	// Add start size
+	encodedLength += 1;
+
+	// Add sizes of each entry
+	for(size_t i = 0; i < aDictionary->size; ++i)
+	{
+		// Get entry
+		struct _BEDictionaryEntry entry = aDictionary->entries[i];
+
+		// Add key length
+		encodedLength += BEStringGetEncodedLength(entry.key);
+
+		// Add value length
+		switch(entry.type)
+		{
+			case BE_STRING:
+				encodedLength += BEStringGetEncodedLength(entry.data.string);
+				break;
+
+			case BE_INTEGER:
+				encodedLength += BEIntegerGetEncodedLength(entry.data.integer);
+				break;
+
+			case BE_LIST:
+				encodedLength += BEListGetEncodedLength(entry.data.list);
+				break;
+
+			case BE_DICTIONARY:
+				encodedLength += BEDictionaryGetEncodedLength(entry.data.dictionary);
+				break;
+
+			default:
+				return -1;
+		}
+	}
+
+	// Add end size
+	encodedLength += 1;
+
+	// Done
+	return encodedLength;
 }
