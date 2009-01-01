@@ -57,6 +57,10 @@ memory should, in order to prevent memory leaks, be cleaned up, either with
 * The struct returned by `BEListCreate` or `BEDictionaryCreate` should be
   cleaned up by using `BEListDelete` or `BEDictionaryDelete`, respectively.
 
+* All data returned by `BEDecode` should be cleaned up. Lists and dictionaries
+  should be cleaned up recursively by using `BEListDeleteDeep` or
+  `BEDictionaryDeleteDeep`, respectively.
+
 Examples
 -----
 
