@@ -62,6 +62,32 @@ void BEListDelete(BEList *aList)
 	free(aList);
 }
 
+void BEListDeleteDeep(BEList *aList)
+{
+	// Delete entries
+	for(size_t i = 0; i < aList->size; ++i)
+	{
+		struct _BEListEntry entry = aList->entries[i];
+		switch(entry.type)
+		{
+			case BE_STRING:
+				free(entry.data.string);
+				break;
+
+			case BE_LIST:
+				BEListDeleteDeep(entry.data.list);
+				break;
+
+			case BE_DICTIONARY:
+				BEDictionaryDeleteDeep(entry.data.dictionary);
+				break;
+		}
+	}
+
+	// Delete list itself
+	BEListDelete(aList);
+}
+
 bool BEListEncode(BEList *aiList, void **aoData, size_t *aoDataLength)
 {
 	// Lists are encoded as an 'l' followed by their elements (also bencoded)
