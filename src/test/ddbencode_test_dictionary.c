@@ -144,6 +144,172 @@ static void BETestDictionary_encode2(void)
 	BEDictionaryDelete(dictionary);
 }
 
+static void BETestDictionary_decode0(void)
+{
+	BEType type;
+	bool success;
+
+	char *string = NULL;
+	int integer = 0;
+	BEList *list = NULL;
+	BEDictionary *dictionary = NULL;
+
+	size_t stringLength = 0;
+	size_t usedLength = 0;
+
+	success = BEDecode("de", 2, &type, &string, &integer, &list, &dictionary, &stringLength, &usedLength);
+
+	UC_ASSERT(success);
+
+	UC_ASSERT(BE_DICTIONARY == type);
+	UC_ASSERT(dictionary);
+	UC_ASSERT(0 == dictionary->size);
+
+	UC_ASSERT(NULL == string);
+	UC_ASSERT(0 == integer);
+	UC_ASSERT(NULL == list);
+	UC_ASSERT(0 == stringLength);
+	UC_ASSERT(2 == usedLength);
+}
+
+static void BETestDictionary_decode1(void)
+{
+	BEType type;
+	bool success;
+
+	char *string = NULL;
+	int integer = 0;
+	BEList *list = NULL;
+	BEDictionary *dictionary = NULL;
+
+	size_t stringLength = 0;
+	size_t usedLength = 0;
+
+	success = BEDecode("d3:fooi123ee", 12, &type, &string, &integer, &list, &dictionary, &stringLength, &usedLength);
+
+	UC_ASSERT(success);
+
+	UC_ASSERT(BE_DICTIONARY == type);
+	UC_ASSERT(dictionary);
+	UC_ASSERT(1 == dictionary->size);
+	UC_ASSERT(0 == strcmp("foo", dictionary->entries[0].key));
+	UC_ASSERT(BE_INTEGER == dictionary->entries[0].type);
+	UC_ASSERT(123 == dictionary->entries[0].data.integer);
+
+	UC_ASSERT(NULL == string);
+	UC_ASSERT(0 == integer);
+	UC_ASSERT(NULL == list);
+	UC_ASSERT(0 == stringLength);
+	UC_ASSERT(12 == usedLength);
+}
+
+static void BETestDictionary_decode2(void)
+{
+	BEType type;
+	bool success;
+
+	char *string = NULL;
+	int integer = 0;
+	BEList *list = NULL;
+	BEDictionary *dictionary = NULL;
+
+	size_t stringLength = 0;
+	size_t usedLength = 0;
+
+	success = BEDecode("d3:fooi123e3:bari456ee", 22, &type, &string, &integer, &list, &dictionary, &stringLength, &usedLength);
+
+	UC_ASSERT(success);
+
+	UC_ASSERT(BE_DICTIONARY == type);
+	UC_ASSERT(dictionary);
+	UC_ASSERT(2 == dictionary->size);
+	UC_ASSERT(0 == strcmp("foo", dictionary->entries[0].key));
+	UC_ASSERT(BE_INTEGER == dictionary->entries[0].type);
+	UC_ASSERT(123 == dictionary->entries[0].data.integer);
+	UC_ASSERT(0 == strcmp("bar", dictionary->entries[1].key));
+	UC_ASSERT(BE_INTEGER == dictionary->entries[1].type);
+	UC_ASSERT(456 == dictionary->entries[1].data.integer);
+
+	UC_ASSERT(NULL == string);
+	UC_ASSERT(0 == integer);
+	UC_ASSERT(NULL == list);
+	UC_ASSERT(0 == stringLength);
+	UC_ASSERT(22 == usedLength);
+}
+
+static void BETestDictionary_decodeComplex(void)
+{
+	BEType type;
+	bool success;
+
+	char *string = NULL;
+	int integer = 0;
+	BEList *list = NULL;
+	BEDictionary *dictionary = NULL;
+
+	size_t stringLength = 0;
+	size_t usedLength = 0;
+
+	success = BEDecode("d1:ad1:bi123eee", 15, &type, &string, &integer, &list, &dictionary, &stringLength, &usedLength);
+
+	UC_ASSERT(success);
+
+	UC_ASSERT(BE_DICTIONARY == type);
+	UC_ASSERT(dictionary);
+	UC_ASSERT(1 == dictionary->size);
+
+	UC_ASSERT(0 == strcmp("a", dictionary->entries[0].key));
+	UC_ASSERT(BE_DICTIONARY == dictionary->entries[0].type);
+	UC_ASSERT(dictionary->entries[0].data.dictionary);
+	UC_ASSERT(1 == dictionary->entries[0].data.dictionary->size);
+
+	UC_ASSERT(0 == strcmp("b", dictionary->entries[0].data.dictionary->entries[0].key));
+	UC_ASSERT(BE_INTEGER == dictionary->entries[0].data.dictionary->entries[0].type);
+	UC_ASSERT(123 == dictionary->entries[0].data.dictionary->entries[0].data.integer);
+
+	UC_ASSERT(NULL == string);
+	UC_ASSERT(0 == integer);
+	UC_ASSERT(NULL == list);
+	UC_ASSERT(0 == stringLength);
+	UC_ASSERT(15 == usedLength);
+}
+
+static void BETestDictionary_decodeInvalid(void)
+{
+	BEType type;
+	bool success;
+
+	char *string = NULL;
+	int integer = 0;
+	BEList *list = NULL;
+	BEDictionary *dictionary = NULL;
+
+	size_t stringLength = 0;
+	size_t usedLength = 0;
+
+	success = BEDecode("d3:fooi123e", 11, &type, &string, &integer, &list, &dictionary, &stringLength, &usedLength);
+
+	UC_ASSERT(!success);
+}
+
+static void BETestDictionary_decodeInvalidKey(void)
+{
+	BEType type;
+	bool success;
+
+	char *string = NULL;
+	int integer = 0;
+	BEList *list = NULL;
+	BEDictionary *dictionary = NULL;
+
+	size_t stringLength = 0;
+	size_t usedLength = 0;
+
+	success = BEDecode("di123ei456ee", 12, &type, &string, &integer, &list, &dictionary, &stringLength, &usedLength);
+
+	UC_ASSERT(!success);
+}
+
 static void BETestDictionary_getEncodedLength0(void)
 {
 	BEDictionary *dictionary = BEDictionaryCreate(
@@ -194,6 +360,12 @@ void BETestDictionary(void)
 	uc_suite_add_test(test_suite, uc_test_create("encode 0",             &BETestDictionary_encode0));
 	uc_suite_add_test(test_suite, uc_test_create("encode 1",             &BETestDictionary_encode1));
 	uc_suite_add_test(test_suite, uc_test_create("encode 2",             &BETestDictionary_encode2));
+	uc_suite_add_test(test_suite, uc_test_create("decode 0",             &BETestDictionary_decode0));
+	uc_suite_add_test(test_suite, uc_test_create("decode 1",             &BETestDictionary_decode1));
+	uc_suite_add_test(test_suite, uc_test_create("decode 2",             &BETestDictionary_decode2));
+	uc_suite_add_test(test_suite, uc_test_create("decode complex",       &BETestDictionary_decodeComplex));
+	uc_suite_add_test(test_suite, uc_test_create("decode invalid",       &BETestDictionary_decodeInvalid));
+	uc_suite_add_test(test_suite, uc_test_create("decode invalid key",   &BETestDictionary_decodeInvalidKey));
 	uc_suite_add_test(test_suite, uc_test_create("get encoded length 0", &BETestDictionary_getEncodedLength0));
 	uc_suite_add_test(test_suite, uc_test_create("get encoded length 1", &BETestDictionary_getEncodedLength1));
 	uc_suite_add_test(test_suite, uc_test_create("get encoded length 2", &BETestDictionary_getEncodedLength2));

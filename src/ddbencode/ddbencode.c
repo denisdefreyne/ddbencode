@@ -220,6 +220,129 @@ static bool _BEDecode_dictionary(void *aiData, size_t aiLength, BEType *aoType, 
 {
 	// Dictionary, e.g. d3:cow3:moo4:spam4:eggse
 
-	// TODO implement
-	return false;
+	// Create dictionary
+	BEDictionary *dictionary = malloc(sizeof (BEDictionary));
+	if(!dictionary)
+		return NULL;
+	dictionary->entries = NULL;
+	dictionary->size = 0;
+
+	// Look for dictionary items
+	size_t currentStart = 1;
+	while(((char *)aiData)[currentStart] != 'e')
+	{
+		BEType subType;
+
+		char         *subKey        = NULL;
+		char         *subString     = NULL;
+		int          subInteger;
+		BEList       *subList       = NULL;
+		BEDictionary *subDictionary = NULL;
+
+		size_t subKeyLength;
+		size_t subStringLength;
+
+		bool success;
+		size_t subUsedLength;
+
+		// Decode key
+		// FIXME check whether aiLength-currentStart-1 doesn't become negative
+		success = BEDecode(
+			aiData+currentStart, aiLength-currentStart-1,
+			&subType,
+			&subKey, &subInteger, &subList, &subDictionary,
+			&subKeyLength,
+			&subUsedLength
+		);
+
+		// Check for errors
+		if(!success || subType != BE_STRING)
+		{
+			// Cleanup
+			if(subString)
+				free(subString);
+			if(subList)
+				free(subList);
+			if(subDictionary)
+				free(subDictionary);
+			BEDictionaryDeleteDeep(dictionary);
+
+			return false;
+		}
+
+		// Move to value
+		currentStart += subUsedLength;
+
+		// Decode value
+		// FIXME check whether aiLength-currentStart-1 doesn't become negative
+		success = BEDecode(
+			aiData+currentStart, aiLength-currentStart-1,
+			&subType,
+			&subString, &subInteger, &subList, &subDictionary,
+			&subStringLength,
+			&subUsedLength
+		);
+
+		// Check for errors
+		if(!success)
+		{
+			// Cleanup
+			if(subString)
+				free(subString);
+			if(subList)
+				free(subList);
+			if(subDictionary)
+				free(subDictionary);
+			BEDictionaryDeleteDeep(dictionary);
+
+			return false;
+		}
+
+		// Expand dictionary
+		// FIXME optimize by getting rid of realloc
+		struct _BEDictionaryEntry *entries = realloc(dictionary->entries, (dictionary->size+1)*sizeof (struct _BEDictionaryEntry));
+		if(!entries)
+		{
+			BEDictionaryDeleteDeep(dictionary);
+			return false;
+		}
+		dictionary->entries = entries;
+		dictionary->size++;
+
+		// Fill dictionary
+		dictionary->entries[dictionary->size-1].key = subKey;
+		switch(subType)
+		{
+			case BE_STRING:
+				dictionary->entries[dictionary->size-1].type = BE_STRING;
+				dictionary->entries[dictionary->size-1].data.string = subString;
+				dictionary->entries[dictionary->size-1].stringLength = subStringLength;
+				break;
+
+			case BE_INTEGER:
+				dictionary->entries[dictionary->size-1].type = BE_INTEGER;
+				dictionary->entries[dictionary->size-1].data.integer = subInteger;
+				break;
+
+			case BE_LIST:
+				dictionary->entries[dictionary->size-1].type = BE_LIST;
+				dictionary->entries[dictionary->size-1].data.list = subList;
+				break;
+
+			case BE_DICTIONARY:
+				dictionary->entries[dictionary->size-1].type = BE_DICTIONARY;
+				dictionary->entries[dictionary->size-1].data.dictionary = subDictionary;
+				break;
+		}
+
+		// Move to next pair
+		currentStart += subUsedLength;
+	}
+
+	// Set result
+	*aoType = BE_DICTIONARY;
+	*aoDictionary = dictionary;
+	if(aoUsedLength)
+		*aoUsedLength = currentStart+1;
+	return true;
 }
