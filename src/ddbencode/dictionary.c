@@ -63,12 +63,35 @@ BEDictionary *BEDictionaryCreate(size_t aSize, ...)
 
 void BEDictionaryDelete(BEDictionary *aDictionary)
 {
-	// TODO implement
+	free(aDictionary->entries);
+	free(aDictionary);
 }
 
 void BEDictionaryDeleteDeep(BEDictionary *aDictionary)
 {
-	// TODO implement
+	// Delete entries
+	for(size_t i = 0; i < aDictionary->size; ++i)
+	{
+		struct _BEDictionaryEntry entry = aDictionary->entries[i];
+		free(entry.key);
+		switch(entry.type)
+		{
+			case BE_STRING:
+				free(entry.data.string);
+				break;
+
+			case BE_LIST:
+				BEListDeleteDeep(entry.data.list);
+				break;
+
+			case BE_DICTIONARY:
+				BEDictionaryDeleteDeep(entry.data.dictionary);
+				break;
+		}
+	}
+
+	// Delete dictionary itself
+	BEDictionaryDelete(aDictionary);
 }
 
 bool BEDictionaryEncode(BEDictionary *aiDictionary, void **aoData, size_t *aoDataLength)
