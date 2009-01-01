@@ -2,7 +2,8 @@
 #include <ddbencode/private.h>
 
 #include <stdarg.h>
-#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
 #include <string.h>
 
 BEList *BEListCreate(size_t aSize, ...)
