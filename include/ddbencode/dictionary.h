@@ -3,7 +3,7 @@
 
 typedef struct _BEDictionary BEDictionary;
 
-BEDictionary *BEDictionaryCreate(void *args, ...);
+BEDictionary *BEDictionaryCreate(size_t aSize, ...);
 void BEDictionaryDelete(BEDictionary *aDictionary);
 void BEDictionaryDeleteDeep(BEDictionary *aDictionary);
 

@@ -20,7 +20,7 @@ struct _BEList
 struct _BEDictionaryEntry
 {
 	char *key;
-	BEType valueType;
+	BEType type;
 	union
 	{
 		char        *string;
