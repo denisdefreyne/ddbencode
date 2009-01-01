@@ -103,8 +103,73 @@ bool BEDictionaryEncode(BEDictionary *aiDictionary, void **aoData, size_t *aoDat
 	// d4:spaml1:a1:bee corresponds to {'spam': ['a', 'b']}. Keys must be strings
 	// and appear in sorted order (sorted as raw strings, not alphanumerics).
 
-	// TODO implement
-	return false;
+	// Calculate the length of the encoded dictionary
+	size_t encodedLength = BEDictionaryGetEncodedLength(aiDictionary);
+
+	// Create data
+	void *data = malloc(encodedLength*(sizeof data));
+	if(!data)
+		return false;
+
+	// Fill data
+	((char *)data)[0] = 'd';
+	void *currentEnd = data+1;
+	for(size_t i = 0; i < aiDictionary->size; ++i)
+	{
+		// Get entry
+		struct _BEDictionaryEntry entry = aiDictionary->entries[i];
+
+		// Encode key
+		void   *keyData;
+		size_t keyDataLength;
+		BEStringEncode(entry.key, strlen(entry.key), &keyData, &keyDataLength);
+
+		// Append encoded key
+		memcpy(currentEnd, keyData, keyDataLength);
+		currentEnd += keyDataLength;
+
+		// Cleanup
+		free(keyData);
+
+		// Encode value
+		void   *valueData;
+		size_t valueDataLength;
+		switch(entry.type)
+		{
+			case BE_STRING:
+				BEStringEncode(entry.data.string, entry.stringLength, &valueData, &valueDataLength);
+				break;
+
+			case BE_INTEGER:
+				BEIntegerEncode(entry.data.integer, &valueData, &valueDataLength);
+				break;
+
+			case BE_LIST:
+				BEListEncode(entry.data.list, &valueData, &valueDataLength);
+				break;
+
+			case BE_DICTIONARY:
+				BEDictionaryEncode(entry.data.dictionary, &valueData, &valueDataLength);
+				break;
+
+			default:
+				return false;
+		}
+
+		// Append encoded value
+		memcpy(currentEnd, valueData, valueDataLength);
+		currentEnd += valueDataLength;
+
+		// Cleanup
+		free(valueData);
+	}
+	((char *)data)[encodedLength-1] = 'e';
+
+	// Return data
+	*aoData = data;
+	*aoDataLength = encodedLength;
+
+	return true;
 }
 
 size_t BEDictionaryGetEncodedLength(BEDictionary *aDictionary)

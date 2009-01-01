@@ -84,6 +84,66 @@ static void BETestDictionary_createInvalid(void)
 	UC_ASSERT(!dictionary);
 }
 
+static void BETestDictionary_encode0(void)
+{
+	BEDictionary *dictionary = BEDictionaryCreate(
+		0
+	); // de
+
+	void *data;
+	size_t dataLength;
+
+	BEDictionaryEncode(dictionary, &data, &dataLength);
+
+	UC_ASSERT(data);
+	UC_ASSERT(1+1 == dataLength);
+	UC_ASSERT(0 == strncmp(data, "de", 1+1));
+
+	free(data);
+	BEDictionaryDelete(dictionary);
+}
+
+static void BETestDictionary_encode1(void)
+{
+	BEDictionary *dictionary = BEDictionaryCreate(
+		1,
+		"foo", BE_STRING, "bar", 3
+	); // d3:foo3:bare
+
+	void *data;
+	size_t dataLength;
+
+	BEDictionaryEncode(dictionary, &data, &dataLength);
+
+	UC_ASSERT(data);
+	UC_ASSERT(1+((1+1+3)+(1+1+3))+1 == dataLength);
+	UC_ASSERT(0 == strncmp(data, "d3:foo3:bare", 1+((1+1+3)+(1+1+3))+1));
+
+	free(data);
+	BEDictionaryDelete(dictionary);
+}
+
+static void BETestDictionary_encode2(void)
+{
+	BEDictionary *dictionary = BEDictionaryCreate(
+		2,
+		"foo", BE_STRING,  "bar", 3,
+		"baz", BE_INTEGER, 123
+	); // d3:foo3:bar3:bazi123ee
+
+	void *data;
+	size_t dataLength;
+
+	BEDictionaryEncode(dictionary, &data, &dataLength);
+
+	UC_ASSERT(data);
+	UC_ASSERT(1+((1+1+3)+(1+1+3))+((1+1+3)+(1+3+1))+1 == dataLength);
+	UC_ASSERT(0 == strncmp(data, "d3:foo3:bar3:bazi123ee", 1+((1+1+3)+(1+1+3))+((1+1+3)+(1+3+1))+1));
+
+	free(data);
+	BEDictionaryDelete(dictionary);
+}
+
 static void BETestDictionary_getEncodedLength0(void)
 {
 	BEDictionary *dictionary = BEDictionaryCreate(
@@ -131,6 +191,9 @@ void BETestDictionary(void)
 	uc_suite_add_test(test_suite, uc_test_create("create 1 integer",     &BETestDictionary_create1Integer));
 	uc_suite_add_test(test_suite, uc_test_create("create 4",             &BETestDictionary_create4));
 	uc_suite_add_test(test_suite, uc_test_create("create invalid",       &BETestDictionary_createInvalid));
+	uc_suite_add_test(test_suite, uc_test_create("encode 0",             &BETestDictionary_encode0));
+	uc_suite_add_test(test_suite, uc_test_create("encode 1",             &BETestDictionary_encode1));
+	uc_suite_add_test(test_suite, uc_test_create("encode 2",             &BETestDictionary_encode2));
 	uc_suite_add_test(test_suite, uc_test_create("get encoded length 0", &BETestDictionary_getEncodedLength0));
 	uc_suite_add_test(test_suite, uc_test_create("get encoded length 1", &BETestDictionary_getEncodedLength1));
 	uc_suite_add_test(test_suite, uc_test_create("get encoded length 2", &BETestDictionary_getEncodedLength2));
