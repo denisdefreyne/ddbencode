@@ -157,26 +157,23 @@ static bool _BEDecode_list(void *aiData, size_t aiLength, BEType *aoType, BEList
 		if(!success)
 		{
 			// Cleanup
-			// FIXME free list
-			// FIXME also free all strings, lists and dictionaries inside
 			if(subString)
 				free(subString);
 			if(subList)
 				free(subList);
 			if(subDictionary)
 				free(subDictionary);
+			BEListDeleteDeep(list);
 
 			return false;
 		}
 
-		// Add to list
+		// Expand list
 		// FIXME optimize by getting rid of realloc
 		struct _BEListEntry *entries = realloc(list->entries, (list->size+1)*sizeof (struct _BEListEntry));
 		if(!entries)
 		{
-			// FIXME also free all strings, lists and dictionaries inside
-			free(list->entries);
-			free(list);
+			BEListDeleteDeep(list);
 			return false;
 		}
 		list->entries = entries;
