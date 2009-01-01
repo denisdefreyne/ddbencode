@@ -13,21 +13,6 @@ static void BETestList_create0(void)
 	BEListDelete(list);
 }
 
-static void BETestList_create1Integer(void)
-{
-	BEList *list = BEListCreate(
-		1,
-		BE_INTEGER, 123
-	);
-
-	UC_ASSERT(1 == list->size);
-
-	UC_ASSERT(BE_INTEGER == list->entries[0].type);
-	UC_ASSERT(123 == list->entries[0].data.integer);
-
-	BEListDelete(list);
-}
-
 static void BETestList_create1String(void)
 {
 	BEList *list = BEListCreate(
@@ -40,6 +25,21 @@ static void BETestList_create1String(void)
 	UC_ASSERT(BE_STRING == list->entries[0].type);
 	UC_ASSERT(0 == strcmp(list->entries[0].data.string, "foo"));
 	UC_ASSERT(3 == list->entries[0].stringLength);
+
+	BEListDelete(list);
+}
+
+static void BETestList_create1Integer(void)
+{
+	BEList *list = BEListCreate(
+		1,
+		BE_INTEGER, 123
+	);
+
+	UC_ASSERT(1 == list->size);
+
+	UC_ASSERT(BE_INTEGER == list->entries[0].type);
+	UC_ASSERT(123 == list->entries[0].data.integer);
 
 	BEListDelete(list);
 }
