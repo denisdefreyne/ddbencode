@@ -232,6 +232,42 @@ static void BETestList_decode2(void)
 	UC_ASSERT(12 == usedLength);
 }
 
+static void BETestList_decodeComplex(void)
+{
+	BEType type;
+	bool success;
+
+	char *string = NULL;
+	int integer = 0;
+	BEList *list = NULL;
+	BEDictionary *dictionary = NULL;
+
+	size_t stringLength = 0;
+	size_t usedLength = 0;
+
+	success = BEDecode("llli123eeee", 11, &type, &string, &integer, &list, &dictionary, &stringLength, &usedLength);
+
+	UC_ASSERT(success);
+
+	UC_ASSERT(BE_LIST == type);
+	UC_ASSERT(list);
+	UC_ASSERT(1 == list->size);
+
+	UC_ASSERT(BE_LIST == list->entries[0].type);
+	UC_ASSERT(list->entries[0].data.list);
+	UC_ASSERT(1 == list->entries[0].data.list->size);
+
+	UC_ASSERT(BE_LIST == list->entries[0].data.list->entries[0].type);
+	UC_ASSERT(list->entries[0].data.list->entries[0].data.list);
+	UC_ASSERT(1 == list->entries[0].data.list->entries[0].data.list->size);
+
+	UC_ASSERT(NULL == string);
+	UC_ASSERT(0 == integer);
+	UC_ASSERT(NULL == dictionary);
+	UC_ASSERT(0 == stringLength);
+	UC_ASSERT(11 == usedLength);
+}
+
 static void BETestList_decodeInvalid(void)
 {
 	BEType type;
@@ -303,6 +339,7 @@ void BETestList(void)
 	uc_suite_add_test(test_suite, uc_test_create("decode 0",             &BETestList_decode0));
 	uc_suite_add_test(test_suite, uc_test_create("decode 1",             &BETestList_decode1));
 	uc_suite_add_test(test_suite, uc_test_create("decode 2",             &BETestList_decode2));
+	uc_suite_add_test(test_suite, uc_test_create("decode complex",       &BETestList_decodeComplex));
 	uc_suite_add_test(test_suite, uc_test_create("decode invalid",       &BETestList_decodeInvalid));
 	uc_suite_add_test(test_suite, uc_test_create("get encoded length 0", &BETestList_getEncodedLength0));
 	uc_suite_add_test(test_suite, uc_test_create("get encoded length 1", &BETestList_getEncodedLength1));
