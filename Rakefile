@@ -35,13 +35,16 @@ end
 ### rules
 
 rule '.o' => [ '.c' ] do |t|
+  puts "CC #{t.source}"
   sh "#{CC} -c #{CFLAGS} -o #{t.name} #{t.source}"
 end
 
 file TARGET_BIN_TEST => OBJS_BIN_TEST do
+  puts "LD #{TARGET_BIN_TEST}"
   sh "#{CC} #{CFLAGS} #{LDFLAGS_BIN_TEST} -o #{TARGET_BIN_TEST} #{OBJS_BIN_TEST}"
 end
 
 file TARGET_LIB => OBJS_LIB do
+  puts "LD #{TARGET_LIB}"
   sh "#{CC} #{CFLAGS} #{LDFLAGS_LIB} -o #{TARGET_LIB} #{OBJS_LIB}"
 end
