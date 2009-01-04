@@ -259,6 +259,8 @@ static bool _BEDecode_dictionary(void *aiData, size_t aiLength, BEType *aoType, 
 		if(!success || subType != BE_STRING)
 		{
 			// Cleanup
+			if(subKey)
+				free(subKey);
 			if(subString)
 				free(subString);
 			if(subList)
@@ -287,6 +289,8 @@ static bool _BEDecode_dictionary(void *aiData, size_t aiLength, BEType *aoType, 
 		if(!success)
 		{
 			// Cleanup
+			if(subKey)
+				free(subKey);
 			if(subString)
 				free(subString);
 			if(subList)
