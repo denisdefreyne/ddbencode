@@ -268,7 +268,7 @@ static void BETestList_decodeComplex(void)
 	UC_ASSERT(11 == usedLength);
 }
 
-static void BETestList_decodeInvalid(void)
+static void BETestList_decodeInvalid0(void)
 {
 	BEType type;
 	bool success;
@@ -282,6 +282,24 @@ static void BETestList_decodeInvalid(void)
 	size_t usedLength = 0;
 
 	success = BEDecode("li123ei456e", 11, &type, &string, &integer, &list, &dictionary, &stringLength, &usedLength);
+
+	UC_ASSERT(!success);
+}
+
+static void BETestList_decodeInvalid1(void)
+{
+	BEType type;
+	bool success;
+
+	char *string = NULL;
+	int integer = 0;
+	BEList *list = NULL;
+	BEDictionary *dictionary = NULL;
+
+	size_t stringLength = 0;
+	size_t usedLength = 0;
+
+	success = BEDecode("l", 1, &type, &string, &integer, &list, &dictionary, &stringLength, &usedLength);
 
 	UC_ASSERT(!success);
 }
@@ -340,7 +358,8 @@ void BETestList(void)
 	uc_suite_add_test(test_suite, uc_test_create("decode 1",             &BETestList_decode1));
 	uc_suite_add_test(test_suite, uc_test_create("decode 2",             &BETestList_decode2));
 	uc_suite_add_test(test_suite, uc_test_create("decode complex",       &BETestList_decodeComplex));
-	uc_suite_add_test(test_suite, uc_test_create("decode invalid",       &BETestList_decodeInvalid));
+	uc_suite_add_test(test_suite, uc_test_create("decode invalid 0",     &BETestList_decodeInvalid0));
+	uc_suite_add_test(test_suite, uc_test_create("decode invalid 1",     &BETestList_decodeInvalid1));
 	uc_suite_add_test(test_suite, uc_test_create("get encoded length 0", &BETestList_getEncodedLength0));
 	uc_suite_add_test(test_suite, uc_test_create("get encoded length 1", &BETestList_getEncodedLength1));
 	uc_suite_add_test(test_suite, uc_test_create("get encoded length 2", &BETestList_getEncodedLength2));
