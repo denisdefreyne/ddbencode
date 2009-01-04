@@ -28,3 +28,8 @@ bool BEIntegerEncode(int aiInteger, void **aoData, size_t *aoDataLength);
 ///
 /// @return The given integer's encoded data length.
 size_t BEIntegerGetEncodedLength(int aInteger);
+
+/// @brief Prints the given integer to stdout.
+///
+/// @param[in] aInteger The integer to print.
+void BEIntegerPrint(int aInteger);

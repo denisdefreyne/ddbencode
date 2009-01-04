@@ -51,3 +51,15 @@ size_t BEIntegerGetEncodedLength(int aInteger)
 	// Add begin and end marker lengths
 	return 1 + integerLength + 1;
 }
+
+void _BEIntegerPrint(int aInteger, size_t aIndentation)
+{
+	for(size_t i = 0; i < aIndentation; ++i)
+		fputs("    ", stdout);
+	printf("%i\n", aInteger);
+}
+
+void BEIntegerPrint(int aInteger)
+{
+	_BEIntegerPrint(aInteger, 0);
+}

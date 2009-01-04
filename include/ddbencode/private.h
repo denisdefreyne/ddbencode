@@ -36,3 +36,8 @@ struct _BEDictionary
 	struct _BEDictionaryEntry *entries;
 	size_t size;
 };
+
+void _BEStringPrint(char *aString, size_t aIndentation);
+void _BEIntegerPrint(int aInteger, size_t aIndentation);
+void _BEListPrint(BEList *aList, size_t aIndentation);
+void _BEDictionaryPrint(BEDictionary *aDictionary, size_t aIndentation);

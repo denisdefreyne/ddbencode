@@ -3,6 +3,7 @@
 
 #include <stdarg.h>
 #include <stdbool.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -217,4 +218,50 @@ size_t BEDictionaryGetEncodedLength(BEDictionary *aDictionary)
 
 	// Done
 	return encodedLength;
+}
+
+void _BEDictionaryPrint(BEDictionary *aDictionary, size_t aIndentation)
+{
+	// Print {
+	for(size_t i = 0; i < aIndentation; ++i)
+		fputs("    ", stdout);
+	puts("{");
+
+	// Print entries
+	for(size_t currentPair = 0; currentPair < aDictionary->size; ++currentPair)
+	{
+		struct _BEDictionaryEntry *entry = &aDictionary->entries[currentPair];
+
+		for(size_t i = 0; i < aIndentation+1; ++i)
+			fputs("    ", stdout);
+		printf("\"%s\" =>\n", entry->key);
+		switch(entry->type)
+		{
+			case BE_STRING:
+				_BEStringPrint(entry->data.string, aIndentation+2);
+				break;
+
+			case BE_INTEGER:
+				_BEIntegerPrint(entry->data.integer, aIndentation+2);
+				break;
+
+			case BE_LIST:
+				_BEListPrint(entry->data.list, aIndentation+2);
+				break;
+
+			case BE_DICTIONARY:
+				_BEDictionaryPrint(entry->data.dictionary, aIndentation+2);
+				break;
+		}
+	}
+
+	// Print }
+	for(size_t i = 0; i < aIndentation; ++i)
+		fputs("    ", stdout);
+	puts("}");
+}
+
+void BEDictionaryPrint(BEDictionary *aDictionary)
+{
+	_BEDictionaryPrint(aDictionary, 0);
 }

@@ -3,6 +3,7 @@
 
 #include <stdarg.h>
 #include <stdbool.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -192,4 +193,47 @@ size_t BEListGetEncodedLength(BEList *aList)
 
 	// Done
 	return encodedLength;
+}
+
+void _BEListPrint(BEList *aList, size_t aIndentation)
+{
+	// Print [
+	for(size_t i = 0; i < aIndentation; ++i)
+		fputs("    ", stdout);
+	puts("[");
+
+	// Print entries
+	for(size_t currentItem = 0; currentItem < aList->size; ++currentItem)
+	{
+		struct _BEListEntry *entry = &aList->entries[currentItem];
+
+		switch(entry->type)
+		{
+			case BE_STRING:
+				_BEStringPrint(entry->data.string, aIndentation+1);
+				break;
+
+			case BE_INTEGER:
+				_BEIntegerPrint(entry->data.integer, aIndentation+1);
+				break;
+
+			case BE_LIST:
+				_BEListPrint(entry->data.list, aIndentation+1);
+				break;
+
+			case BE_DICTIONARY:
+				_BEDictionaryPrint(entry->data.dictionary, aIndentation+1);
+				break;
+		}
+	}
+
+	// Print ]
+	for(size_t i = 0; i < aIndentation; ++i)
+		fputs("    ", stdout);
+	puts("]");
+}
+
+void BEListPrint(BEList *aList)
+{
+	_BEListPrint(aList, 0);
 }

@@ -43,3 +43,15 @@ size_t BEStringGetEncodedLength(void *aString)
 	else
 		return (int)log10((double)stringLength) + 1 + 1 + stringLength;
 }
+
+void _BEStringPrint(char *aString, size_t aIndentation)
+{
+	for(size_t i = 0; i < aIndentation; ++i)
+		fputs("    ", stdout);
+	printf("\"%s\"\n", aString);
+}
+
+void BEStringPrint(char *aString)
+{
+	_BEStringPrint(aString, 0);
+}

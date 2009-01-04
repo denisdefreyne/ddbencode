@@ -88,3 +88,8 @@ bool BEListEncode(BEList *aiList, void **aoData, size_t *aoDataLength);
 ///
 /// @return The given list's encoded data length.
 size_t BEListGetEncodedLength(BEList *aList);
+
+/// @brief Prints the given list to stdout.
+///
+/// @param[in] aList The list to print.
+void BEListPrint(BEList *aList);

@@ -29,3 +29,8 @@ bool BEStringEncode(void *aiString, size_t aiStringLength, void **aoData, size_t
 ///
 /// @return The given string's encoded data length.
 size_t BEStringGetEncodedLength(void *aString);
+
+/// @brief Prints the given string to stdout.
+///
+/// @param[in] aString The string to print.
+void BEStringPrint(char *aString);

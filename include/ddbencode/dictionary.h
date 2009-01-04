@@ -92,3 +92,8 @@ bool BEDictionaryEncode(BEDictionary *aiDictionary, void **aoData, size_t *aoDat
 ///
 /// @return The given dictionary's encoded data length.
 size_t BEDictionaryGetEncodedLength(BEDictionary *aDictionary);
+
+/// @brief Prints the given dictionary to stdout.
+///
+/// @param[in] aDictionary The dictionary to print.
+void BEDictionaryPrint(BEDictionary *aDictionary);
