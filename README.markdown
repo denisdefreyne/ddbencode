@@ -19,23 +19,7 @@ directory.
 Usage
 -----
 
-...
-
-### Memory allocation
-
-`ddbencode` allocates memory for some of its returned data structures. This
-memory should, in order to prevent memory leaks, be cleaned up, either with
-`free` or a specific "delete" function.
-
-* The data returned by `BEStringEncode`, `BEIntegerEncode`, `BEListEncode` and
-  `BEDictionaryEncode` should be cleaned up with a `free`.
-
-* The struct returned by `BEListCreate` or `BEDictionaryCreate` should be
-  cleaned up by using `BEListDelete` or `BEDictionaryDelete`, respectively.
-
-* All data returned by `BEDecode` should be cleaned up. Lists and dictionaries
-  should be cleaned up recursively by using `BEListDeleteDeep` or
-  `BEDictionaryDeleteDeep`, respectively.
+See the source documentation for sample usage.
 
 Examples
 -----
