@@ -82,6 +82,10 @@ void BEDictionaryDeleteDeep(BEDictionary *aDictionary)
 				free(entry.data.string);
 				break;
 
+			case BE_INTEGER:
+				;
+				break;
+
 			case BE_LIST:
 				BEListDeleteDeep(entry.data.list);
 				break;
