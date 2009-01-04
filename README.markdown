@@ -16,30 +16,6 @@ Running the unit tests requires `uctest` which is a simple C unit testing
 library. The rakefile assumes that `uctest` is placed inside the "vendor"
 directory.
 
-Status
-------
-
-Implemented:
-
-* Encoding
-	* String
-	* Integer
-* Decoding
-	* String
-	* Integer
-
-Not implemented:
-
-* Creation/deletion
-	* List
-	* Dictionary
-* Encoding
-	* List
-	* Dictionary
-* Decoding
-	* List
-	* Dictionary
-
 Usage
 -----
 
