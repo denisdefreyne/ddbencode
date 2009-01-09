@@ -24,15 +24,15 @@ BEDictionary *BEDictionaryCreate(size_t aSize, ...)
 	for(size_t i = 0; i < aSize; ++i)
 	{
 		// Set key
-		dictionary->entries[i].key = va_arg(ap, char *);
+		char *key = va_arg(ap, char *);
+		dictionary->entries[i].key = BEStringCreate(key, strlen(key));
 
 		// Set value
 		switch(va_arg(ap, int))
 		{
 			case BE_STRING:
 				dictionary->entries[i].type = BE_STRING;
-				dictionary->entries[i].data.string = va_arg(ap, char *);
-				dictionary->entries[i].stringLength = va_arg(ap, size_t);
+				dictionary->entries[i].data.string = va_arg(ap, BEString *);
 				break;
 
 			case BE_INTEGER:
@@ -79,7 +79,7 @@ void BEDictionaryDeleteDeep(BEDictionary *aDictionary)
 		switch(entry.type)
 		{
 			case BE_STRING:
-				free(entry.data.string);
+				BEStringDelete(entry.data.string);
 				break;
 
 			case BE_INTEGER:
@@ -127,7 +127,7 @@ bool BEDictionaryEncode(BEDictionary *aiDictionary, void **aoData, size_t *aoDat
 		// Encode key
 		void   *keyData;
 		size_t keyDataLength;
-		BEStringEncode(entry.key, strlen(entry.key), &keyData, &keyDataLength);
+		BEStringEncode(entry.key, &keyData, &keyDataLength);
 
 		// Append encoded key
 		memcpy(currentEnd, keyData, keyDataLength);
@@ -142,7 +142,7 @@ bool BEDictionaryEncode(BEDictionary *aiDictionary, void **aoData, size_t *aoDat
 		switch(entry.type)
 		{
 			case BE_STRING:
-				BEStringEncode(entry.data.string, entry.stringLength, &valueData, &valueDataLength);
+				BEStringEncode(entry.data.string, &valueData, &valueDataLength);
 				break;
 
 			case BE_INTEGER:
@@ -238,7 +238,7 @@ void _BEDictionaryPrint(BEDictionary *aDictionary, size_t aIndentation)
 
 		for(size_t i = 0; i < aIndentation+1; ++i)
 			fputs("    ", stdout);
-		printf("\"%s\" =>\n", entry->key);
+		printf("\"%s\" =>\n", entry->key->cString);
 		switch(entry->type)
 		{
 			case BE_STRING:

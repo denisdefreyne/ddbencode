@@ -27,8 +27,7 @@ BEList *BEListCreate(size_t aSize, ...)
 		{
 			case BE_STRING:
 				list->entries[i].type = BE_STRING;
-				list->entries[i].data.string = va_arg(ap, char *);
-				list->entries[i].stringLength = va_arg(ap, size_t);
+				list->entries[i].data.string = va_arg(ap, BEString *);
 				break;
 
 			case BE_INTEGER:
@@ -74,7 +73,7 @@ void BEListDeleteDeep(BEList *aList)
 		switch(entry.type)
 		{
 			case BE_STRING:
-				free(entry.data.string);
+				BEStringDelete(entry.data.string);
 				break;
 
 			case BE_INTEGER:
@@ -123,7 +122,7 @@ bool BEListEncode(BEList *aiList, void **aoData, size_t *aoDataLength)
 		switch(entry.type)
 		{
 			case BE_STRING:
-				BEStringEncode(entry.data.string, entry.stringLength, &entryData, &entryDataLength);
+				BEStringEncode(entry.data.string, &entryData, &entryDataLength);
 				break;
 
 			case BE_INTEGER:

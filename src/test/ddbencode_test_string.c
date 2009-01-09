@@ -1,6 +1,7 @@
 #include <string.h>
 
 #include <ddbencode/ddbencode.h>
+#include <ddbencode/private.h>
 #include <uctest/uctest.h>
 
 static void BETestString_encode0(void)
@@ -8,7 +9,8 @@ static void BETestString_encode0(void)
 	void   *data  = NULL;
 	size_t length = 0;
 
-	BEStringEncode("", 0, &data, &length);
+	BEString *string = BEStringCreate("", 0);
+	BEStringEncode(string, &data, &length);
 
 	UC_ASSERT(2 == length);
 	UC_ASSERT(0 == strcmp(data, "0:"));
@@ -21,7 +23,8 @@ static void BETestString_encode1(void)
 	void   *data  = NULL;
 	size_t length = 0;
 
-	BEStringEncode("t", 1, &data, &length);
+	BEString *string = BEStringCreate("t", 1);
+	BEStringEncode(string, &data, &length);
 
 	UC_ASSERT(3 == length);
 	UC_ASSERT(0 == strcmp(data, "1:t"));
@@ -34,7 +37,8 @@ static void BETestString_encode4(void)
 	void   *data  = NULL;
 	size_t length = 0;
 
-	BEStringEncode("test", 4, &data, &length);
+	BEString *string = BEStringCreate("test", 4);
+	BEStringEncode(string, &data, &length);
 
 	UC_ASSERT(6 == length);
 	UC_ASSERT(0 == strcmp(data, "4:test"));
@@ -47,7 +51,8 @@ static void BETestString_encode9(void)
 	void   *data  = NULL;
 	size_t length = 0;
 
-	BEStringEncode("abcdefghi", 9, &data, &length);
+	BEString *string = BEStringCreate("abcdefghi", 9);
+	BEStringEncode(string, &data, &length);
 
 	UC_ASSERT(11 == length);
 	UC_ASSERT(0 == strcmp(data, "9:abcdefghi"));
@@ -60,7 +65,8 @@ static void BETestString_encode10(void)
 	void   *data  = NULL;
 	size_t length = 0;
 
-	BEStringEncode("abcdefghij", 10, &data, &length);
+	BEString *string = BEStringCreate("abcdefghij", 10);
+	BEStringEncode(string, &data, &length);
 
 	UC_ASSERT(13 == length);
 	UC_ASSERT(0 == strcmp(data, "10:abcdefghij"));
@@ -73,7 +79,8 @@ static void BETestString_encode11(void)
 	void   *data  = NULL;
 	size_t length = 0;
 
-	BEStringEncode("abcdefghijk", 11, &data, &length);
+	BEString *string = BEStringCreate("abcdefghijk", 11);
+	BEStringEncode(string, &data, &length);
 
 	UC_ASSERT(14 == length);
 	UC_ASSERT(0 == strcmp(data, "11:abcdefghijk"));
@@ -86,21 +93,20 @@ static void BETestString_decode0(void)
 	BEType type;
 	bool success;
 
-	char *string = NULL;
+	BEString *string = NULL;
 	int integer = 0;
 	BEList *list = NULL;
 	BEDictionary *dictionary = NULL;
 
-	size_t stringLength = 0;
 	size_t usedLength = 0;
 
-	success = BEDecode("0:", 2, &type, &string, &integer, &list, &dictionary, &stringLength, &usedLength);
+	success = BEDecode("0:", 2, &type, &string, &integer, &list, &dictionary, &usedLength);
 
 	UC_ASSERT(success);
 
 	UC_ASSERT(BE_STRING == type);
-	UC_ASSERT(0 == strcmp(string, ""));
-	UC_ASSERT(0 == stringLength);
+	UC_ASSERT(0 == strcmp(string->cString, ""));
+	UC_ASSERT(0 == string->length);
 
 	UC_ASSERT(0 == integer);
 	UC_ASSERT(NULL == list);
@@ -113,21 +119,20 @@ static void BETestString_decode1(void)
 	BEType type;
 	bool success;
 
-	char *string = NULL;
+	BEString *string = NULL;
 	int integer = 0;
 	BEList *list = NULL;
 	BEDictionary *dictionary = NULL;
 
-	size_t stringLength = 0;
 	size_t usedLength = 0;
 
-	success = BEDecode("1:a", 3, &type, &string, &integer, &list, &dictionary, &stringLength, &usedLength);
+	success = BEDecode("1:a", 3, &type, &string, &integer, &list, &dictionary, &usedLength);
 
 	UC_ASSERT(success);
 
 	UC_ASSERT(BE_STRING == type);
-	UC_ASSERT(0 == strcmp(string, "a"));
-	UC_ASSERT(1 == stringLength);
+	UC_ASSERT(0 == strcmp(string->cString, "a"));
+	UC_ASSERT(1 == string->length);
 
 	UC_ASSERT(0 == integer);
 	UC_ASSERT(NULL == list);
@@ -140,21 +145,20 @@ static void BETestString_decode4(void)
 	BEType type;
 	bool success;
 
-	char *string = NULL;
+	BEString *string = NULL;
 	int integer = 0;
 	BEList *list = NULL;
 	BEDictionary *dictionary = NULL;
 
-	size_t stringLength = 0;
 	size_t usedLength = 0;
 
-	success = BEDecode("4:abcd", 6, &type, &string, &integer, &list, &dictionary, &stringLength, &usedLength);
+	success = BEDecode("4:abcd", 6, &type, &string, &integer, &list, &dictionary, &usedLength);
 
 	UC_ASSERT(success);
 
 	UC_ASSERT(BE_STRING == type);
-	UC_ASSERT(0 == strcmp(string, "abcd"));
-	UC_ASSERT(4 == stringLength);
+	UC_ASSERT(0 == strcmp(string->cString, "abcd"));
+	UC_ASSERT(4 == string->length);
 
 	UC_ASSERT(0 == integer);
 	UC_ASSERT(NULL == list);
@@ -167,21 +171,20 @@ static void BETestString_decode9(void)
 	BEType type;
 	bool success;
 
-	char *string = NULL;
+	BEString *string = NULL;
 	int integer = 0;
 	BEList *list = NULL;
 	BEDictionary *dictionary = NULL;
 
-	size_t stringLength = 0;
 	size_t usedLength = 0;
 
-	success = BEDecode("9:abcdefghi", 11, &type, &string, &integer, &list, &dictionary, &stringLength, &usedLength);
+	success = BEDecode("9:abcdefghi", 11, &type, &string, &integer, &list, &dictionary, &usedLength);
 
 	UC_ASSERT(success);
 
 	UC_ASSERT(BE_STRING == type);
-	UC_ASSERT(0 == strcmp(string, "abcdefghi"));
-	UC_ASSERT(9 == stringLength);
+	UC_ASSERT(0 == strcmp(string->cString, "abcdefghi"));
+	UC_ASSERT(9 == string->length);
 
 	UC_ASSERT(0 == integer);
 	UC_ASSERT(NULL == list);
@@ -194,21 +197,20 @@ static void BETestString_decode10(void)
 	BEType type;
 	bool success;
 
-	char *string = NULL;
+	BEString *string = NULL;
 	int integer = 0;
 	BEList *list = NULL;
 	BEDictionary *dictionary = NULL;
 
-	size_t stringLength = 0;
 	size_t usedLength = 0;
 
-	success = BEDecode("10:abcdefghij", 13, &type, &string, &integer, &list, &dictionary, &stringLength, &usedLength);
+	success = BEDecode("10:abcdefghij", 13, &type, &string, &integer, &list, &dictionary, &usedLength);
 
 	UC_ASSERT(success);
 
 	UC_ASSERT(BE_STRING == type);
-	UC_ASSERT(0 == strcmp(string, "abcdefghij"));
-	UC_ASSERT(10 == stringLength);
+	UC_ASSERT(0 == strcmp(string->cString, "abcdefghij"));
+	UC_ASSERT(10 == string->length);
 
 	UC_ASSERT(0 == integer);
 	UC_ASSERT(NULL == list);
@@ -221,21 +223,20 @@ static void BETestString_decode11(void)
 	BEType type;
 	bool success;
 
-	char *string = NULL;
+	BEString *string = NULL;
 	int integer = 0;
 	BEList *list = NULL;
 	BEDictionary *dictionary = NULL;
 
-	size_t stringLength = 0;
 	size_t usedLength = 0;
 
-	success = BEDecode("11:abcdefghijk", 14, &type, &string, &integer, &list, &dictionary, &stringLength, &usedLength);
+	success = BEDecode("11:abcdefghijk", 14, &type, &string, &integer, &list, &dictionary, &usedLength);
 
 	UC_ASSERT(success);
 
 	UC_ASSERT(BE_STRING == type);
-	UC_ASSERT(0 == strcmp(string, "abcdefghijk"));
-	UC_ASSERT(11 == stringLength);
+	UC_ASSERT(0 == strcmp(string->cString, "abcdefghijk"));
+	UC_ASSERT(11 == string->length);
 
 	UC_ASSERT(0 == integer);
 	UC_ASSERT(NULL == list);
@@ -248,21 +249,20 @@ static void BETestString_decodeLong(void)
 	BEType type;
 	bool success;
 
-	char *string = NULL;
+	BEString *string = NULL;
 	int integer = 0;
 	BEList *list = NULL;
 	BEDictionary *dictionary = NULL;
 
-	size_t stringLength = 0;
 	size_t usedLength = 0;
 
-	success = BEDecode("3:abcdefghijklmno", 17, &type, &string, &integer, &list, &dictionary, &stringLength, &usedLength);
+	success = BEDecode("3:abcdefghijklmno", 17, &type, &string, &integer, &list, &dictionary, &usedLength);
 
 	UC_ASSERT(success);
 
 	UC_ASSERT(BE_STRING == type);
-	UC_ASSERT(0 == strcmp(string, "abc"));
-	UC_ASSERT(3 == stringLength);
+	UC_ASSERT(0 == strcmp(string->cString, "abc"));
+	UC_ASSERT(3 == string->length);
 
 	UC_ASSERT(0 == integer);
 	UC_ASSERT(NULL == list);
@@ -275,15 +275,14 @@ static void BETestString_decodeInvalid0(void)
 	BEType type;
 	bool success;
 
-	char *string = NULL;
+	BEString *string = NULL;
 	int integer = 0;
 	BEList *list = NULL;
 	BEDictionary *dictionary = NULL;
 
-	size_t stringLength = 0;
 	size_t usedLength = 0;
 
-	success = BEDecode("0", 1, &type, &string, &integer, &list, &dictionary, &stringLength, &usedLength);
+	success = BEDecode("0", 1, &type, &string, &integer, &list, &dictionary, &usedLength);
 
 	UC_ASSERT(false == success);
 }
@@ -293,15 +292,14 @@ static void BETestString_decodeInvalid1(void)
 	BEType type;
 	bool success;
 
-	char *string = NULL;
+	BEString *string = NULL;
 	int integer = 0;
 	BEList *list = NULL;
 	BEDictionary *dictionary = NULL;
 
-	size_t stringLength = 0;
 	size_t usedLength = 0;
 
-	success = BEDecode(":", 1, &type, &string, &integer, &list, &dictionary, &stringLength, &usedLength);
+	success = BEDecode(":", 1, &type, &string, &integer, &list, &dictionary, &usedLength);
 
 	UC_ASSERT(false == success);
 }
@@ -311,15 +309,14 @@ static void BETestString_decodeInvalid2(void)
 	BEType type;
 	bool success;
 
-	char *string = NULL;
+	BEString *string = NULL;
 	int integer = 0;
 	BEList *list = NULL;
 	BEDictionary *dictionary = NULL;
 
-	size_t stringLength = 0;
 	size_t usedLength = 0;
 
-	success = BEDecode("5:asdf", 6, &type, &string, &integer, &list, &dictionary, &stringLength, &usedLength);
+	success = BEDecode("5:asdf", 6, &type, &string, &integer, &list, &dictionary, &usedLength);
 
 	UC_ASSERT(false == success);
 }
@@ -329,42 +326,46 @@ static void BETestString_decodeInvalid3(void)
 	BEType type;
 	bool success;
 
-	char *string = NULL;
+	BEString *string = NULL;
 	int integer = 0;
 	BEList *list = NULL;
 	BEDictionary *dictionary = NULL;
 
-	size_t stringLength = 0;
 	size_t usedLength = 0;
 
-	success = BEDecode("9:asdf", 6, &type, &string, &integer, &list, &dictionary, &stringLength, &usedLength);
+	success = BEDecode("9:asdf", 6, &type, &string, &integer, &list, &dictionary, &usedLength);
 
 	UC_ASSERT(false == success);
 }
 
 static void BETestString_getEncodedLength0(void)
 {
-	UC_ASSERT(2 == BEStringGetEncodedLength(""));
+	BEString *string = BEStringCreate("", 0);
+	UC_ASSERT(2 == BEStringGetEncodedLength(string));
 }
 
 static void BETestString_getEncodedLength1(void)
 {
-	UC_ASSERT(3 == BEStringGetEncodedLength("a"));
+	BEString *string = BEStringCreate("a", 1);
+	UC_ASSERT(3 == BEStringGetEncodedLength(string));
 }
 
 static void BETestString_getEncodedLength9(void)
 {
-	UC_ASSERT(11 == BEStringGetEncodedLength("abcdefghi"));
+	BEString *string = BEStringCreate("abcdefghi", 9);
+	UC_ASSERT(11 == BEStringGetEncodedLength(string));
 }
 
 static void BETestString_getEncodedLength10(void)
 {
-	UC_ASSERT(13 == BEStringGetEncodedLength("abcdefghij"));
+	BEString *string = BEStringCreate("abcdefghij", 10);
+	UC_ASSERT(13 == BEStringGetEncodedLength(string));
 }
 
 static void BETestString_getEncodedLength11(void)
 {
-	UC_ASSERT(14 == BEStringGetEncodedLength("abcdefghijk"));
+	BEString *string = BEStringCreate("abcdefghijk", 11);
+	UC_ASSERT(14 == BEStringGetEncodedLength(string));
 }
 
 void BETestString(void)

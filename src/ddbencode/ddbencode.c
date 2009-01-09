@@ -5,12 +5,12 @@
 #include <stdlib.h>
 #include <string.h>
 
-static bool _BEDecode_string(void *aiData, size_t aiLength, BEType *aoType, char **aoString, size_t *aoStringLength, size_t *aoUsedLength);
+static bool _BEDecode_string(void *aiData, size_t aiLength, BEType *aoType, BEString **aoString, size_t *aoUsedLength);
 static bool _BEDecode_integer(void *aiData, size_t aiLength, BEType *aoType, int *aoInteger, size_t *aoUsedLength);
 static bool _BEDecode_list(void *aiData, size_t aiLength, BEType *aoType, BEList **aoList, size_t *aoUsedLength);
 static bool _BEDecode_dictionary(void *aiData, size_t aiLength, BEType *aoType, BEDictionary **aoDictionary, size_t *aoUsedLength);
 
-bool BEDecode(void *aiData, size_t aiLength, BEType *aoType, char **aoString, int *aoInteger, BEList **aoList, BEDictionary **aoDictionary, size_t *aoStringLength, size_t *aoUsedLength)
+bool BEDecode(void *aiData, size_t aiLength, BEType *aoType, BEString **aoString, int *aoInteger, BEList **aoList, BEDictionary **aoDictionary, size_t *aoUsedLength)
 {
 	// Validate length
 	if(aiLength < 2)
@@ -18,7 +18,7 @@ bool BEDecode(void *aiData, size_t aiLength, BEType *aoType, char **aoString, in
 
 	switch(((char *)aiData)[0])
 	{
-		case '0'...'9': return _BEDecode_string(aiData, aiLength, aoType, aoString, aoStringLength, aoUsedLength);
+		case '0'...'9': return _BEDecode_string(aiData, aiLength, aoType, aoString, aoUsedLength);
 		case 'i':       return _BEDecode_integer(aiData, aiLength, aoType, aoInteger, aoUsedLength);
 		case 'l':       return _BEDecode_list(aiData, aiLength, aoType, aoList, aoUsedLength);
 		case 'd':       return _BEDecode_dictionary(aiData, aiLength, aoType, aoDictionary, aoUsedLength);
@@ -26,7 +26,7 @@ bool BEDecode(void *aiData, size_t aiLength, BEType *aoType, char **aoString, in
 	}
 }
 
-static bool _BEDecode_string(void *aiData, size_t aiLength, BEType *aoType, char **aoString, size_t *aoStringLength, size_t *aoUsedLength)
+static bool _BEDecode_string(void *aiData, size_t aiLength, BEType *aoType, BEString **aoString, size_t *aoUsedLength)
 {
 	// String, e.g. 4:spam
 
@@ -57,18 +57,14 @@ static bool _BEDecode_string(void *aiData, size_t aiLength, BEType *aoType, char
 	if(i + 1 + length > aiLength)
 		return false;
 
-	// Get string
-	char *string = malloc((length+1)*sizeof (char));
+	// Create string
+	BEString *string = BEStringCreate(aiData+i+1, length);
 	if(!string)
 		return false;
-	memcpy(string, aiData+i+1, length);
-	string[length] = '\0';
 
 	// Set result
 	*aoType = BE_STRING;
 	*aoString = string;
-	if(aoStringLength)
-		*aoStringLength = length;
 	if(aoUsedLength)
 		*aoUsedLength = i + 1 + length;
 	return true;
@@ -135,12 +131,10 @@ static bool _BEDecode_list(void *aiData, size_t aiLength, BEType *aoType, BEList
 	{
 		BEType subType;
 
-		char         *subString     = NULL;
+		BEString     *subString     = NULL;
 		int          subInteger;
 		BEList       *subList       = NULL;
 		BEDictionary *subDictionary = NULL;
-
-		size_t subStringLength;
 
 		size_t subUsedLength;
 
@@ -149,7 +143,6 @@ static bool _BEDecode_list(void *aiData, size_t aiLength, BEType *aoType, BEList
 			aiData+currentStart, aiLength-currentStart-1,
 			&subType,
 			&subString, &subInteger, &subList, &subDictionary,
-			&subStringLength,
 			&subUsedLength
 		);
 
@@ -185,7 +178,6 @@ static bool _BEDecode_list(void *aiData, size_t aiLength, BEType *aoType, BEList
 			case BE_STRING:
 				list->entries[list->size-1].type = BE_STRING;
 				list->entries[list->size-1].data.string = subString;
-				list->entries[list->size-1].stringLength = subStringLength;
 				break;
 
 			case BE_INTEGER:
@@ -233,14 +225,11 @@ static bool _BEDecode_dictionary(void *aiData, size_t aiLength, BEType *aoType, 
 	{
 		BEType subType;
 
-		char         *subKey        = NULL;
-		char         *subString     = NULL;
+		BEString     *subKey        = NULL;
+		BEString     *subString     = NULL;
 		int          subInteger;
 		BEList       *subList       = NULL;
 		BEDictionary *subDictionary = NULL;
-
-		size_t subKeyLength;
-		size_t subStringLength;
 
 		bool success;
 		size_t subUsedLength;
@@ -251,7 +240,6 @@ static bool _BEDecode_dictionary(void *aiData, size_t aiLength, BEType *aoType, 
 			aiData+currentStart, aiLength-currentStart-1,
 			&subType,
 			&subKey, &subInteger, &subList, &subDictionary,
-			&subKeyLength,
 			&subUsedLength
 		);
 
@@ -281,7 +269,6 @@ static bool _BEDecode_dictionary(void *aiData, size_t aiLength, BEType *aoType, 
 			aiData+currentStart, aiLength-currentStart-1,
 			&subType,
 			&subString, &subInteger, &subList, &subDictionary,
-			&subStringLength,
 			&subUsedLength
 		);
 
@@ -320,7 +307,6 @@ static bool _BEDecode_dictionary(void *aiData, size_t aiLength, BEType *aoType, 
 			case BE_STRING:
 				dictionary->entries[dictionary->size-1].type = BE_STRING;
 				dictionary->entries[dictionary->size-1].data.string = subString;
-				dictionary->entries[dictionary->size-1].stringLength = subStringLength;
 				break;
 
 			case BE_INTEGER:

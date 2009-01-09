@@ -5,18 +5,36 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
+/// @brief A string.
+///
+/// This structure is \em not meant to be used as a general-purpose string as it has not been optimized, and likely never will be.
+typedef struct _BEString BEString;
+
+/// @brief Creates a new string with the given C string and length.
+///
+/// TODO document
+///
+/// @return The newly created string.
+BEString *BEStringCreate(char *aCString, size_t aLength);
+
+/// @brief Deletes the given string.
+///
+/// TODO document
+///
+/// @param[in] aString The string to delete.
+void BEStringDelete(BEString *aString);
+
 /// @brief Encodes the given string.
 ///
 /// This function allocates memory for the encoded data; this memory should be
 /// free()d once it is no longer necessary.
 ///
-/// @param[in]  aiString       The byte string that should be encoded.
-/// @param[in]  aiStringLength The length of the byte string that should be encoded.
+/// @param[in]  aiString       The string that should be encoded.
 /// @param[out] aoData         A pointer to where the encoded string should be stored.
 /// @param[out] aoDataLength   The length of the encoded string.
 ///
 /// @return true on success, false on failure.
-bool BEStringEncode(void *aiString, size_t aiStringLength, void **aoData, size_t *aoDataLength);
+bool BEStringEncode(BEString *aiString, void **aoData, size_t *aoDataLength);
 
 /// @brief Returns the length of the encoded string.
 ///
@@ -28,9 +46,9 @@ bool BEStringEncode(void *aiString, size_t aiStringLength, void **aoData, size_t
 /// @param[in] aString The string from which to get the encoded data length.
 ///
 /// @return The given string's encoded data length.
-size_t BEStringGetEncodedLength(void *aString);
+size_t BEStringGetEncodedLength(BEString *aString);
 
 /// @brief Prints the given string to stdout.
 ///
 /// @param[in] aString The string to print.
-void BEStringPrint(char *aString);
+void BEStringPrint(BEString *aString);

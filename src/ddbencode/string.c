@@ -1,32 +1,59 @@
 #include <ddbencode/ddbencode.h>
+#include <ddbencode/private.h>
 
 #include <math.h>
 #include <stdio.h>
 #include <string.h>
 
-bool BEStringEncode(void *aiString, size_t aiStringLength, void **aoData, size_t *aoDataLength)
+BEString *BEStringCreate(char *aCString, size_t aLength)
+{
+	// Create string
+	BEString *string = malloc(sizeof (BEString));
+	if(!string)
+		return NULL;
+
+	// Set length
+	string->length = aLength;
+
+	// Copy C string
+	string->cString = malloc((aLength+1)*sizeof(char));
+	if(!string->cString)
+		return NULL;
+	memcpy(string->cString, aCString, aLength);
+	string->cString[aLength] = '\0';
+
+	// Done
+	return string;
+}
+
+void BEStringDelete(BEString *aString)
+{
+	free(aString->cString);
+	free(aString);
+}
+
+bool BEStringEncode(BEString *aiString, void **aoData, size_t *aoDataLength)
 {
 	// Strings are length-prefixed base ten followed by a colon and the string.
 	// For example 4:spam corresponds to 'spam'.
 
 	// Calculate the length of the length (yes, indeed) of the string
-	size_t stringLength = strlen(aiString);
 	size_t lengthLength;
-	if(stringLength < 2)
+	if(aiString->length < 2)
 		lengthLength = 1;
 	else
-		lengthLength = (int)log10((double)stringLength) + 1;
+		lengthLength = (int)log10((double)aiString->length) + 1;
 
 	// Create data
-	size_t dataLength = lengthLength + 1 + stringLength;
+	size_t dataLength = lengthLength + 1 + aiString->length;
 	void *data = malloc(dataLength+1);
 	if(!data)
 		return false;
 
 	// Fill data
-	sprintf(data, "%i:", (int)stringLength);
-	memcpy(data+lengthLength+1, aiString, aiStringLength);
-	((char *)data)[lengthLength+1+aiStringLength] = '\0';
+	sprintf(data, "%i:", (int)aiString->length);
+	memcpy(data+lengthLength+1, aiString->cString, aiString->length);
+	((char *)data)[lengthLength+1+aiString->length] = '\0';
 
 	// Return data
 	*aoData = data;
@@ -35,23 +62,22 @@ bool BEStringEncode(void *aiString, size_t aiStringLength, void **aoData, size_t
 	return true;
 }
 
-size_t BEStringGetEncodedLength(void *aString)
+size_t BEStringGetEncodedLength(BEString *aString)
 {
-	size_t stringLength = strlen(aString);
-	if(stringLength < 2)
-		return 1 + 1 + stringLength;
+	if(aString->length < 2)
+		return 1 + 1 + aString->length;
 	else
-		return (int)log10((double)stringLength) + 1 + 1 + stringLength;
+		return (int)log10((double)aString->length) + 1 + 1 + aString->length;
 }
 
-void _BEStringPrint(char *aString, size_t aIndentation)
+void _BEStringPrint(BEString *aString, size_t aIndentation)
 {
 	for(size_t i = 0; i < aIndentation; ++i)
 		fputs("    ", stdout);
-	printf("\"%s\"\n", aString);
+	printf("\"%s\"\n", aString->cString);
 }
 
-void BEStringPrint(char *aString)
+void BEStringPrint(BEString *aString)
 {
 	_BEStringPrint(aString, 0);
 }

@@ -74,13 +74,12 @@ typedef enum {
 /// @param[out] aoInteger      The decoded item, if the item is a integer.
 /// @param[out] aoList         The decoded item, if the item is a list.
 /// @param[out] aoDictionary   The decoded item, if the item is a dictionary.
-/// @param[out] aoStringLength The length of the decoded string, if the item is a string.
 /// @param[out] aoUsedLength   The number of bytes that were necessary to decode the item. Can be NULL.
 ///
 /// @return true on success, false on failure.
 bool BEDecode(
 	void *aiData, size_t aiLength,
 	BEType *aoType,
-	char **aoString, int *aoInteger, BEList **aoList, BEDictionary **aoDictionary, size_t *aoStringLength,
+	BEString **aoString, int *aoInteger, BEList **aoList, BEDictionary **aoDictionary,
 	size_t *aoUsedLength
 );

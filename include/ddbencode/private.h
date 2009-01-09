@@ -1,14 +1,19 @@
+struct _BEString
+{
+	char *cString;
+	size_t length;
+};
+
 struct _BEListEntry
 {
 	BEType type;
 	union
 	{
-		char        *string;
+		BEString    *string;
 		int         integer;
 		BEList      *list;
 		BEDictionary *dictionary;
 	} data;
-	size_t stringLength;
 };
 
 struct _BEList
@@ -19,16 +24,15 @@ struct _BEList
 
 struct _BEDictionaryEntry
 {
-	char *key;
+	BEString *key;
 	BEType type;
 	union
 	{
-		char        *string;
+		BEString    *string;
 		int         integer;
 		BEList      *list;
 		BEDictionary *dictionary;
 	} data;
-	size_t stringLength;
 };
 
 struct _BEDictionary
@@ -37,7 +41,7 @@ struct _BEDictionary
 	size_t size;
 };
 
-void _BEStringPrint(char *aString, size_t aIndentation);
+void _BEStringPrint(BEString *aString, size_t aIndentation);
 void _BEIntegerPrint(int aInteger, size_t aIndentation);
 void _BEListPrint(BEList *aList, size_t aIndentation);
 void _BEDictionaryPrint(BEDictionary *aDictionary, size_t aIndentation);
