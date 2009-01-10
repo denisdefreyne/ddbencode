@@ -34,7 +34,7 @@ typedef struct _BEDictionary BEDictionary;
 /// @endcode
 ///
 /// Dictionaries created with BEDictionaryCreate() should be released using
-/// COObjectRelease(). All strings, lists and dictionaries passed to
+/// CORelease(). All strings, lists and dictionaries passed to
 /// BEDictionaryCreate() are retained by the dictionary.
 ///
 /// @return The newly created dictionary.

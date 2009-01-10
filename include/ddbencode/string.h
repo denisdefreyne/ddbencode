@@ -21,7 +21,7 @@ typedef struct _BEString BEString;
 /// @param[in] aLength	The length of the given C string.
 ///
 /// Strings created with BEStringCreate() should be released using
-/// COObjectRelease().
+/// CORelease().
 ///
 /// @return The newly created string.
 BEString *BEStringCreate(char *aCString, size_t aLength);

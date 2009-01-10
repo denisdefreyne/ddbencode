@@ -32,7 +32,7 @@ typedef struct _BEList BEList;
 /// );
 /// @endcode
 /// Lists created with BEListCreate() should be released using
-/// COObjectRelease(). All strings, lists and dictionaries passed to
+/// CORelease(). All strings, lists and dictionaries passed to
 /// BEListCreate() are retained by the list.
 ///
 /// @return The newly created list.

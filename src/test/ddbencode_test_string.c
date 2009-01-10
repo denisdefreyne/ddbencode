@@ -18,7 +18,7 @@ static void BETestString_encode0(void)
 	UC_ASSERT(0 == strcmp(data, "0:"));
 
 	free(data);
-	COObjectRelease(string);
+	CORelease(string);
 }
 
 static void BETestString_encode1(void)
@@ -33,7 +33,7 @@ static void BETestString_encode1(void)
 	UC_ASSERT(0 == strcmp(data, "1:t"));
 
 	free(data);
-	COObjectRelease(string);
+	CORelease(string);
 }
 
 static void BETestString_encode4(void)
@@ -48,7 +48,7 @@ static void BETestString_encode4(void)
 	UC_ASSERT(0 == strcmp(data, "4:test"));
 
 	free(data);
-	COObjectRelease(string);
+	CORelease(string);
 }
 
 static void BETestString_encode9(void)
@@ -63,7 +63,7 @@ static void BETestString_encode9(void)
 	UC_ASSERT(0 == strcmp(data, "9:abcdefghi"));
 
 	free(data);
-	COObjectRelease(string);
+	CORelease(string);
 }
 
 static void BETestString_encode10(void)
@@ -78,7 +78,7 @@ static void BETestString_encode10(void)
 	UC_ASSERT(0 == strcmp(data, "10:abcdefghij"));
 
 	free(data);
-	COObjectRelease(string);
+	CORelease(string);
 }
 
 static void BETestString_encode11(void)
@@ -93,7 +93,7 @@ static void BETestString_encode11(void)
 	UC_ASSERT(0 == strcmp(data, "11:abcdefghijk"));
 
 	free(data);
-	COObjectRelease(string);
+	CORelease(string);
 }
 
 static void BETestString_decode0(void)
@@ -121,7 +121,7 @@ static void BETestString_decode0(void)
 	UC_ASSERT(NULL == dictionary);
 	UC_ASSERT(2 == usedLength);
 
-	COObjectRelease(string);
+	CORelease(string);
 }
 
 static void BETestString_decode1(void)
@@ -149,7 +149,7 @@ static void BETestString_decode1(void)
 	UC_ASSERT(NULL == dictionary);
 	UC_ASSERT(3 == usedLength);
 
-	COObjectRelease(string);
+	CORelease(string);
 }
 
 static void BETestString_decode4(void)
@@ -177,7 +177,7 @@ static void BETestString_decode4(void)
 	UC_ASSERT(NULL == dictionary);
 	UC_ASSERT(6 == usedLength);
 
-	COObjectRelease(string);
+	CORelease(string);
 }
 
 static void BETestString_decode9(void)
@@ -205,7 +205,7 @@ static void BETestString_decode9(void)
 	UC_ASSERT(NULL == dictionary);
 	UC_ASSERT(11 == usedLength);
 
-	COObjectRelease(string);
+	CORelease(string);
 }
 
 static void BETestString_decode10(void)
@@ -233,7 +233,7 @@ static void BETestString_decode10(void)
 	UC_ASSERT(NULL == dictionary);
 	UC_ASSERT(13 == usedLength);
 
-	COObjectRelease(string);
+	CORelease(string);
 }
 
 #include <cobject/private.h>
@@ -263,7 +263,7 @@ static void BETestString_decode11(void)
 	UC_ASSERT(NULL == dictionary);
 	UC_ASSERT(14 == usedLength);
 
-	COObjectRelease(string);
+	CORelease(string);
 }
 
 static void BETestString_decodeLong(void)
@@ -291,7 +291,7 @@ static void BETestString_decodeLong(void)
 	UC_ASSERT(NULL == dictionary);
 	UC_ASSERT(5 == usedLength);
 
-	COObjectRelease(string);
+	CORelease(string);
 }
 
 static void BETestString_decodeInvalid0(void)
@@ -368,7 +368,7 @@ static void BETestString_getEncodedLength0(void)
 
 	UC_ASSERT(2 == BEStringGetEncodedLength(string));
 
-	COObjectRelease(string);
+	CORelease(string);
 }
 
 static void BETestString_getEncodedLength1(void)
@@ -377,7 +377,7 @@ static void BETestString_getEncodedLength1(void)
 
 	UC_ASSERT(3 == BEStringGetEncodedLength(string));
 
-	COObjectRelease(string);
+	CORelease(string);
 }
 
 static void BETestString_getEncodedLength9(void)
@@ -386,7 +386,7 @@ static void BETestString_getEncodedLength9(void)
 
 	UC_ASSERT(11 == BEStringGetEncodedLength(string));
 
-	COObjectRelease(string);
+	CORelease(string);
 }
 
 static void BETestString_getEncodedLength10(void)
@@ -395,7 +395,7 @@ static void BETestString_getEncodedLength10(void)
 
 	UC_ASSERT(13 == BEStringGetEncodedLength(string));
 
-	COObjectRelease(string);
+	CORelease(string);
 }
 
 static void BETestString_getEncodedLength11(void)
@@ -404,7 +404,7 @@ static void BETestString_getEncodedLength11(void)
 
 	UC_ASSERT(14 == BEStringGetEncodedLength(string));
 
-	COObjectRelease(string);
+	CORelease(string);
 }
 
 void BETestString(void)

@@ -126,8 +126,8 @@ static bool _BEDecode_list(void *aiData, size_t aiLength, BEType *aoType, BEList
 	list->size = 0;
 
 	// Initialize
-	COObjectInitialize(list);
-	COObjectSetDestructor(list, &_BEListDelete);
+	COInitialize(list);
+	COSetDestructor(list, &_BEListDelete);
 
 	// Look for list items
 	size_t currentStart = 1;
@@ -155,12 +155,12 @@ static bool _BEDecode_list(void *aiData, size_t aiLength, BEType *aoType, BEList
 		{
 			// Cleanup
 			if(subString)
-				COObjectRelease(subString);
+				CORelease(subString);
 			if(subList)
-				COObjectRelease(subList);
+				CORelease(subList);
 			if(subDictionary)
-				COObjectRelease(subDictionary);
-			COObjectRelease(list);
+				CORelease(subDictionary);
+			CORelease(list);
 
 			return false;
 		}
@@ -172,12 +172,12 @@ static bool _BEDecode_list(void *aiData, size_t aiLength, BEType *aoType, BEList
 		{
 			// Cleanup
 			if(subString)
-				COObjectRelease(subString);
+				CORelease(subString);
 			if(subList)
-				COObjectRelease(subList);
+				CORelease(subList);
 			if(subDictionary)
-				COObjectRelease(subDictionary);
-			COObjectRelease(list);
+				CORelease(subDictionary);
+			CORelease(list);
 
 			return false;
 		}
@@ -232,8 +232,8 @@ static bool _BEDecode_dictionary(void *aiData, size_t aiLength, BEType *aoType, 
 	dictionary->size = 0;
 
 	// Initialize
-	COObjectInitialize(dictionary);
-	COObjectSetDestructor(dictionary, &_BEDictionaryDelete);
+	COInitialize(dictionary);
+	COSetDestructor(dictionary, &_BEDictionaryDelete);
 
 	// Look for dictionary items
 	size_t currentStart = 1;
@@ -264,14 +264,14 @@ static bool _BEDecode_dictionary(void *aiData, size_t aiLength, BEType *aoType, 
 		{
 			// Cleanup
 			if(subKey)
-				COObjectRelease(subKey);
+				CORelease(subKey);
 			if(subString)
-				COObjectRelease(subString);
+				CORelease(subString);
 			if(subList)
-				COObjectRelease(subList);
+				CORelease(subList);
 			if(subDictionary)
-				COObjectRelease(subDictionary);
-			COObjectRelease(dictionary);
+				CORelease(subDictionary);
+			CORelease(dictionary);
 
 			return false;
 		}
@@ -293,14 +293,14 @@ static bool _BEDecode_dictionary(void *aiData, size_t aiLength, BEType *aoType, 
 		{
 			// Cleanup
 			if(subKey)
-				COObjectRelease(subKey);
+				CORelease(subKey);
 			if(subString)
-				COObjectRelease(subString);
+				CORelease(subString);
 			if(subList)
-				COObjectRelease(subList);
+				CORelease(subList);
 			if(subDictionary)
-				COObjectRelease(subDictionary);
-			COObjectRelease(dictionary);
+				CORelease(subDictionary);
+			CORelease(dictionary);
 
 			return false;
 		}
@@ -312,14 +312,14 @@ static bool _BEDecode_dictionary(void *aiData, size_t aiLength, BEType *aoType, 
 		{
 			// Cleanup
 			if(subKey)
-				COObjectRelease(subKey);
+				CORelease(subKey);
 			if(subString)
-				COObjectRelease(subString);
+				CORelease(subString);
 			if(subList)
-				COObjectRelease(subList);
+				CORelease(subList);
 			if(subDictionary)
-				COObjectRelease(subDictionary);
-			COObjectRelease(dictionary);
+				CORelease(subDictionary);
+			CORelease(dictionary);
 
 			return false;
 		}

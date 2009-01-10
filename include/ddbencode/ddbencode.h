@@ -57,7 +57,7 @@ typedef enum {
 /// The data returned by this function is newly allocated into memory and
 /// should be cleaned up to prevent memory leaks. Strings should be free()d,
 /// while strings, lists and dictionaries should be released using
-/// COObjectRelease().
+/// CORelease().
 ///
 /// Even though the data could possibly hold two or more encoded items, only
 /// the first item will be decoded. The number of bytes used for decoding will

@@ -13,7 +13,7 @@ static void BETestDictionary_create0(void)
 
 	UC_ASSERT(0 == dictionary->size);
 
-	COObjectRelease(dictionary);
+	CORelease(dictionary);
 }
 
 static void BETestDictionary_create1String(void)
@@ -31,8 +31,8 @@ static void BETestDictionary_create1String(void)
 	UC_ASSERT(0 == strcmp("bar", dictionary->entries[0].data.string->cString));
 	UC_ASSERT(3 == dictionary->entries[0].data.string->length);
 
-	COObjectRelease(string);
-	COObjectRelease(dictionary);
+	CORelease(string);
+	CORelease(dictionary);
 }
 
 static void BETestDictionary_create1Integer(void)
@@ -48,7 +48,7 @@ static void BETestDictionary_create1Integer(void)
 	UC_ASSERT(BE_INTEGER == dictionary->entries[0].type);
 	UC_ASSERT(123 == dictionary->entries[0].data.integer);
 
-	COObjectRelease(dictionary);
+	CORelease(dictionary);
 }
 
 static void BETestDictionary_create4(void)
@@ -80,10 +80,10 @@ static void BETestDictionary_create4(void)
 	UC_ASSERT(BE_DICTIONARY == dictionary->entries[3].type);
 	UC_ASSERT(subDictionary == dictionary->entries[3].data.dictionary);
 
-	COObjectRelease(subString);
-	COObjectRelease(subList);
-	COObjectRelease(subDictionary);
-	COObjectRelease(dictionary);
+	CORelease(subString);
+	CORelease(subList);
+	CORelease(subDictionary);
+	CORelease(dictionary);
 }
 
 static void BETestDictionary_createInvalid(void)
@@ -96,7 +96,7 @@ static void BETestDictionary_createInvalid(void)
 
 	UC_ASSERT(!dictionary);
 
-	COObjectRelease(string);
+	CORelease(string);
 }
 
 static void BETestDictionary_encode0(void)
@@ -115,7 +115,7 @@ static void BETestDictionary_encode0(void)
 	UC_ASSERT(0 == strncmp(data, "de", 1+1));
 
 	free(data);
-	COObjectRelease(dictionary);
+	CORelease(dictionary);
 }
 
 static void BETestDictionary_encode1(void)
@@ -136,8 +136,8 @@ static void BETestDictionary_encode1(void)
 	UC_ASSERT(0 == strncmp(data, "d3:foo3:bare", 1+((1+1+3)+(1+1+3))+1));
 
 	free(data);
-	COObjectRelease(string);
-	COObjectRelease(dictionary);
+	CORelease(string);
+	CORelease(dictionary);
 }
 
 static void BETestDictionary_encode2(void)
@@ -159,8 +159,8 @@ static void BETestDictionary_encode2(void)
 	UC_ASSERT(0 == strncmp(data, "d3:foo3:bar3:bazi123ee", 1+((1+1+3)+(1+1+3))+((1+1+3)+(1+3+1))+1));
 
 	free(data);
-	COObjectRelease(string);
-	COObjectRelease(dictionary);
+	CORelease(string);
+	CORelease(dictionary);
 }
 
 static void BETestDictionary_decode0(void)
@@ -188,7 +188,7 @@ static void BETestDictionary_decode0(void)
 	UC_ASSERT(NULL == list);
 	UC_ASSERT(2 == usedLength);
 
-	COObjectRelease(dictionary);
+	CORelease(dictionary);
 }
 
 static void BETestDictionary_decode1(void)
@@ -219,7 +219,7 @@ static void BETestDictionary_decode1(void)
 	UC_ASSERT(NULL == list);
 	UC_ASSERT(12 == usedLength);
 
-	COObjectRelease(dictionary);
+	CORelease(dictionary);
 }
 
 static void BETestDictionary_decode2(void)
@@ -253,7 +253,7 @@ static void BETestDictionary_decode2(void)
 	UC_ASSERT(NULL == list);
 	UC_ASSERT(22 == usedLength);
 
-	COObjectRelease(dictionary);
+	CORelease(dictionary);
 }
 
 static void BETestDictionary_decodeComplex(void)
@@ -290,7 +290,7 @@ static void BETestDictionary_decodeComplex(void)
 	UC_ASSERT(NULL == list);
 	UC_ASSERT(15 == usedLength);
 
-	COObjectRelease(dictionary);
+	CORelease(dictionary);
 }
 
 static void BETestDictionary_decodeInvalid(void)
@@ -335,7 +335,7 @@ static void BETestDictionary_getEncodedLength0(void)
 
 	UC_ASSERT(1+1 == BEDictionaryGetEncodedLength(dictionary));
 
-	COObjectRelease(dictionary);
+	CORelease(dictionary);
 }
 
 static void BETestDictionary_getEncodedLength1(void)
@@ -348,8 +348,8 @@ static void BETestDictionary_getEncodedLength1(void)
 
 	UC_ASSERT(1+((1+1+3)+(1+1+3))+1 == BEDictionaryGetEncodedLength(dictionary));
 
-	COObjectRelease(string);
-	COObjectRelease(dictionary);
+	CORelease(string);
+	CORelease(dictionary);
 }
 
 static void BETestDictionary_getEncodedLength2(void)
@@ -363,8 +363,8 @@ static void BETestDictionary_getEncodedLength2(void)
 
 	UC_ASSERT(1+((1+1+4)+(1+1+3))+((1+1+4)+(1+3+1))+1 == BEDictionaryGetEncodedLength(dictionary));
 
-	COObjectRelease(string);
-	COObjectRelease(dictionary);
+	CORelease(string);
+	CORelease(dictionary);
 }
 
 void BETestDictionary(void)

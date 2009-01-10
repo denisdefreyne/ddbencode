@@ -10,7 +10,7 @@ static void BETestList_create0(void)
 
 	UC_ASSERT(0 == list->size);
 
-	COObjectRelease(list);
+	CORelease(list);
 }
 
 static void BETestList_create1String(void)
@@ -27,8 +27,8 @@ static void BETestList_create1String(void)
 	UC_ASSERT(0 == strcmp(list->entries[0].data.string->cString, "foo"));
 	UC_ASSERT(3 == list->entries[0].data.string->length);
 
-	COObjectRelease(string);
-	COObjectRelease(list);
+	CORelease(string);
+	CORelease(list);
 }
 
 static void BETestList_create1Integer(void)
@@ -43,7 +43,7 @@ static void BETestList_create1Integer(void)
 	UC_ASSERT(BE_INTEGER == list->entries[0].type);
 	UC_ASSERT(123 == list->entries[0].data.integer);
 
-	COObjectRelease(list);
+	CORelease(list);
 }
 
 static void BETestList_create4(void)
@@ -75,10 +75,10 @@ static void BETestList_create4(void)
 	UC_ASSERT(BE_DICTIONARY == list->entries[3].type);
 	UC_ASSERT(subDictionary == list->entries[3].data.dictionary);
 
-	COObjectRelease(subString);
-	COObjectRelease(subList);
-	COObjectRelease(subDictionary);
-	COObjectRelease(list);
+	CORelease(subString);
+	CORelease(subList);
+	CORelease(subDictionary);
+	CORelease(list);
 }
 
 static void BETestList_createInvalid(void)
@@ -91,7 +91,7 @@ static void BETestList_createInvalid(void)
 
 	UC_ASSERT(!list);
 
-	COObjectRelease(string);
+	CORelease(string);
 }
 
 static void BETestList_encode0(void)
@@ -110,7 +110,7 @@ static void BETestList_encode0(void)
 	UC_ASSERT(0 == strncmp(data, "le", 1+1));
 
 	free(data);
-	COObjectRelease(list);
+	CORelease(list);
 }
 
 static void BETestList_encode1(void)
@@ -131,8 +131,8 @@ static void BETestList_encode1(void)
 	UC_ASSERT(0 == strncmp(data, "l3:fooe", 1+(1+1+3)+1));
 
 	free(data);
-	COObjectRelease(string);
-	COObjectRelease(list);
+	CORelease(string);
+	CORelease(list);
 }
 
 static void BETestList_encode2(void)
@@ -154,8 +154,8 @@ static void BETestList_encode2(void)
 	UC_ASSERT(0 == strncmp(data, "l3:fooi123ee", 1+(1+1+3)+(1+3+1)+1));
 
 	free(data);
-	COObjectRelease(string);
-	COObjectRelease(list);
+	CORelease(string);
+	CORelease(list);
 }
 
 static void BETestList_decode0(void)
@@ -183,7 +183,7 @@ static void BETestList_decode0(void)
 	UC_ASSERT(NULL == dictionary);
 	UC_ASSERT(2 == usedLength);
 
-	COObjectRelease(list);
+	CORelease(list);
 }
 
 static void BETestList_decode1(void)
@@ -213,7 +213,7 @@ static void BETestList_decode1(void)
 	UC_ASSERT(NULL == dictionary);
 	UC_ASSERT(7 == usedLength);
 
-	COObjectRelease(list);
+	CORelease(list);
 }
 
 static void BETestList_decode2(void)
@@ -245,7 +245,7 @@ static void BETestList_decode2(void)
 	UC_ASSERT(NULL == dictionary);
 	UC_ASSERT(12 == usedLength);
 
-	COObjectRelease(list);
+	CORelease(list);
 }
 
 static void BETestList_decodeComplex(void)
@@ -281,7 +281,7 @@ static void BETestList_decodeComplex(void)
 	UC_ASSERT(NULL == dictionary);
 	UC_ASSERT(11 == usedLength);
 
-	COObjectRelease(list);
+	CORelease(list);
 }
 
 static void BETestList_decodeInvalid0(void)
@@ -326,7 +326,7 @@ static void BETestList_getEncodedLength0(void)
 
 	UC_ASSERT(1+1 == BEListGetEncodedLength(list));
 
-	COObjectRelease(list);
+	CORelease(list);
 }
 
 static void BETestList_getEncodedLength1(void)
@@ -339,8 +339,8 @@ static void BETestList_getEncodedLength1(void)
 
 	UC_ASSERT(1+(1+1+3)+1 == BEListGetEncodedLength(list));
 
-	COObjectRelease(string);
-	COObjectRelease(list);
+	CORelease(string);
+	CORelease(list);
 }
 
 static void BETestList_getEncodedLength2(void)
@@ -354,8 +354,8 @@ static void BETestList_getEncodedLength2(void)
 
 	UC_ASSERT(1+(1+1+3)+(1+3+1)+1 == BEListGetEncodedLength(list));
 
-	COObjectRelease(string);
-	COObjectRelease(list);
+	CORelease(string);
+	CORelease(list);
 }
 
 void BETestList(void)

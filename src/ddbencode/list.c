@@ -24,8 +24,8 @@ BEList *BEListCreate(size_t aSize, ...)
 	list->size = aSize;
 
 	// Initialize
-	COObjectInitialize(list);
-	COObjectSetDestructor(list, &_BEListDelete);
+	COInitialize(list);
+	COSetDestructor(list, &_BEListDelete);
 
 	va_start(ap, aSize);
 	for(size_t i = 0; i < aSize; ++i)
@@ -35,7 +35,7 @@ BEList *BEListCreate(size_t aSize, ...)
 			case BE_STRING:
 				list->entries[i].type = BE_STRING;
 				list->entries[i].data.string = va_arg(ap, BEString *);
-				COObjectRetain(list->entries[i].data.string);
+				CORetain(list->entries[i].data.string);
 				break;
 
 			case BE_INTEGER:
@@ -46,17 +46,17 @@ BEList *BEListCreate(size_t aSize, ...)
 			case BE_LIST:
 				list->entries[i].type = BE_LIST;
 				list->entries[i].data.list = va_arg(ap, BEList *);
-				COObjectRetain(list->entries[i].data.list);
+				CORetain(list->entries[i].data.list);
 				break;
 
 			case BE_DICTIONARY:
 				list->entries[i].type = BE_DICTIONARY;
 				list->entries[i].data.dictionary = va_arg(ap, BEDictionary *);
-				COObjectRetain(list->entries[i].data.dictionary);
+				CORetain(list->entries[i].data.dictionary);
 				break;
 
 			default:
-				COObjectRelease(list);
+				CORelease(list);
 				return NULL;
 		}
 	}
@@ -222,7 +222,7 @@ void _BEListDelete(void *aList)
 		switch(entry.type)
 		{
 			case BE_STRING:
-				COObjectRelease(entry.data.string);
+				CORelease(entry.data.string);
 				break;
 
 			case BE_INTEGER:
@@ -230,11 +230,11 @@ void _BEListDelete(void *aList)
 				break;
 
 			case BE_LIST:
-				COObjectRelease(entry.data.list);
+				CORelease(entry.data.list);
 				break;
 
 			case BE_DICTIONARY:
-				COObjectRelease(entry.data.dictionary);
+				CORelease(entry.data.dictionary);
 				break;
 		}
 	}

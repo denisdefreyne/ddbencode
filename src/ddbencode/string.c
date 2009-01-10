@@ -13,8 +13,8 @@ BEString *BEStringCreate(char *aCString, size_t aLength)
 		return NULL;
 
 	// Initialize
-	COObjectInitialize(string);
-	COObjectSetDestructor(string, &_BEStringDelete);
+	COInitialize(string);
+	COSetDestructor(string, &_BEStringDelete);
 
 	// Set length
 	string->length = aLength;

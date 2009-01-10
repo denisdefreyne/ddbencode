@@ -24,8 +24,8 @@ BEDictionary *BEDictionaryCreate(size_t aSize, ...)
 	dictionary->size = aSize;
 
 	// Initialize
-	COObjectInitialize(dictionary);
-	COObjectSetDestructor(dictionary, &_BEDictionaryDelete);
+	COInitialize(dictionary);
+	COSetDestructor(dictionary, &_BEDictionaryDelete);
 
 	va_start(ap, aSize);
 	for(size_t i = 0; i < aSize; ++i)
@@ -40,7 +40,7 @@ BEDictionary *BEDictionaryCreate(size_t aSize, ...)
 			case BE_STRING:
 				dictionary->entries[i].type = BE_STRING;
 				dictionary->entries[i].data.string = va_arg(ap, BEString *);
-				COObjectRetain(dictionary->entries[i].data.string);
+				CORetain(dictionary->entries[i].data.string);
 				break;
 
 			case BE_INTEGER:
@@ -51,17 +51,17 @@ BEDictionary *BEDictionaryCreate(size_t aSize, ...)
 			case BE_LIST:
 				dictionary->entries[i].type = BE_LIST;
 				dictionary->entries[i].data.list = va_arg(ap, BEList *);
-				COObjectRetain(dictionary->entries[i].data.list);
+				CORetain(dictionary->entries[i].data.list);
 				break;
 
 			case BE_DICTIONARY:
 				dictionary->entries[i].type = BE_DICTIONARY;
 				dictionary->entries[i].data.dictionary = va_arg(ap, BEDictionary *);
-				COObjectRetain(dictionary->entries[i].data.dictionary);
+				CORetain(dictionary->entries[i].data.dictionary);
 				break;
 
 			default:
-				COObjectRelease(dictionary);
+				CORelease(dictionary);
 				return NULL;
 		}
 	}
@@ -247,11 +247,11 @@ void _BEDictionaryDelete(void *aDictionary)
 	for(size_t i = 0; i < ((BEDictionary *)aDictionary)->size; ++i)
 	{
 		struct _BEDictionaryEntry entry = ((BEDictionary *)aDictionary)->entries[i];
-		COObjectRelease(entry.key);
+		CORelease(entry.key);
 		switch(entry.type)
 		{
 			case BE_STRING:
-				COObjectRelease(entry.data.string);
+				CORelease(entry.data.string);
 				break;
 
 			case BE_INTEGER:
@@ -259,11 +259,11 @@ void _BEDictionaryDelete(void *aDictionary)
 				break;
 
 			case BE_LIST:
-				COObjectRelease(entry.data.list);
+				CORelease(entry.data.list);
 				break;
 
 			case BE_DICTIONARY:
-				COObjectRelease(entry.data.dictionary);
+				CORelease(entry.data.dictionary);
 				break;
 		}
 	}
