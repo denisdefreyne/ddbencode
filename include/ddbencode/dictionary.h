@@ -7,7 +7,8 @@
 
 /// @brief A dictionary.
 ///
-/// This structure is \em not meant to be used as a general-purpose dictionary as it has not been optimized, and likely never will be.
+/// This structure is \em not meant to be used as a general-purpose dictionary
+/// as it has not been optimized, and likely never will be.
 typedef struct _BEDictionary BEDictionary;
 
 /// @brief Creates a new dictionary with the given keys and values.
@@ -16,57 +17,28 @@ typedef struct _BEDictionary BEDictionary;
 /// The next arguments are grouped. Each group consists of an argument
 /// containing the key, which is a string, followed by an argument indicating
 /// the dictionary value type (BE_STRING, BE_INTEGER, BE_LIST, BE_DICTIONARY)
-/// and an argument containing the actual value itself. String argument groups
-/// have a fourth argument containing the string length.
+/// and an argument containing the actual value itself.
 ///
 /// For example, the following piece of code creates a dictionary with three
 /// elements:
 ///
 /// @code
 /// // create a dictionary
+/// // someString is a BEString *
 /// BEDictionary *dictionary = BEDictionaryCreate(
-///     3,                                    // number of elements
-///     "name",    BE_STRING,  "denis",    5, // argument group 0
-///     "age",     BE_INTEGER, 22,            // argument group 1
-///     "hobbies", BE_LIST,    hobbiesList    // argument group 2
+///     3,                                 // number of elements
+///     "name",    BE_STRING,  someString, // argument group 0
+///     "age",     BE_INTEGER, 22,         // argument group 1
+///     "hobbies", BE_LIST,    hobbiesList // argument group 2
 /// );
 /// @endcode
 ///
-/// Dictionaries created with BEDictionaryCreate() should be deallocated by using BEDictionaryDelete().
+/// Dictionaries created with BEDictionaryCreate() should be released using
+/// COObjectRelease(). All strings, lists and dictionaries passed to
+/// BEDictionaryCreate() are retained by the dictionary.
 ///
 /// @return The newly created dictionary.
 BEDictionary *BEDictionaryCreate(size_t aSize, ...);
-
-/// @brief Deletes the given dictionary.
-///
-/// The given ditionary will be free()d, but its dictionary items will not.
-/// Deleting a dictionary may therefore create a memory leak.
-/// BEDictionaryDeleteDeep() deletes a dictionary as well as its dictionary
-/// items recursively.
-///
-/// @param[in] aDictionary The dictionary to delete.
-void BEDictionaryDelete(BEDictionary *aDictionary);
-
-/// @brief Deletes the given dictionary along with its dictionary items.
-///
-/// The given dictionary will be free()d. Each dictionary item will be free()d
-/// recursively as well; deleting a dictionary recursively can therefore cause
-/// non-allocated dictionary items to be inadvertently free()d. For example, the
-/// following piece of code is invalid, as it will cause a constant string to
-/// be free()d:
-///
-/// @code
-/// // create a dictionary
-/// BEDictionary *dictionary = BEDictionaryCreate(
-///     1,                         // a dictionary with one item
-///     "bar", BE_STRING, "foo", 3 // first item is the string "foo"
-/// );
-/// // delete the dictionary recursively (INVALID!)
-/// BEDictionaryDeleteDeep(dictionary);
-/// @endcode
-///
-/// @param[in] aDictionary The dictionary to delete recursively.
-void BEDictionaryDeleteDeep(BEDictionary *aDictionary);
 
 /// @brief Encodes the given dictionary.
 ///

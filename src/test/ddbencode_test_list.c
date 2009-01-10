@@ -10,7 +10,7 @@ static void BETestList_create0(void)
 
 	UC_ASSERT(0 == list->size);
 
-	BEListDelete(list);
+	COObjectRelease(list);
 }
 
 static void BETestList_create1String(void)
@@ -27,7 +27,8 @@ static void BETestList_create1String(void)
 	UC_ASSERT(0 == strcmp(list->entries[0].data.string->cString, "foo"));
 	UC_ASSERT(3 == list->entries[0].data.string->length);
 
-	BEListDelete(list);
+	COObjectRelease(string);
+	COObjectRelease(list);
 }
 
 static void BETestList_create1Integer(void)
@@ -42,18 +43,21 @@ static void BETestList_create1Integer(void)
 	UC_ASSERT(BE_INTEGER == list->entries[0].type);
 	UC_ASSERT(123 == list->entries[0].data.integer);
 
-	BEListDelete(list);
+	COObjectRelease(list);
 }
 
 static void BETestList_create4(void)
 {
-	BEString *string = BEStringCreate("foo", 3);
+	BEString     *subString     = BEStringCreate("foo", 3);
+	BEList       *subList       = BEListCreate(0);
+	BEDictionary *subDictionary = BEDictionaryCreate(0);
+
 	BEList *list = BEListCreate(
 		4,
-		BE_STRING,     string,
+		BE_STRING,     subString,
 		BE_INTEGER,    111,
-		BE_LIST,       (void *)222,
-		BE_DICTIONARY, (void *)333
+		BE_LIST,       subList,
+		BE_DICTIONARY, subDictionary
 	);
 
 	UC_ASSERT(4 == list->size);
@@ -66,12 +70,15 @@ static void BETestList_create4(void)
 	UC_ASSERT(111 == list->entries[1].data.integer);
 
 	UC_ASSERT(BE_LIST == list->entries[2].type);
-	UC_ASSERT((void *)222 == list->entries[2].data.list);
+	UC_ASSERT(subList == list->entries[2].data.list);
 
 	UC_ASSERT(BE_DICTIONARY == list->entries[3].type);
-	UC_ASSERT((void *)333 == list->entries[3].data.dictionary);
+	UC_ASSERT(subDictionary == list->entries[3].data.dictionary);
 
-	BEListDelete(list);
+	COObjectRelease(subString);
+	COObjectRelease(subList);
+	COObjectRelease(subDictionary);
+	COObjectRelease(list);
 }
 
 static void BETestList_createInvalid(void)
@@ -83,6 +90,8 @@ static void BETestList_createInvalid(void)
 	);
 
 	UC_ASSERT(!list);
+
+	COObjectRelease(string);
 }
 
 static void BETestList_encode0(void)
@@ -101,7 +110,7 @@ static void BETestList_encode0(void)
 	UC_ASSERT(0 == strncmp(data, "le", 1+1));
 
 	free(data);
-	BEListDelete(list);
+	COObjectRelease(list);
 }
 
 static void BETestList_encode1(void)
@@ -122,7 +131,8 @@ static void BETestList_encode1(void)
 	UC_ASSERT(0 == strncmp(data, "l3:fooe", 1+(1+1+3)+1));
 
 	free(data);
-	BEListDelete(list);
+	COObjectRelease(string);
+	COObjectRelease(list);
 }
 
 static void BETestList_encode2(void)
@@ -144,7 +154,8 @@ static void BETestList_encode2(void)
 	UC_ASSERT(0 == strncmp(data, "l3:fooi123ee", 1+(1+1+3)+(1+3+1)+1));
 
 	free(data);
-	BEListDelete(list);
+	COObjectRelease(string);
+	COObjectRelease(list);
 }
 
 static void BETestList_decode0(void)
@@ -171,6 +182,8 @@ static void BETestList_decode0(void)
 	UC_ASSERT(0 == integer);
 	UC_ASSERT(NULL == dictionary);
 	UC_ASSERT(2 == usedLength);
+
+	COObjectRelease(list);
 }
 
 static void BETestList_decode1(void)
@@ -199,6 +212,8 @@ static void BETestList_decode1(void)
 	UC_ASSERT(0 == integer);
 	UC_ASSERT(NULL == dictionary);
 	UC_ASSERT(7 == usedLength);
+
+	COObjectRelease(list);
 }
 
 static void BETestList_decode2(void)
@@ -229,6 +244,8 @@ static void BETestList_decode2(void)
 	UC_ASSERT(0 == integer);
 	UC_ASSERT(NULL == dictionary);
 	UC_ASSERT(12 == usedLength);
+
+	COObjectRelease(list);
 }
 
 static void BETestList_decodeComplex(void)
@@ -263,6 +280,8 @@ static void BETestList_decodeComplex(void)
 	UC_ASSERT(0 == integer);
 	UC_ASSERT(NULL == dictionary);
 	UC_ASSERT(11 == usedLength);
+
+	COObjectRelease(list);
 }
 
 static void BETestList_decodeInvalid0(void)
@@ -307,7 +326,7 @@ static void BETestList_getEncodedLength0(void)
 
 	UC_ASSERT(1+1 == BEListGetEncodedLength(list));
 
-	BEListDelete(list);
+	COObjectRelease(list);
 }
 
 static void BETestList_getEncodedLength1(void)
@@ -320,7 +339,8 @@ static void BETestList_getEncodedLength1(void)
 
 	UC_ASSERT(1+(1+1+3)+1 == BEListGetEncodedLength(list));
 
-	BEListDelete(list);
+	COObjectRelease(string);
+	COObjectRelease(list);
 }
 
 static void BETestList_getEncodedLength2(void)
@@ -334,7 +354,8 @@ static void BETestList_getEncodedLength2(void)
 
 	UC_ASSERT(1+(1+1+3)+(1+3+1)+1 == BEListGetEncodedLength(list));
 
-	BEListDelete(list);
+	COObjectRelease(string);
+	COObjectRelease(list);
 }
 
 void BETestList(void)

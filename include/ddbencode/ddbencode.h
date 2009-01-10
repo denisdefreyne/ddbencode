@@ -29,11 +29,10 @@
 /// Decoding:
 /// - BEDecode()
 ///
-/// Creating/deleting lists and dictionaries:
+/// Creating strings, lists and dictionaries:
+/// - BEStringCreate()
 /// - BEListCreate()
-/// - BEListDelete()
 /// - BEDictionaryCreate()
-/// - BEDictionaryDelete()
 
 /// The item types that can be encoded and/or used in lists and dictionaries.
 typedef enum {
@@ -57,8 +56,8 @@ typedef enum {
 ///
 /// The data returned by this function is newly allocated into memory and
 /// should be cleaned up to prevent memory leaks. Strings should be free()d,
-/// lists should be deleted using BEListDeleteDeep() and dictionaries should
-/// be deleted using BEDictionaryDeleteDeep().
+/// while strings, lists and dictionaries should be released using
+/// COObjectRelease().
 ///
 /// Even though the data could possibly hold two or more encoded items, only
 /// the first item will be decoded. The number of bytes used for decoding will
@@ -66,7 +65,6 @@ typedef enum {
 /// not be necessary, as the content of a torrent file consists of a single
 /// bencoded dictionary.
 ///
-
 /// @param[in]  aiData         A pointer to the encoded data that should be decoded.
 /// @param[in]  aiLength       The length of the encoded data.
 /// @param[out] aoType         The type of the decoded item.

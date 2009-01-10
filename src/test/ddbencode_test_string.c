@@ -4,6 +4,8 @@
 #include <ddbencode/private.h>
 #include <uctest/uctest.h>
 
+// TODO add string creation tests
+
 static void BETestString_encode0(void)
 {
 	void   *data  = NULL;
@@ -16,6 +18,7 @@ static void BETestString_encode0(void)
 	UC_ASSERT(0 == strcmp(data, "0:"));
 
 	free(data);
+	COObjectRelease(string);
 }
 
 static void BETestString_encode1(void)
@@ -30,6 +33,7 @@ static void BETestString_encode1(void)
 	UC_ASSERT(0 == strcmp(data, "1:t"));
 
 	free(data);
+	COObjectRelease(string);
 }
 
 static void BETestString_encode4(void)
@@ -44,6 +48,7 @@ static void BETestString_encode4(void)
 	UC_ASSERT(0 == strcmp(data, "4:test"));
 
 	free(data);
+	COObjectRelease(string);
 }
 
 static void BETestString_encode9(void)
@@ -58,6 +63,7 @@ static void BETestString_encode9(void)
 	UC_ASSERT(0 == strcmp(data, "9:abcdefghi"));
 
 	free(data);
+	COObjectRelease(string);
 }
 
 static void BETestString_encode10(void)
@@ -72,6 +78,7 @@ static void BETestString_encode10(void)
 	UC_ASSERT(0 == strcmp(data, "10:abcdefghij"));
 
 	free(data);
+	COObjectRelease(string);
 }
 
 static void BETestString_encode11(void)
@@ -86,6 +93,7 @@ static void BETestString_encode11(void)
 	UC_ASSERT(0 == strcmp(data, "11:abcdefghijk"));
 
 	free(data);
+	COObjectRelease(string);
 }
 
 static void BETestString_decode0(void)
@@ -112,6 +120,8 @@ static void BETestString_decode0(void)
 	UC_ASSERT(NULL == list);
 	UC_ASSERT(NULL == dictionary);
 	UC_ASSERT(2 == usedLength);
+
+	COObjectRelease(string);
 }
 
 static void BETestString_decode1(void)
@@ -138,6 +148,8 @@ static void BETestString_decode1(void)
 	UC_ASSERT(NULL == list);
 	UC_ASSERT(NULL == dictionary);
 	UC_ASSERT(3 == usedLength);
+
+	COObjectRelease(string);
 }
 
 static void BETestString_decode4(void)
@@ -164,6 +176,8 @@ static void BETestString_decode4(void)
 	UC_ASSERT(NULL == list);
 	UC_ASSERT(NULL == dictionary);
 	UC_ASSERT(6 == usedLength);
+
+	COObjectRelease(string);
 }
 
 static void BETestString_decode9(void)
@@ -190,6 +204,8 @@ static void BETestString_decode9(void)
 	UC_ASSERT(NULL == list);
 	UC_ASSERT(NULL == dictionary);
 	UC_ASSERT(11 == usedLength);
+
+	COObjectRelease(string);
 }
 
 static void BETestString_decode10(void)
@@ -216,7 +232,11 @@ static void BETestString_decode10(void)
 	UC_ASSERT(NULL == list);
 	UC_ASSERT(NULL == dictionary);
 	UC_ASSERT(13 == usedLength);
+
+	COObjectRelease(string);
 }
+
+#include <cobject/private.h>
 
 static void BETestString_decode11(void)
 {
@@ -242,6 +262,8 @@ static void BETestString_decode11(void)
 	UC_ASSERT(NULL == list);
 	UC_ASSERT(NULL == dictionary);
 	UC_ASSERT(14 == usedLength);
+
+	COObjectRelease(string);
 }
 
 static void BETestString_decodeLong(void)
@@ -268,6 +290,8 @@ static void BETestString_decodeLong(void)
 	UC_ASSERT(NULL == list);
 	UC_ASSERT(NULL == dictionary);
 	UC_ASSERT(5 == usedLength);
+
+	COObjectRelease(string);
 }
 
 static void BETestString_decodeInvalid0(void)
@@ -284,7 +308,7 @@ static void BETestString_decodeInvalid0(void)
 
 	success = BEDecode("0", 1, &type, &string, &integer, &list, &dictionary, &usedLength);
 
-	UC_ASSERT(false == success);
+	UC_ASSERT(!success);
 }
 
 static void BETestString_decodeInvalid1(void)
@@ -301,7 +325,7 @@ static void BETestString_decodeInvalid1(void)
 
 	success = BEDecode(":", 1, &type, &string, &integer, &list, &dictionary, &usedLength);
 
-	UC_ASSERT(false == success);
+	UC_ASSERT(!success);
 }
 
 static void BETestString_decodeInvalid2(void)
@@ -318,7 +342,7 @@ static void BETestString_decodeInvalid2(void)
 
 	success = BEDecode("5:asdf", 6, &type, &string, &integer, &list, &dictionary, &usedLength);
 
-	UC_ASSERT(false == success);
+	UC_ASSERT(!success);
 }
 
 static void BETestString_decodeInvalid3(void)
@@ -335,37 +359,52 @@ static void BETestString_decodeInvalid3(void)
 
 	success = BEDecode("9:asdf", 6, &type, &string, &integer, &list, &dictionary, &usedLength);
 
-	UC_ASSERT(false == success);
+	UC_ASSERT(!success);
 }
 
 static void BETestString_getEncodedLength0(void)
 {
 	BEString *string = BEStringCreate("", 0);
+
 	UC_ASSERT(2 == BEStringGetEncodedLength(string));
+
+	COObjectRelease(string);
 }
 
 static void BETestString_getEncodedLength1(void)
 {
 	BEString *string = BEStringCreate("a", 1);
+
 	UC_ASSERT(3 == BEStringGetEncodedLength(string));
+
+	COObjectRelease(string);
 }
 
 static void BETestString_getEncodedLength9(void)
 {
 	BEString *string = BEStringCreate("abcdefghi", 9);
+
 	UC_ASSERT(11 == BEStringGetEncodedLength(string));
+
+	COObjectRelease(string);
 }
 
 static void BETestString_getEncodedLength10(void)
 {
 	BEString *string = BEStringCreate("abcdefghij", 10);
+
 	UC_ASSERT(13 == BEStringGetEncodedLength(string));
+
+	COObjectRelease(string);
 }
 
 static void BETestString_getEncodedLength11(void)
 {
 	BEString *string = BEStringCreate("abcdefghijk", 11);
+
 	UC_ASSERT(14 == BEStringGetEncodedLength(string));
+
+	COObjectRelease(string);
 }
 
 void BETestString(void)

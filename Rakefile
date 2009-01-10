@@ -3,10 +3,10 @@
 TARGET_BIN_TEST   = 'ddbencode_test'
 TARGET_LIB        = 'ddbencode.dylib'
 
-SRCS_LIB          = FileList[ 'src/ddbencode/*.c' ]
-SRCS_BIN_TEST     = FileList[ 'src/ddbencode/*.c', 'src/test/*.c', 'vendor/uctest/src/uctest/*.c' ]
+SRCS_LIB          = FileList[ 'src/ddbencode/*.c', 'vendor/cobject/src/cobject/*.c' ]
+SRCS_BIN_TEST     = FileList[ 'src/ddbencode/*.c', 'src/test/*.c', 'vendor/cobject/src/cobject/*.c', 'vendor/uctest/src/uctest/*.c' ]
 
-CFLAGS            = '--std=c99 -W -Wall -Wno-unused-parameter -Iinclude -Ivendor/uctest/include'
+CFLAGS            = '-ggdb --std=c99 -W -Wall -Wno-unused-parameter -Iinclude -Ivendor/cobject/include -Ivendor/uctest/include'
 LDFLAGS_BIN_TEST  = ''
 LDFLAGS_LIB       = '-dynamiclib'
 

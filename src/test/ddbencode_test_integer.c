@@ -384,7 +384,7 @@ static void BETestInteger_decodeInvalid0(void)
 
 	success = BEDecode("ie", 2, &type, &string, &integer, &list, &dictionary, &usedLength);
 
-	UC_ASSERT(false == success);
+	UC_ASSERT(!success);
 }
 
 static void BETestInteger_decodeInvalid1(void)
@@ -401,7 +401,7 @@ static void BETestInteger_decodeInvalid1(void)
 
 	success = BEDecode("ieee", 4, &type, &string, &integer, &list, &dictionary, &usedLength);
 
-	UC_ASSERT(false == success);
+	UC_ASSERT(!success);
 }
 
 static void BETestInteger_decodeInvalid2(void)
@@ -418,7 +418,7 @@ static void BETestInteger_decodeInvalid2(void)
 
 	success = BEDecode("i12345e", 3, &type, &string, &integer, &list, &dictionary, &usedLength);
 
-	UC_ASSERT(false == success);
+	UC_ASSERT(!success);
 }
 
 static void BETestInteger_getEncodedLength0(void)

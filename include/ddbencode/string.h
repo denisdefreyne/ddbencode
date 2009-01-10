@@ -7,22 +7,24 @@
 
 /// @brief A string.
 ///
-/// This structure is \em not meant to be used as a general-purpose string as it has not been optimized, and likely never will be.
+/// This structure is \em not meant to be used as a general-purpose string as
+/// it has not been optimized, and likely never will be.
 typedef struct _BEString BEString;
 
 /// @brief Creates a new string with the given C string and length.
 ///
-/// TODO document
+/// The given string can contain "null" characters. These do not indicate the
+/// length of the string; the length of the string is determined by the length
+/// argument.
+///
+/// @param[in] aCString The C string from which the string should be created.
+/// @param[in] aLength	The length of the given C string.
+///
+/// Strings created with BEStringCreate() should be released using
+/// COObjectRelease().
 ///
 /// @return The newly created string.
 BEString *BEStringCreate(char *aCString, size_t aLength);
-
-/// @brief Deletes the given string.
-///
-/// TODO document
-///
-/// @param[in] aString The string to delete.
-void BEStringDelete(BEString *aString);
 
 /// @brief Encodes the given string.
 ///

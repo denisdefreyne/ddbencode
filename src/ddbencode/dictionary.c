@@ -17,8 +17,15 @@ BEDictionary *BEDictionaryCreate(size_t aSize, ...)
 		return NULL;
 	dictionary->entries = malloc(aSize * (sizeof (struct _BEDictionaryEntry)));
 	if(!dictionary->entries)
+	{
+		free(dictionary);
 		return NULL;
+	}
 	dictionary->size = aSize;
+
+	// Initialize
+	COObjectInitialize(dictionary);
+	COObjectSetDestructor(dictionary, &_BEDictionaryDelete);
 
 	va_start(ap, aSize);
 	for(size_t i = 0; i < aSize; ++i)
@@ -33,6 +40,7 @@ BEDictionary *BEDictionaryCreate(size_t aSize, ...)
 			case BE_STRING:
 				dictionary->entries[i].type = BE_STRING;
 				dictionary->entries[i].data.string = va_arg(ap, BEString *);
+				COObjectRetain(dictionary->entries[i].data.string);
 				break;
 
 			case BE_INTEGER:
@@ -43,17 +51,17 @@ BEDictionary *BEDictionaryCreate(size_t aSize, ...)
 			case BE_LIST:
 				dictionary->entries[i].type = BE_LIST;
 				dictionary->entries[i].data.list = va_arg(ap, BEList *);
+				COObjectRetain(dictionary->entries[i].data.list);
 				break;
 
 			case BE_DICTIONARY:
 				dictionary->entries[i].type = BE_DICTIONARY;
 				dictionary->entries[i].data.dictionary = va_arg(ap, BEDictionary *);
+				COObjectRetain(dictionary->entries[i].data.dictionary);
 				break;
 
 			default:
-				// FIXME delete everything properly
-				free(dictionary->entries);
-				free(dictionary);
+				COObjectRelease(dictionary);
 				return NULL;
 		}
 	}
@@ -61,43 +69,6 @@ BEDictionary *BEDictionaryCreate(size_t aSize, ...)
 
 	// Done
 	return dictionary;
-}
-
-void BEDictionaryDelete(BEDictionary *aDictionary)
-{
-	free(aDictionary->entries);
-	free(aDictionary);
-}
-
-void BEDictionaryDeleteDeep(BEDictionary *aDictionary)
-{
-	// Delete entries
-	for(size_t i = 0; i < aDictionary->size; ++i)
-	{
-		struct _BEDictionaryEntry entry = aDictionary->entries[i];
-		free(entry.key);
-		switch(entry.type)
-		{
-			case BE_STRING:
-				BEStringDelete(entry.data.string);
-				break;
-
-			case BE_INTEGER:
-				;
-				break;
-
-			case BE_LIST:
-				BEListDeleteDeep(entry.data.list);
-				break;
-
-			case BE_DICTIONARY:
-				BEDictionaryDeleteDeep(entry.data.dictionary);
-				break;
-		}
-	}
-
-	// Delete dictionary itself
-	BEDictionaryDelete(aDictionary);
 }
 
 bool BEDictionaryEncode(BEDictionary *aiDictionary, void **aoData, size_t *aoDataLength)
@@ -224,6 +195,11 @@ size_t BEDictionaryGetEncodedLength(BEDictionary *aDictionary)
 	return encodedLength;
 }
 
+void BEDictionaryPrint(BEDictionary *aDictionary)
+{
+	_BEDictionaryPrint(aDictionary, 0);
+}
+
 void _BEDictionaryPrint(BEDictionary *aDictionary, size_t aIndentation)
 {
 	// Print {
@@ -265,7 +241,34 @@ void _BEDictionaryPrint(BEDictionary *aDictionary, size_t aIndentation)
 	puts("}");
 }
 
-void BEDictionaryPrint(BEDictionary *aDictionary)
+void _BEDictionaryDelete(void *aDictionary)
 {
-	_BEDictionaryPrint(aDictionary, 0);
+	// Release entries
+	for(size_t i = 0; i < ((BEDictionary *)aDictionary)->size; ++i)
+	{
+		struct _BEDictionaryEntry entry = ((BEDictionary *)aDictionary)->entries[i];
+		COObjectRelease(entry.key);
+		switch(entry.type)
+		{
+			case BE_STRING:
+				COObjectRelease(entry.data.string);
+				break;
+
+			case BE_INTEGER:
+				;
+				break;
+
+			case BE_LIST:
+				COObjectRelease(entry.data.list);
+				break;
+
+			case BE_DICTIONARY:
+				COObjectRelease(entry.data.dictionary);
+				break;
+		}
+	}
+
+	// Delete entries array
+	if(((BEDictionary *)aDictionary)->entries)
+		free(((BEDictionary *)aDictionary)->entries);
 }

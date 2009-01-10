@@ -12,24 +12,25 @@ BEString *BEStringCreate(char *aCString, size_t aLength)
 	if(!string)
 		return NULL;
 
+	// Initialize
+	COObjectInitialize(string);
+	COObjectSetDestructor(string, &_BEStringDelete);
+
 	// Set length
 	string->length = aLength;
 
 	// Copy C string
 	string->cString = malloc((aLength+1)*sizeof(char));
 	if(!string->cString)
+	{
+		free(string);
 		return NULL;
+	}
 	memcpy(string->cString, aCString, aLength);
 	string->cString[aLength] = '\0';
 
 	// Done
 	return string;
-}
-
-void BEStringDelete(BEString *aString)
-{
-	free(aString->cString);
-	free(aString);
 }
 
 bool BEStringEncode(BEString *aiString, void **aoData, size_t *aoDataLength)
@@ -70,6 +71,11 @@ size_t BEStringGetEncodedLength(BEString *aString)
 		return (int)log10((double)aString->length) + 1 + 1 + aString->length;
 }
 
+void BEStringPrint(BEString *aString)
+{
+	_BEStringPrint(aString, 0);
+}
+
 void _BEStringPrint(BEString *aString, size_t aIndentation)
 {
 	for(size_t i = 0; i < aIndentation; ++i)
@@ -77,7 +83,8 @@ void _BEStringPrint(BEString *aString, size_t aIndentation)
 	printf("\"%s\"\n", aString->cString);
 }
 
-void BEStringPrint(BEString *aString)
+void _BEStringDelete(void *aString)
 {
-	_BEStringPrint(aString, 0);
+	// Delete C string
+	free(((BEString *)aString)->cString);
 }

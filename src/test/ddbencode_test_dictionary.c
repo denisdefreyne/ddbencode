@@ -1,8 +1,11 @@
 #include <string.h>
 
+#include <cobject/cobject.h>
+#include <cobject/private.h>
+#include <uctest/uctest.h>
+
 #include <ddbencode/ddbencode.h>
 #include <ddbencode/private.h>
-#include <uctest/uctest.h>
 
 static void BETestDictionary_create0(void)
 {
@@ -10,7 +13,7 @@ static void BETestDictionary_create0(void)
 
 	UC_ASSERT(0 == dictionary->size);
 
-	BEDictionaryDelete(dictionary);
+	COObjectRelease(dictionary);
 }
 
 static void BETestDictionary_create1String(void)
@@ -28,7 +31,8 @@ static void BETestDictionary_create1String(void)
 	UC_ASSERT(0 == strcmp("bar", dictionary->entries[0].data.string->cString));
 	UC_ASSERT(3 == dictionary->entries[0].data.string->length);
 
-	BEDictionaryDelete(dictionary);
+	COObjectRelease(string);
+	COObjectRelease(dictionary);
 }
 
 static void BETestDictionary_create1Integer(void)
@@ -44,18 +48,21 @@ static void BETestDictionary_create1Integer(void)
 	UC_ASSERT(BE_INTEGER == dictionary->entries[0].type);
 	UC_ASSERT(123 == dictionary->entries[0].data.integer);
 
-	BEDictionaryDelete(dictionary);
+	COObjectRelease(dictionary);
 }
 
 static void BETestDictionary_create4(void)
 {
-	BEString *string = BEStringCreate("foo", 3);
+	BEString     *subString     = BEStringCreate("foo", 3);
+	BEList       *subList       = BEListCreate(0);
+	BEDictionary *subDictionary = BEDictionaryCreate(0);
+
 	BEDictionary *dictionary = BEDictionaryCreate(
 		4,
-		"string key",     BE_STRING,     string,
+		"string key",     BE_STRING,     subString,
 		"integer key",    BE_INTEGER,    111,
-		"list key",       BE_LIST,       (void *)222,
-		"dictionary key", BE_DICTIONARY, (void *)333
+		"list key",       BE_LIST,       subList,
+		"dictionary key", BE_DICTIONARY, subDictionary
 	);
 
 	UC_ASSERT(4 == dictionary->size);
@@ -68,12 +75,15 @@ static void BETestDictionary_create4(void)
 	UC_ASSERT(111 == dictionary->entries[1].data.integer);
 
 	UC_ASSERT(BE_LIST == dictionary->entries[2].type);
-	UC_ASSERT((void *)222 == dictionary->entries[2].data.list);
+	UC_ASSERT(subList == dictionary->entries[2].data.list);
 
 	UC_ASSERT(BE_DICTIONARY == dictionary->entries[3].type);
-	UC_ASSERT((void *)333 == dictionary->entries[3].data.dictionary);
+	UC_ASSERT(subDictionary == dictionary->entries[3].data.dictionary);
 
-	BEDictionaryDelete(dictionary);
+	COObjectRelease(subString);
+	COObjectRelease(subList);
+	COObjectRelease(subDictionary);
+	COObjectRelease(dictionary);
 }
 
 static void BETestDictionary_createInvalid(void)
@@ -85,6 +95,8 @@ static void BETestDictionary_createInvalid(void)
 	);
 
 	UC_ASSERT(!dictionary);
+
+	COObjectRelease(string);
 }
 
 static void BETestDictionary_encode0(void)
@@ -103,7 +115,7 @@ static void BETestDictionary_encode0(void)
 	UC_ASSERT(0 == strncmp(data, "de", 1+1));
 
 	free(data);
-	BEDictionaryDelete(dictionary);
+	COObjectRelease(dictionary);
 }
 
 static void BETestDictionary_encode1(void)
@@ -124,7 +136,8 @@ static void BETestDictionary_encode1(void)
 	UC_ASSERT(0 == strncmp(data, "d3:foo3:bare", 1+((1+1+3)+(1+1+3))+1));
 
 	free(data);
-	BEDictionaryDelete(dictionary);
+	COObjectRelease(string);
+	COObjectRelease(dictionary);
 }
 
 static void BETestDictionary_encode2(void)
@@ -146,7 +159,8 @@ static void BETestDictionary_encode2(void)
 	UC_ASSERT(0 == strncmp(data, "d3:foo3:bar3:bazi123ee", 1+((1+1+3)+(1+1+3))+((1+1+3)+(1+3+1))+1));
 
 	free(data);
-	BEDictionaryDelete(dictionary);
+	COObjectRelease(string);
+	COObjectRelease(dictionary);
 }
 
 static void BETestDictionary_decode0(void)
@@ -173,6 +187,8 @@ static void BETestDictionary_decode0(void)
 	UC_ASSERT(0 == integer);
 	UC_ASSERT(NULL == list);
 	UC_ASSERT(2 == usedLength);
+
+	COObjectRelease(dictionary);
 }
 
 static void BETestDictionary_decode1(void)
@@ -202,6 +218,8 @@ static void BETestDictionary_decode1(void)
 	UC_ASSERT(0 == integer);
 	UC_ASSERT(NULL == list);
 	UC_ASSERT(12 == usedLength);
+
+	COObjectRelease(dictionary);
 }
 
 static void BETestDictionary_decode2(void)
@@ -234,6 +252,8 @@ static void BETestDictionary_decode2(void)
 	UC_ASSERT(0 == integer);
 	UC_ASSERT(NULL == list);
 	UC_ASSERT(22 == usedLength);
+
+	COObjectRelease(dictionary);
 }
 
 static void BETestDictionary_decodeComplex(void)
@@ -269,6 +289,8 @@ static void BETestDictionary_decodeComplex(void)
 	UC_ASSERT(0 == integer);
 	UC_ASSERT(NULL == list);
 	UC_ASSERT(15 == usedLength);
+
+	COObjectRelease(dictionary);
 }
 
 static void BETestDictionary_decodeInvalid(void)
@@ -313,7 +335,7 @@ static void BETestDictionary_getEncodedLength0(void)
 
 	UC_ASSERT(1+1 == BEDictionaryGetEncodedLength(dictionary));
 
-	BEDictionaryDelete(dictionary);
+	COObjectRelease(dictionary);
 }
 
 static void BETestDictionary_getEncodedLength1(void)
@@ -326,7 +348,8 @@ static void BETestDictionary_getEncodedLength1(void)
 
 	UC_ASSERT(1+((1+1+3)+(1+1+3))+1 == BEDictionaryGetEncodedLength(dictionary));
 
-	BEDictionaryDelete(dictionary);
+	COObjectRelease(string);
+	COObjectRelease(dictionary);
 }
 
 static void BETestDictionary_getEncodedLength2(void)
@@ -340,7 +363,8 @@ static void BETestDictionary_getEncodedLength2(void)
 
 	UC_ASSERT(1+((1+1+4)+(1+1+3))+((1+1+4)+(1+3+1))+1 == BEDictionaryGetEncodedLength(dictionary));
 
-	BEDictionaryDelete(dictionary);
+	COObjectRelease(string);
+	COObjectRelease(dictionary);
 }
 
 void BETestDictionary(void)

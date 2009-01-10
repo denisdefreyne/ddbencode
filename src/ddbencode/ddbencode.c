@@ -125,6 +125,10 @@ static bool _BEDecode_list(void *aiData, size_t aiLength, BEType *aoType, BEList
 	list->entries = NULL;
 	list->size = 0;
 
+	// Initialize
+	COObjectInitialize(list);
+	COObjectSetDestructor(list, &_BEListDelete);
+
 	// Look for list items
 	size_t currentStart = 1;
 	while(((char *)aiData)[currentStart] != 'e')
@@ -151,12 +155,12 @@ static bool _BEDecode_list(void *aiData, size_t aiLength, BEType *aoType, BEList
 		{
 			// Cleanup
 			if(subString)
-				free(subString);
+				COObjectRelease(subString);
 			if(subList)
-				free(subList);
+				COObjectRelease(subList);
 			if(subDictionary)
-				free(subDictionary);
-			BEListDeleteDeep(list);
+				COObjectRelease(subDictionary);
+			COObjectRelease(list);
 
 			return false;
 		}
@@ -166,7 +170,15 @@ static bool _BEDecode_list(void *aiData, size_t aiLength, BEType *aoType, BEList
 		struct _BEListEntry *entries = realloc(list->entries, (list->size+1)*sizeof (struct _BEListEntry));
 		if(!entries)
 		{
-			BEListDeleteDeep(list);
+			// Cleanup
+			if(subString)
+				COObjectRelease(subString);
+			if(subList)
+				COObjectRelease(subList);
+			if(subDictionary)
+				COObjectRelease(subDictionary);
+			COObjectRelease(list);
+
 			return false;
 		}
 		list->entries = entries;
@@ -219,6 +231,10 @@ static bool _BEDecode_dictionary(void *aiData, size_t aiLength, BEType *aoType, 
 	dictionary->entries = NULL;
 	dictionary->size = 0;
 
+	// Initialize
+	COObjectInitialize(dictionary);
+	COObjectSetDestructor(dictionary, &_BEDictionaryDelete);
+
 	// Look for dictionary items
 	size_t currentStart = 1;
 	while(((char *)aiData)[currentStart] != 'e')
@@ -248,14 +264,14 @@ static bool _BEDecode_dictionary(void *aiData, size_t aiLength, BEType *aoType, 
 		{
 			// Cleanup
 			if(subKey)
-				free(subKey);
+				COObjectRelease(subKey);
 			if(subString)
-				free(subString);
+				COObjectRelease(subString);
 			if(subList)
-				free(subList);
+				COObjectRelease(subList);
 			if(subDictionary)
-				free(subDictionary);
-			BEDictionaryDeleteDeep(dictionary);
+				COObjectRelease(subDictionary);
+			COObjectRelease(dictionary);
 
 			return false;
 		}
@@ -277,14 +293,14 @@ static bool _BEDecode_dictionary(void *aiData, size_t aiLength, BEType *aoType, 
 		{
 			// Cleanup
 			if(subKey)
-				free(subKey);
+				COObjectRelease(subKey);
 			if(subString)
-				free(subString);
+				COObjectRelease(subString);
 			if(subList)
-				free(subList);
+				COObjectRelease(subList);
 			if(subDictionary)
-				free(subDictionary);
-			BEDictionaryDeleteDeep(dictionary);
+				COObjectRelease(subDictionary);
+			COObjectRelease(dictionary);
 
 			return false;
 		}
@@ -294,7 +310,17 @@ static bool _BEDecode_dictionary(void *aiData, size_t aiLength, BEType *aoType, 
 		struct _BEDictionaryEntry *entries = realloc(dictionary->entries, (dictionary->size+1)*sizeof (struct _BEDictionaryEntry));
 		if(!entries)
 		{
-			BEDictionaryDeleteDeep(dictionary);
+			// Cleanup
+			if(subKey)
+				COObjectRelease(subKey);
+			if(subString)
+				COObjectRelease(subString);
+			if(subList)
+				COObjectRelease(subList);
+			if(subDictionary)
+				COObjectRelease(subDictionary);
+			COObjectRelease(dictionary);
+
 			return false;
 		}
 		dictionary->entries = entries;

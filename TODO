@@ -1,4 +1,6 @@
 ddbencode to do
 ===============
 
-* add list/dictionary querying functionality
+* add string/list/dictionary querying functionality
+* bring documentation w.r.t. reference counting up to date
+* update string printing example in readme

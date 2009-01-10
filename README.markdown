@@ -7,7 +7,9 @@ decoder. It comes with a comprehensive test suite to ensure correctness.
 Requirements
 ------------
 
-`ddbencode` requires a C99-compliant compiler. It has no other dependencies.
+`ddbencode` requires a C99-compliant compiler. It also depends on `CObject`, a
+minimalistic reference-counting library that makes memory management in C a
+lot easier.
 
 Building `ddbencode` requires `rake` (Ruby make), although it should be rather
 easy to build the library and applications without `rake`.
@@ -22,25 +24,31 @@ Usage
 See the source documentation for sample usage.
 
 Examples
------
+--------
+
+String creation example:
+
+	BEString *string = BEStringCreate(
+		"foo", 3
+	);
 
 List creation example:
 
 	BEList *list = BEListCreate(
-		4,                      // number of list entries
-		BE_STRING,  "foo",   3, // entry 0
-		BE_INTEGER, 123,        // entry 1
-		BE_LIST,    someList    // entry 2
+		4,                   // number of list entries
+		BE_STRING,  string,  // entry 0
+		BE_INTEGER, 123,     // entry 1
+		BE_LIST,    someList // entry 2
 	);
 
 Dictionary creation example:
 
 	BEDictionary *dictionary = BEDictionaryCreate(
-		4                                   // number of dictionary entries
-		"foo",  BE_STRING,     "stuff",  5, // entry 0
-		"bar",  BE_INTEGER,    123,         // entry 1
-		"baz",  BE_LIST,       someList,    // entry 2
-		"quux", BE_DICTIONARY, someDict     // entry 3
+		4                                // number of dictionary entries
+		"foo",  BE_STRING,     string,   // entry 0
+		"bar",  BE_INTEGER,    123,      // entry 1
+		"baz",  BE_LIST,       someList, // entry 2
+		"quux", BE_DICTIONARY, someDict  // entry 3
 	);
 
 Encoding example:
@@ -58,19 +66,17 @@ Decoding example:
 
 	BEType type;
 
-	char *string = NULL;
+	BEString *string = NULL;
 	int integer = 0;
 	BEList *list = NULL;
 	BEDictionary *dictionary = NULL;
 
-	size_t stringLength = 0;
 	size_t usedLength = 0;
 
 	success = BEDecode(
 		"le", 2,                               // the data and its length
 		&type,                                 // the type of the decoded item
-		&string, &integer, &list, &dictionary, // the decoded item (only one will be set)
-		&stringLength,                         // the length of the decoded string, if any
+		&string, &integer, &list, &dictionary, // the decoded item
 		&usedLength                            // the amount of consumed bytes
 	);
 

@@ -7,7 +7,8 @@
 
 /// @brief A list.
 ///
-/// This structure is \em not meant to be used as a general-purpose list as it has not been optimized, and likely never will be.
+/// This structure is \em not meant to be used as a general-purpose list as it
+/// has not been optimized, and likely never will be.
 typedef struct _BEList BEList;
 
 /// @brief Creates a new list with the given elements.
@@ -15,55 +16,27 @@ typedef struct _BEList BEList;
 /// The first argument contains the size of the list, which can be zero. The
 /// next arguments are grouped. Each group consists of an argument containing
 /// the list item type (BE_STRING, BE_INTEGER, BE_LIST, BE_DICTIONARY) and an
-/// argument containing the actual item itself. String argument groups have a
-/// third argument containing the string length.
+/// argument containing the actual item itself.
 ///
 /// For example, the following piece of code creates a list with three
 /// elements:
 ///
 /// @code
 /// // create a list
+/// // someString is a BEString *
 /// BEList *list = BEListCreate(
-///     3,                               // number of elements
-///     BE_STRING,     "foo",         3, // argument group 0
-///     BE_INTEGER,    123,              // argument group 1
-///     BE_DICTIONARY, someDictionary    // argument group 2
+///     3,                            // number of elements
+///     BE_STRING,     someString,    // argument group 0
+///     BE_INTEGER,    123,           // argument group 1
+///     BE_DICTIONARY, someDictionary // argument group 2
 /// );
 /// @endcode
-///
-/// Lists created with BEListCreate() should be deallocated by using BEListDelete().
+/// Lists created with BEListCreate() should be released using
+/// COObjectRelease(). All strings, lists and dictionaries passed to
+/// BEListCreate() are retained by the list.
 ///
 /// @return The newly created list.
 BEList *BEListCreate(size_t aSize, ...);
-
-/// @brief Deletes the given list.
-///
-/// The given list will be free()d, but its list items will not. Deleting a list
-/// may therefore create a memory leak. BEListDeleteDeep() deletes a list as
-/// well as its list items recursively.
-///
-/// @param[in] aList The list to delete.
-void BEListDelete(BEList *aList);
-
-/// @brief Deletes the given list along with its list items.
-///
-/// The given list will be free()d. Each list item will be free()d recursively as
-/// well; deleting a list recursively can therefore cause non-allocated list
-/// items to be inadvertently free()d. For example, the following piece of code
-/// is invalid, as it will cause a constant string to be free()d:
-///
-/// @code
-/// // create a list
-/// BEList *list = BEListCreate(
-///     1,                  // a list with one item
-///     BE_STRING, "foo", 3 // first item is the string "foo"
-/// );
-/// // delete the list recursively (INVALID!)
-/// BEListDeleteDeep(list);
-/// @endcode
-///
-/// @param[in] aList The list to delete recursively.
-void BEListDeleteDeep(BEList *aList);
 
 /// @brief Encodes the given list.
 ///

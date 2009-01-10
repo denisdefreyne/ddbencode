@@ -17,8 +17,15 @@ BEList *BEListCreate(size_t aSize, ...)
 		return NULL;
 	list->entries = malloc(aSize * (sizeof (struct _BEListEntry)));
 	if(!list->entries)
+	{
+		free(list);
 		return NULL;
+	}
 	list->size = aSize;
+
+	// Initialize
+	COObjectInitialize(list);
+	COObjectSetDestructor(list, &_BEListDelete);
 
 	va_start(ap, aSize);
 	for(size_t i = 0; i < aSize; ++i)
@@ -28,6 +35,7 @@ BEList *BEListCreate(size_t aSize, ...)
 			case BE_STRING:
 				list->entries[i].type = BE_STRING;
 				list->entries[i].data.string = va_arg(ap, BEString *);
+				COObjectRetain(list->entries[i].data.string);
 				break;
 
 			case BE_INTEGER:
@@ -38,17 +46,17 @@ BEList *BEListCreate(size_t aSize, ...)
 			case BE_LIST:
 				list->entries[i].type = BE_LIST;
 				list->entries[i].data.list = va_arg(ap, BEList *);
+				COObjectRetain(list->entries[i].data.list);
 				break;
 
 			case BE_DICTIONARY:
 				list->entries[i].type = BE_DICTIONARY;
 				list->entries[i].data.dictionary = va_arg(ap, BEDictionary *);
+				COObjectRetain(list->entries[i].data.dictionary);
 				break;
 
 			default:
-				// FIXME delete everything properly
-				free(list->entries);
-				free(list);
+				COObjectRelease(list);
 				return NULL;
 		}
 	}
@@ -56,42 +64,6 @@ BEList *BEListCreate(size_t aSize, ...)
 
 	// Done
 	return list;
-}
-
-void BEListDelete(BEList *aList)
-{
-	free(aList->entries);
-	free(aList);
-}
-
-void BEListDeleteDeep(BEList *aList)
-{
-	// Delete entries
-	for(size_t i = 0; i < aList->size; ++i)
-	{
-		struct _BEListEntry entry = aList->entries[i];
-		switch(entry.type)
-		{
-			case BE_STRING:
-				BEStringDelete(entry.data.string);
-				break;
-
-			case BE_INTEGER:
-				;
-				break;
-
-			case BE_LIST:
-				BEListDeleteDeep(entry.data.list);
-				break;
-
-			case BE_DICTIONARY:
-				BEDictionaryDeleteDeep(entry.data.dictionary);
-				break;
-		}
-	}
-
-	// Delete list itself
-	BEListDelete(aList);
 }
 
 bool BEListEncode(BEList *aiList, void **aoData, size_t *aoDataLength)
@@ -198,6 +170,11 @@ size_t BEListGetEncodedLength(BEList *aList)
 	return encodedLength;
 }
 
+void BEListPrint(BEList *aList)
+{
+	_BEListPrint(aList, 0);
+}
+
 void _BEListPrint(BEList *aList, size_t aIndentation)
 {
 	// Print [
@@ -236,7 +213,33 @@ void _BEListPrint(BEList *aList, size_t aIndentation)
 	puts("]");
 }
 
-void BEListPrint(BEList *aList)
+void _BEListDelete(void *aList)
 {
-	_BEListPrint(aList, 0);
+	// Release entries
+	for(size_t i = 0; i < ((BEList *)aList)->size; ++i)
+	{
+		struct _BEListEntry entry = ((BEList *)aList)->entries[i];
+		switch(entry.type)
+		{
+			case BE_STRING:
+				COObjectRelease(entry.data.string);
+				break;
+
+			case BE_INTEGER:
+				;
+				break;
+
+			case BE_LIST:
+				COObjectRelease(entry.data.list);
+				break;
+
+			case BE_DICTIONARY:
+				COObjectRelease(entry.data.dictionary);
+				break;
+		}
+	}
+
+	// Delete entries array
+	if(((BEList *)aList)->entries)
+		free(((BEList *)aList)->entries);
 }
