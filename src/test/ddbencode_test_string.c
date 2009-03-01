@@ -4,6 +4,19 @@
 #include <ddbencode/private.h>
 #include <uctest/uctest.h>
 
+// Object
+struct _COObject
+{
+	COGuts *guts;
+};
+
+// Guts
+struct _COGuts
+{
+	size_t       referenceCount;
+	CODestructor destructor;
+};
+
 // TODO add string creation tests
 
 static void BETestString_encode0(void)
@@ -235,8 +248,6 @@ static void BETestString_decode10(void)
 
 	CORelease(string);
 }
-
-#include <cobject/private.h>
 
 static void BETestString_decode11(void)
 {

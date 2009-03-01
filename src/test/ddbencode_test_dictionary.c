@@ -1,11 +1,23 @@
 #include <string.h>
 
 #include <cobject/cobject.h>
-#include <cobject/private.h>
 #include <uctest/uctest.h>
 
 #include <ddbencode/ddbencode.h>
 #include <ddbencode/private.h>
+
+// Object
+struct _COObject
+{
+	COGuts *guts;
+};
+
+// Guts
+struct _COGuts
+{
+	size_t       referenceCount;
+	CODestructor destructor;
+};
 
 static void BETestDictionary_create0(void)
 {
