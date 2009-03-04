@@ -32,6 +32,25 @@ task :test => [ TARGET_BIN_TEST ] do
   sh "echo ; ./#{TARGET_BIN_TEST}"
 end
 
+task :fetch_dependencies do
+  # Make vendor dir
+  FileUtils.mkdir('vendor') unless File.directory?('vendor')
+
+  # Get cobject
+  unless File.directory?('vendor/cobject')
+    puts "=== Fetching cobject..."
+    system('hg', 'clone', 'http://projects.stoneship.org/hg/shared/cobject', 'vendor/cobject')
+    puts '=== Fetching cobject: done.'
+  end
+
+  # Get uctest
+  unless File.directory?('vendor/uctest')
+    puts "=== Fetching uctest..."
+    system('hg', 'clone', 'http://projects.stoneship.org/hg/shared/uctest', 'vendor/uctest')
+    puts '=== Fetching uctest: done.'
+  end
+end
+
 ### rules
 
 rule '.o' => [ '.c' ] do |t|

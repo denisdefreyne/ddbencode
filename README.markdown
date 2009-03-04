@@ -18,6 +18,9 @@ Running the unit tests requires `uctest` which is a simple C unit testing
 library. The rakefile assumes that `uctest` is placed inside the "vendor"
 directory.
 
+The `CObject` and `uctest` dependencies can be fetched automagically by
+issuing the `fetch_dependencies` rake task.
+
 Usage
 -----
 
