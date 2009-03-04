@@ -93,6 +93,14 @@ Decoding example:
 		// etc...
 	}
 
+Tests
+-----
+
+`ddbencode` comes with a comprehensive test suite to ensure the correctness of
+its implementation. Issue the `test` rake task in order to run the test suite.
+Running the test suite should not cause any failures to be reported; if one or
+more tests fail, please contact me (see below).
+
 Contact
 -------
 
